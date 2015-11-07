@@ -44,6 +44,7 @@
     "webpack": "^1.9.10"
   },
   "scripts": {
+    "db": "./node_modules/.bin/babel-node ./src/server/modules/data",
     "postinstall": "./node_modules/.bin/gulp build",
     "dev": "./node_modules/.bin/gulp",
     "debug": "./node_modules/.bin/gulp debug",
