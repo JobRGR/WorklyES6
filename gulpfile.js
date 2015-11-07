@@ -44,7 +44,7 @@ gulp.task('client', function (done) {
 gulp.task('img:client', function () {
   gulp.src(searchImgClient)
     .pipe(rename(function (path) { path.dirname = '' }))
-    .pipe(gulp.dest('./dist/assets/img/'))
+    .pipe(gulp.dest('./dist/img/'))
 })
 
 gulp.task('html', function() {
@@ -59,7 +59,7 @@ gulp.task('img:server', function () {
     .pipe(rename(function (path) {
       path.dirname = ''
     }))
-    .pipe(gulp.dest('./dist/assets/img_server'))
+    .pipe(gulp.dest('./dist/img_server'))
 })
 
 gulp.task('img', ['img:client', 'img:server'])
