@@ -20,6 +20,14 @@ class University {
   removeAll(req, res, next) {
     UniversityModel.getItem(null, err => res.send({ok: err && true}))
   }
+
+  getCount(req, res, next) {
+    UniversityModel.getCount(count => res.send({count}))
+  }
+
+  autocomplete(req, res, next) {
+    UniversityModel.autocomplete(req.query.university, universities => res.send({universities}))
+  }
 }
 
 export default new University()
