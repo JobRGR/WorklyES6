@@ -12,7 +12,7 @@ let Handler = function (name, Module) {
     removeItem: (req, res, next) => Module.removeItem(req.params.id, err => res.send({ok: err || true})),
     removeAll: (req, res, next) => Module.removeItem(null, err => res.send({ok: err || true})),
     getCount: (req, res, next) => Module.getCount(count => res.send({count})),
-    autocomplete: (req, res, next) => Module.autocomplete(req.query.item, items => res.send({[this.names]: items}))
+    autocomplete: (req, res, next) => Module.autocomplete(req.query[name], items => res.send({[this.names]: items}))
   }
 }
 

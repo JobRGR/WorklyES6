@@ -11,7 +11,7 @@ export default (url, name) => {
   let tmpModel = null
   let list = null
 
-  describe('[name]', () => {
+  describe(`${name} tests`, () => {
     it('.get list', (done) => {
       request(url)
         .get(path)
@@ -130,6 +130,19 @@ export default (url, name) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'count')
           assert.equal(res.body.count, list.length)
+          done()
+        })
+    })
+
+    it('.autocomplete', (done) => {
+      const index = parseInt(list.length * Math.random())
+      const query = list[index].name.split(' ')[0]
+      request(url)
+        .get(`${path}-autocomplete?${name}=${query}`)
+        .end(function(err, res) {
+          assert.equal(res.status, 200)
+          assert.property(res.body, names)
+          res.body[names].forEach(item => assert.include(item.name, query))
           done()
         })
     })
