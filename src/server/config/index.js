@@ -1,3 +1,3 @@
 export default {
-  uri: 'mongodb://localhost/web_lab'
+  uri: 'mongodb://localhost/worklyES6'
 }

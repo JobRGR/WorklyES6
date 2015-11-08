@@ -1,22 +1,24 @@
 import {assert} from 'chai'
 import request from 'supertest'
+import pluralize from 'pluralize'
 
-const path = '/api/speciality'
-const tmpData = {name: 'Some speciality'}
-const newTmpData = {name: 'New speciality'}
+export default (url, name) => {
+  const path = `/api/${name}`
+  const tmpData = {name: `Some ${name}`}
+  const newTmpData = {name:`New ${name}`}
+  const names = pluralize(name, 2)
 
-let tmpModel = null
-let list = null
+  let tmpModel = null
+  let list = null
 
-export default (url) => {
-  describe('.speciality', () => {
+  describe('[name]', () => {
     it('.get list', (done) => {
       request(url)
         .get(path)
         .end(function(err, res) {
-          list = res.body.specialities || []
+          list = res.body[names] || []
           assert.equal(res.status, 200)
-          assert.property(res.body, 'specialities')
+          assert.property(res.body, names)
           done()
         })
     })
@@ -27,10 +29,10 @@ export default (url) => {
         .get(`${path}/${list[index]._id}`)
         .end(function(err, res) {
           assert.equal(res.status, 200)
-          assert.property(res.body, 'speciality')
-          assert.property(res.body.speciality, 'name')
-          assert.equal(res.body.speciality.name, list[index].name)
-          assert.equal(res.body.speciality._id, list[index]._id)
+          assert.property(res.body, name)
+          assert.property(res.body[name], 'name')
+          assert.equal(res.body[name].name, list[index].name)
+          assert.equal(res.body[name]._id, list[index]._id)
           done()
         })
     })
@@ -51,11 +53,11 @@ export default (url) => {
         .post(path)
         .send(tmpData)
         .end(function(err, res) {
-          tmpModel = res.body.speciality || {}
+          tmpModel = res.body[name] || {}
           assert.equal(res.status, 200)
-          assert.property(res.body, 'speciality')
-          assert.property(res.body.speciality, 'name')
-          assert.equal(res.body.speciality.name, tmpData.name)
+          assert.property(res.body, name)
+          assert.property(res.body[name], 'name')
+          assert.equal(res.body[name].name, tmpData.name)
           done()
         })
     })
@@ -65,10 +67,10 @@ export default (url) => {
         .get(`${path}/${tmpModel._id}`)
         .end(function(err, res) {
           assert.equal(res.status, 200)
-          assert.property(res.body, 'speciality')
-          assert.property(res.body.speciality, 'name')
-          assert.equal(res.body.speciality.name, tmpModel.name)
-          assert.equal(res.body.speciality._id, tmpModel._id)
+          assert.property(res.body, name)
+          assert.property(res.body[name], 'name')
+          assert.equal(res.body[name].name, tmpModel.name)
+          assert.equal(res.body[name]._id, tmpModel._id)
           done()
         })
     })
@@ -79,10 +81,10 @@ export default (url) => {
         .send(newTmpData)
         .end(function(err, res) {
           assert.equal(res.status, 200)
-          assert.property(res.body, 'speciality')
-          assert.property(res.body.speciality, 'name')
-          assert.equal(res.body.speciality.name, newTmpData.name)
-          assert.equal(res.body.speciality._id, tmpModel._id)
+          assert.property(res.body, name)
+          assert.property(res.body[name], 'name')
+          assert.equal(res.body[name].name, newTmpData.name)
+          assert.equal(res.body[name]._id, tmpModel._id)
           done()
         })
     })
@@ -92,10 +94,10 @@ export default (url) => {
         .get(`${path}/${tmpModel._id}`)
         .end(function(err, res) {
           assert.equal(res.status, 200)
-          assert.property(res.body, 'speciality')
-          assert.property(res.body.speciality, 'name')
-          assert.equal(res.body.speciality.name, newTmpData.name)
-          assert.equal(res.body.speciality._id, tmpModel._id)
+          assert.property(res.body, name)
+          assert.property(res.body[name], 'name')
+          assert.equal(res.body[name].name, newTmpData.name)
+          assert.equal(res.body[name]._id, tmpModel._id)
           done()
         })
     })
