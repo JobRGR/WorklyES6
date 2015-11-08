@@ -115,7 +115,6 @@ export default (url) => {
       request(url)
         .delete(`${path}/${tmpModel._id}`)
         .end(function(err, res) {
-          console.log(res.body)
           assert.equal(res.status, 200)
           assert.property(res.body, 'ok')
           done()

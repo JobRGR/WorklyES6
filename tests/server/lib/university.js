@@ -51,7 +51,6 @@ export default (url) => {
         .post(path)
         .send(tmpData)
         .end(function(err, res) {
-          console.log(err, res.body)
           tmpModel = res.body.university || {}
           assert.equal(res.status, 200)
           assert.property(res.body, 'university')
@@ -116,7 +115,6 @@ export default (url) => {
       request(url)
         .delete(`${path}/${tmpModel._id}`)
         .end(function(err, res) {
-          console.log(res.body)
           assert.equal(res.status, 200)
           assert.property(res.body, 'ok')
           done()

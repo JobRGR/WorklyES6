@@ -24,10 +24,7 @@ schema.statics.updateItem = function (id, name, callback) {
   this.findById(id, (err, speciality) => {
     if (err) return callback(err)
     speciality.name = name
-    speciality.save(err => {
-      console.log(err, speciality)
-      callback(err, speciality)
-    })
+    speciality.save(err => callback(err, speciality))
   })
 }
 
