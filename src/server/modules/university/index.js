@@ -1,12 +1,15 @@
 import mongoose from '../index'
 
 let  {Schema} = mongoose
-const schema = new Schema({name: {type: String, required: true}})
+const schema = new Schema({name: {type: String, unique: true, required: true}})
 
 schema.statics.addItem = function (name, callback) {
   const University = this
-  let university = new University({name})
-  university.save(err => callback(err, university))
+  University.findOne({name}, (err, item) => {
+    if (item) return callback(err, item)
+    let university = new University({name})
+    university.save(err => callback(err, university))
+  })
 }
 
 schema.statics.getItem = function (id, callback) {

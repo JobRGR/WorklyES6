@@ -9,16 +9,20 @@ class University {
     UniversityModel.getItem(null, universities => res.send({universities}))
   }
 
+  addItem(req, res, next) {
+    UniversityModel.addItem(req.body.name, (err, university) => res.send({university}))
+  }
+
   updateItem(req, res, next) {
-    UniversityModel.updateItem(null, (err, university) => res.send({university}))
+    UniversityModel.updateItem(req.params.id, req.body.name, (err, university) => res.send({university}))
   }
 
   removeItem(req, res, next) {
-    UniversityModel.getItem(req.params.id, err => res.send({ok: err && true}))
+    UniversityModel.removeItem(req.params.id, err => res.send({ok: err && true}))
   }
 
   removeAll(req, res, next) {
-    UniversityModel.getItem(null, err => res.send({ok: err && true}))
+    UniversityModel.removeItem(null, err => res.send({ok: err && true}))
   }
 
   getCount(req, res, next) {
