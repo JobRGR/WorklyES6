@@ -18,11 +18,11 @@ class University {
   }
 
   removeItem(req, res, next) {
-    UniversityModel.removeItem(req.params.id, err => res.send({ok: err && true}))
+    UniversityModel.removeItem(req.params.id, err => res.send({ok: err || true}))
   }
 
   removeAll(req, res, next) {
-    UniversityModel.removeItem(null, err => res.send({ok: err && true}))
+    UniversityModel.removeItem(null, err => res.send({ok: err || true}))
   }
 
   getCount(req, res, next) {

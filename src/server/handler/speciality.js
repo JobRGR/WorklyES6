@@ -18,11 +18,11 @@ class Speciality {
   }
 
   removeItem(req, res, next) {
-    SpecialityModel.removeItem(req.params.id, err => res.send({ok: err && true}))
+    SpecialityModel.removeItem(req.params.id, err => res.send({ok: err || true}))
   }
 
   removeAll(req, res, next) {
-    SpecialityModel.removeItem(null, err => res.send({ok: err && true}))
+    SpecialityModel.removeItem(null, err => res.send({ok: err || true}))
   }
 
   getCount(req, res, next) {
