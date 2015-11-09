@@ -2,9 +2,8 @@ import express from 'express'
 import Handler from './handler'
 
 
-export default (name, Module) => {
+export default (name, Module, handler = new Handler(name, Module)) => {
   let app = express()
-  let handler = new Handler(name, Module)
 
   let api = express.Router()
     .get('/', handler.getAll)

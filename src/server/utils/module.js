@@ -1,7 +1,7 @@
 import mongoose from '../modules'
 
-let  {Schema} = mongoose
-const schema = new Schema({name: {type: String, unique: true, required: true}})
+let {Schema} = mongoose
+let schema = new Schema({name: {type: String, unique: true, required: true}})
 
 schema.statics.addItem = function (name, callback) {
   const Model = this
