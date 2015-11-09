@@ -9,5 +9,5 @@ portscanner.checkPortStatus(3333, '127.0.0.1', (error, status) => {
 
 const url = 'http://localhost:3333'
 
-service(url, 'speciality')
-service(url, 'university')
+const microServices = ['speciality', 'university', 'city', 'skill']
+microServices.forEach(name => service(url, name))
