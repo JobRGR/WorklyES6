@@ -1,4 +1,6 @@
-import mongoose from '../modules'
+import mongoose from '../../modules'
+import removeItem from './remove'
+import getCount from './count'
 
 let {Schema} = mongoose
 let schema = new Schema({name: {type: String, unique: true, required: true}})
@@ -28,14 +30,8 @@ schema.statics.updateItem = function (id, name, callback) {
   })
 }
 
-schema.statics.getCount = function (callback) {
-  this.count({}, (err, count) => callback(count))
-}
-
-schema.statics.removeItem = function (id, callback) {
-  if (id) this.findByIdAndRemove(id, callback)
-  else this.remove({}, callback)
-}
+schema.statics.getCount = getCount
+schema.statics.removeItem = removeItem
 
 schema.statics.autocomplete = function (name, callback) {
   this
