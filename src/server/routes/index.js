@@ -1,19 +1,13 @@
 import express from 'express'
 import render from '../handler/render'
-import University from '../handler/university'
-import Speciality from '../handler/speciality'
-import City from '../handler/city'
-import Skill from '../handler/skill'
+import Dictionary from '../handler/dictionary'
 
 export default () => {
   let app = express()
+  let api = express.Router()
 
-  let api = express
-    .Router()
-    .use(University)
-    .use(Speciality)
-    .use(City)
-    .use(Skill)
+  const services = ['City', 'Skill', 'University', 'Speciality']
+  services.forEach(item => api.use(Dictionary[item]))
 
   app
     .use('/api', api)

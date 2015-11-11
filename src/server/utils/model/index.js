@@ -1,4 +1,4 @@
-import mongoose from '../../modules'
+import mongoose from '../../models'
 import removeItem from './remove'
 import getCount from './count'
 
