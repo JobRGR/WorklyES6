@@ -8,8 +8,8 @@ let {Schema} = mongoose
 let schema = new Schema({
   start: {type: Date},
   end: {type: Date},
-  speciality: {type: Schema.Types.ObjectId, ref: 'Speciality'},
-  university: {type: Schema.Types.ObjectId, ref: 'University'}
+  speciality: {type: mongoose.Schema.Types.ObjectId, ref: 'Speciality'},
+  university: {type: mongoose.Schema.Types.ObjectId, ref: 'University'}
 })
 
 schema.statics.addItem = function ({start, end, speciality, university}, callback) {
@@ -24,9 +24,15 @@ schema.statics.addItem = function ({start, end, speciality, university}, callbac
 }
 
 schema.statics.getItem = function (id, callback) {
-  if (id) this.findById(id, (err, education) => callback(education))
+  if (id) this
+    .findById(id)
+    .populate('university')
+    .populate('speciality')
+    .exec((err, education) => callback(education))
   else this
     .find({})
+    .populate('university')
+    .populate('speciality')
     .sort({'start': 1})
     .exec((err, educations) => callback(educations))
 }
