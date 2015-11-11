@@ -1,6 +1,7 @@
 import mongoose from '../index'
 import removeItem from '../../utils/model/remove'
 import getCount from '../../utils/model/count'
+import getRandom from '../../utils/model/random'
 
 
 let {Schema} = mongoose
@@ -13,7 +14,12 @@ let schema = new Schema({
 
 schema.statics.addItem = function ({start, end, speciality, university}, callback) {
   const Education = this
-  let education = new Education({start, end, speciality, university})
+  let education = new Education({
+    start, end,
+    speciality: speciality,
+    university: university
+  })
+  console.log('before save', speciality, education)
   education.save(err => callback(err, education))
 }
 
@@ -28,13 +34,16 @@ schema.statics.getItem = function (id, callback) {
 schema.statics.updateItem = function (id, edit, callback) {
   this.findById(id, (err, education) => {
     if (err) return callback(err)
-    for (let key in  edit) if (edit[key]) education[key] = edit[key]
+    for (let key in  edit)
+      if (edit[key])
+        education[key] = /speciality|university/.test(key) ? mongoose.Types.ObjectId(edit[key]) : edit[key]
     education.save(err => callback(err, education))
   })
 }
 
 schema.statics.getCount = getCount
 schema.statics.removeItem = removeItem
+schema.statics.getRandom = getRandom
 
 export default mongoose.model('Education', schema)
 

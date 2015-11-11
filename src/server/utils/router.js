@@ -15,7 +15,9 @@ export default (name, Module, handler = new Handler(name, Module)) => {
   
   app
     .get(`/${name}-count`, handler.getCount)
+    .get(`/${name}-search`, handler.searchItem)
     .get(`/${name}-autocomplete`, handler.autocomplete)
+    .get(`/${name}-random`, handler.getRandom)
     .use(`/${name}`, api)
 
   return app

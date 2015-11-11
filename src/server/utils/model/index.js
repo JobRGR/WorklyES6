@@ -1,6 +1,7 @@
 import mongoose from '../../models'
 import removeItem from './remove'
 import getCount from './count'
+import getRandom from './random'
 
 let {Schema} = mongoose
 let schema = new Schema({name: {type: String, unique: true, required: true}})
@@ -22,6 +23,10 @@ schema.statics.getItem = function (id, callback) {
     .exec((err, items) => callback(items))
 }
 
+schema.statics.searchItem = function (name, callback) {
+  this.findOne({name}, (err, item) => callback(item))
+}
+
 schema.statics.updateItem = function (id, name, callback) {
   this.findById(id, (err, item) => {
     if (err) return callback(err)
@@ -32,6 +37,7 @@ schema.statics.updateItem = function (id, name, callback) {
 
 schema.statics.getCount = getCount
 schema.statics.removeItem = removeItem
+schema.statics.getRandom = getRandom
 
 schema.statics.autocomplete = function (name, callback) {
   this

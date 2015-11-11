@@ -6,6 +6,8 @@ let Handler = function (name, Module) {
 
   return {
     getItem: (req, res, next) => Module.getItem(req.params.id, item => res.send({[this.name]: item})),
+    searchItem: (req, res, next) => Module.searchItem(req.query[name], item => res.send({[this.name]: item})),
+    getRandom: (req, res, netx) => Module.getRandom(item => res.send({[this.name]: item})),
     getAll: (req, res, next) => Module.getItem(null, items => res.send({[this.names]: items})),
     addItem: (req, res, next) => Module.addItem(req.body.name, (err, item) => res.send({[this.name]: item})),
     updateItem: (req, res, next) => Module.updateItem(req.params.id, req.body.name, (err, item) => res.send({[this.name]: item})),

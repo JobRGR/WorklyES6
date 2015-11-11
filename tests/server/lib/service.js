@@ -146,5 +146,30 @@ export default (url, name) => {
           done()
         })
     })
+
+    it('.search', (done) => {
+      const index = parseInt(list.length * Math.random())
+      const query = list[index].name
+      request(url)
+        .get(`${path}-search?${name}=${query}`)
+        .end(function(err, res) {
+          assert.equal(res.status, 200)
+          assert.property(res.body, name)
+          assert.equal(res.body[name].name, query)
+          done()
+        })
+    })
+
+    it('.random', (done) => {
+      request(url)
+        .get(`${path}-random`)
+        .end(function(err, res) {
+          assert.equal(res.status, 200)
+          assert.property(res.body, name)
+          console.log(res.body, name)
+          assert.isString(res.body[name].name)
+          done()
+        })
+    })
   })
 }
