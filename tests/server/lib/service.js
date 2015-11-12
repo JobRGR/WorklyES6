@@ -166,7 +166,6 @@ export default (url, name) => {
         .end(function(err, res) {
           assert.equal(res.status, 200)
           assert.property(res.body, name)
-          console.log(res.body, name)
           assert.isString(res.body[name].name)
           done()
         })

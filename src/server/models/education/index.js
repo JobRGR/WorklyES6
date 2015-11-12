@@ -1,7 +1,6 @@
 import mongoose from '../index'
 import removeItem from '../../utils/model/remove'
 import getCount from '../../utils/model/count'
-import getRandom from '../../utils/model/random'
 
 
 let {Schema} = mongoose
@@ -49,7 +48,19 @@ schema.statics.updateItem = function (id, edit, callback) {
 
 schema.statics.getCount = getCount
 schema.statics.removeItem = removeItem
-schema.statics.getRandom = getRandom
+
+schema.statics.getRandom = function(callback) {
+  this.count((err, count) => {
+    if (err) return callback(err)
+    const skip = Math.floor(Math.random() * count)
+    this
+      .findOne()
+      .skip(skip)
+      .populate('university')
+      .populate('speciality')
+      .exec((err, item) => callback(err || item))
+  })
+}
 
 export default mongoose.model('Education', schema)
 
