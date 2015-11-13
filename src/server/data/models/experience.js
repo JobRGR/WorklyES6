@@ -2,7 +2,7 @@ import Charlatan from 'charlatan'
 import async from 'async'
 import Experience from '../../models/experience'
 import addArray from '../utils/add_array'
-import position from '../utils/position'
+import position from './position'
 import company from './company'
 import random from '../utils/random'
 
