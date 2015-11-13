@@ -14,8 +14,9 @@ export default () => {
     .delete('/:id', Education.removeItem)
 
   app
-    .get(`/education-count`, Education.getCount)
-    .get(`/education-random`, Education.getRandom)
+    .get('/education-count', Education.getCount)
+    .get('/education-random', Education.getRandom)
+    .post('/education-add', Education.addNew)
     .use(`/education`, api)
 
   return app

@@ -7,9 +7,7 @@ const ip = '127.0.0.1'
 const url = `${ip}:${port}`
 
 portscanner.checkPortStatus(port, ip, (error, status) => {
-  if (status == 'closed')  {
-    require('../../src/server')
-  }
+  (status == 'closed') && require('../../src/server')
 })
 
 const microServices = ['speciality', 'university', 'city', 'skill']

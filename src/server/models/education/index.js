@@ -18,7 +18,6 @@ schema.statics.addItem = function ({start, end, speciality, university}, callbac
     speciality: speciality,
     university: university
   })
-  console.log('before save', speciality, education)
   education.save(err => callback(err, education))
 }
 

@@ -1,5 +1,6 @@
 import express from 'express'
-import Education from '../models/education'
+import async from 'async'
+import {University, Speciality, Education} from '../models/models'
 
 
 class EducationHandler {
@@ -33,6 +34,17 @@ class EducationHandler {
 
   getRandom(req, res, next) {
     Education.getRandom(education => res.send({education}))
+  }
+
+  addNew(req, res, next) {
+    let {start, end} = req.body
+    async.parallel({
+      university: (callback) => University.addItem(req.body.university, callback),
+      speciality: (callback) => Speciality.addItem(req.body.speciality, callback)
+    }, (err, {university, speciality}) => {
+      let data = {start, end, university: university._id, speciality: speciality._id}
+      Education.addItem(data, (err, education) => res.send({err, education}))
+    })
   }
 }
 

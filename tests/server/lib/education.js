@@ -6,6 +6,15 @@ export default (url) => {
   let tmpData = {start: new Date('09-01-2012'), end: new Date('07-01-2017')}
   let newTmpData = {start: new Date('09-01-2011'), end: new Date('07-01-2018')}
 
+  let newData = {
+    start: new Date('09-01-2012'), end: new Date('07-01-2017'),
+    university: 'Stanford', speciality: 'Computer Science'
+  }
+
+  let newDataReturn = {}
+  let newUniversity = null
+  let newSpeciality = null
+
   let tmpModel = null
   let list = null
 
@@ -167,6 +176,103 @@ export default (url) => {
           assert.isString(res.body.education.end)
           assert.isObject(res.body.education.speciality)
           assert.isObject(res.body.education.university)
+          done()
+        })
+    })
+
+
+    it('.add new item', (done) => {
+      request(url)
+        .post(`${path}-add`)
+        .send(newData)
+        .end(((err, res) => {
+          newDataReturn = res.body.education || {}
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'education')
+          assert.property(res.body.education, 'start')
+          assert.property(res.body.education, 'end')
+          assert.property(res.body.education, 'speciality')
+          assert.property(res.body.education, 'university')
+          assert.equal(res.body.education.start, newData.start.toISOString())
+          assert.equal(res.body.education.end, newData.end.toISOString())
+          done()
+        }))
+    })
+
+    it('.check add new item', (done) => {
+      request(url)
+        .get(`${path}/${newDataReturn._id}`)
+        .end(function(err, res) {
+          newSpeciality = res.body.education.speciality || null
+          newUniversity = res.body.education.university || null
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'education')
+          assert.property(res.body.education, 'start')
+          assert.property(res.body.education, 'end')
+          assert.property(res.body.education, 'speciality')
+          assert.property(res.body.education, 'university')
+          assert.equal(res.body.education.start, newData.start.toISOString())
+          assert.equal(res.body.education.end, newData.end.toISOString())
+          assert.isObject(res.body.education.speciality)
+          assert.isObject(res.body.education.university)
+          assert.equal(res.body.education.speciality._id, newDataReturn.speciality)
+          assert.equal(res.body.education.university._id, newDataReturn.university)
+          done()
+        })
+    })
+
+    it('.delete item', (done) => {
+      request(url)
+        .delete(`${path}/${newDataReturn._id}`)
+        .end(function(err, res) {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'ok')
+          done()
+        })
+    })
+
+    it('.get new university', (done) => {
+      request(url)
+        .get(`/api/university/${newUniversity._id}`)
+        .end(function(err, res) {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'university')
+          assert.property(res.body.university, 'name')
+          assert.equal(res.body.university.name, newData.university)
+          assert.equal(res.body.university._id, newUniversity._id)
+          done()
+        })
+    })
+
+    it('.delete new university', (done) => {
+      request(url)
+        .delete(`/api/university/${newUniversity._id}`)
+        .end(function(err, res) {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'ok')
+          done()
+        })
+    })
+
+    it('.get new speciality', (done) => {
+      request(url)
+        .get(`/api/speciality/${newSpeciality._id}`)
+        .end(function(err, res) {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'speciality')
+          assert.property(res.body.speciality, 'name')
+          assert.equal(res.body.speciality.name, newData.speciality)
+          assert.equal(res.body.speciality._id, newSpeciality._id)
+          done()
+        })
+    })
+
+    it('.delete new speciality', (done) => {
+      request(url)
+        .delete(`/api/speciality/${newSpeciality._id}`)
+        .end(function(err, res) {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'ok')
           done()
         })
     })
