@@ -5,19 +5,15 @@ import getCount from '../../utils/model/count'
 
 let {Schema} = mongoose
 let schema = new Schema({
-  start: {type: Date},
-  end: {type: Date},
-  speciality: {type: mongoose.Schema.Types.ObjectId, ref: 'Speciality'},
-  university: {type: mongoose.Schema.Types.ObjectId, ref: 'University'}
+  start: {type: Date, required: true},
+  end: {type: Date, required: true},
+  speciality: {type: mongoose.Schema.Types.ObjectId, ref: 'Speciality', required: true},
+  university: {type: mongoose.Schema.Types.ObjectId, ref: 'University', required: true}
 })
 
 schema.statics.addItem = function ({start, end, speciality, university}, callback) {
   const Education = this
-  let education = new Education({
-    start, end,
-    speciality: speciality,
-    university: university
-  })
+  let education = new Education({start, end, speciality, university})
   education.save(err => callback(err, education))
 }
 

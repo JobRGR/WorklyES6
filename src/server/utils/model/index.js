@@ -2,6 +2,9 @@ import mongoose from '../../models'
 import removeItem from './remove'
 import getCount from './count'
 import getRandom from './random'
+import getItem from './get'
+import updateItem from './update'
+
 
 let {Schema} = mongoose
 let schema = new Schema({name: {type: String, unique: true, required: true}})
@@ -15,29 +18,9 @@ schema.statics.addItem = function (name, callback) {
   })
 }
 
-schema.statics.getItem = function (id, callback) {
-  if (id) this.findById(id, (err, item) => callback(item))
-  else this
-    .find({})
-    .sort({'name': 1})
-    .exec((err, items) => callback(items))
-}
-
 schema.statics.searchItem = function (name, callback) {
   this.findOne({name}, (err, item) => callback(item))
 }
-
-schema.statics.updateItem = function (id, name, callback) {
-  this.findById(id, (err, item) => {
-    if (err) return callback(err)
-    item.name = name
-    item.save(err => callback(err, item))
-  })
-}
-
-schema.statics.getCount = getCount
-schema.statics.removeItem = removeItem
-schema.statics.getRandom = getRandom
 
 schema.statics.autocomplete = function (name, callback) {
   this
@@ -46,6 +29,12 @@ schema.statics.autocomplete = function (name, callback) {
     .limit(20)
     .exec((err, items) => callback(items))
 }
+
+schema.statics.getItem = getItem
+schema.statics.getCount = getCount
+schema.statics.removeItem = removeItem
+schema.statics.getRandom = getRandom
+schema.statics.updateItem = updateItem
 
 export default schema
 
