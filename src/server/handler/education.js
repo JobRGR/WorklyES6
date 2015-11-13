@@ -39,8 +39,8 @@ class EducationHandler {
   addNew(req, res, next) {
     let {start, end} = req.body
     async.parallel({
-      university: (callback) => University.addItem(req.body.university, callback),
-      speciality: (callback) => Speciality.addItem(req.body.speciality, callback)
+      university: (callback) => University.addItem({name: req.body.university}, callback),
+      speciality: (callback) => Speciality.addItem({name: req.body.speciality}, callback)
     }, (err, {university, speciality}) => {
       let data = {start, end, university: university._id, speciality: speciality._id}
       Education.addItem(data, (err, education) => res.send({err, education}))

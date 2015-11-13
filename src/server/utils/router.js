@@ -1,8 +1,7 @@
 import express from 'express'
 import Handler from './handler'
 
-
-export default (name, Module, handler = new Handler(name, Module)) => {
+let route = (name, handler) => {
   let app = express()
 
   let api = express.Router()
@@ -12,7 +11,7 @@ export default (name, Module, handler = new Handler(name, Module)) => {
     .put('/:id', handler.updateItem)
     .delete('/', handler.removeAll)
     .delete('/:id', handler.removeItem)
-  
+
   app
     .get(`/${name}-count`, handler.getCount)
     .get(`/${name}-search`, handler.searchItem)
@@ -21,4 +20,9 @@ export default (name, Module, handler = new Handler(name, Module)) => {
     .use(`/${name}`, api)
 
   return app
+}
+
+export default {
+  route,
+  service: (name, Module, handler = new Handler(name, Module)) => route(name, handler)
 }

@@ -1,10 +1,5 @@
 import mongoose from '../index'
-import removeItem from '../../utils/model/remove'
-import getCount from '../../utils/model/count'
-import getRandom from '../../utils/model/random'
-import getItem from '../../utils/model/get'
-import updateItem from '../../utils/model/update'
-
+import {removeItem, getCount, getRandom, getItem, updateItem, autocomplite, searchItem} from '../../utils/model/helpers'
 
 let {Schema} = mongoose
 let schema = new Schema({
@@ -16,11 +11,14 @@ let schema = new Schema({
 })
 
 schema.statics.addItem = function ({start, end, name, about, company}, callback) {
+  console.log({start, end, name, about, company})
   const Experience = this
   let experience = new Experience({start, end, name, about, company})
   experience.save(err => callback(err, experience))
 }
 
+schema.statics.searchItem = searchItem
+schema.statics.autocomplete = autocomplite
 schema.statics.getItem = getItem
 schema.statics.getCount = getCount
 schema.statics.removeItem = removeItem

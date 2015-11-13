@@ -25,7 +25,11 @@ const speciality = {
 export default {
   generate: (cb) => {
     async.each([city, skill, university, speciality], ({name, data}, callback) => {
-      addArray(Models[name], data, err => callback())
+      let newData = []
+      for (let i = 0; i < data.length; i++) {
+        newData.push({name: data[i]})
+      }
+      addArray(Models[name], newData, err => callback())
     }, err => cb(err))
   },
   city, skill, university, speciality

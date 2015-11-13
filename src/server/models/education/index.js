@@ -1,7 +1,5 @@
 import mongoose from '../index'
-import removeItem from '../../utils/model/remove'
-import getCount from '../../utils/model/count'
-
+import {removeItem, getCount} from '../../utils/model/helpers'
 
 let {Schema} = mongoose
 let schema = new Schema({

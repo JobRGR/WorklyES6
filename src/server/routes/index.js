@@ -1,6 +1,7 @@
 import express from 'express'
 import render from '../handler/render'
-import Dictionary from '../handler/dictionary'
+import Dictionary from './services/dictionary'
+import Experience from './services/experience'
 import educationService from './services/education'
 
 export default () => {
@@ -10,7 +11,9 @@ export default () => {
   const services = ['City', 'Skill', 'University', 'Speciality']
   services.forEach(item => api.use(Dictionary[item]))
 
-  api.use(educationService())
+  api
+    .use(educationService())
+    .use(Experience)
 
   app
     .use('/api', api)
