@@ -1,12 +1,11 @@
 import Charlatan from 'charlatan'
-import mongoose from 'mongoose'
 import async from 'async'
 import {Education, University, Speciality} from '../../models/models'
 import addArray from '../utils/add_array'
 
 let data = []
 
-for (let i = 0; i < 50; i++) {
+for (let i = 0; i < 100; i++) {
   data.push({
     start: Charlatan.Date.birthday(4, 7),
     end: Charlatan.Date.birthday(0, 4)

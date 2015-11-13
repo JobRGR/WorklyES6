@@ -1,3 +1,1 @@
-export default (data) => {
-  return data[Math.random() * data.length]
-}
+export default (data) => data[parseInt(Math.random() * data.length)]
