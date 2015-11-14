@@ -1,5 +1,5 @@
 import express from 'express'
-import Handler from './handler'
+import Handler from '../handler'
 
 export default (name, handler) => {
   let app = express()

@@ -1,13 +1,11 @@
 import pluralize from 'pluralize'
 import Next from './helpers/next'
 
-let Handler = function (name, Module) {
+let Handler = function (name, Module, autocomplete = true, searchItem = true) {
   this.name = name
   this.names = pluralize(name, 2)
-
   let {nextItem, nextItems} = new Next(this.name)
-
-  return {
+  let handler = {
     getItem: (req, res, next) => Module.getItem(req.params.id, (err, item) => nextItem(err, item, req, next)),
     searchItem: (req, res, next) => Module.searchItem(req.query[name], (err, item) => nextItem(err, item, req, next)),
     getRandom: (req, res, next) => Module.getRandom((err, item) => nextItem(err, item, req, next)),
@@ -21,6 +19,9 @@ let Handler = function (name, Module) {
     sendItem: (req, res, next) => res.send({[this.name]: req[this.name]}),
     sendItems: (req, res, next) => res.send({[this.names]: req[this.names]})
   }
+  !autocomplete && (delete handler.autocomplete)
+  !searchItem && (delete handler.searchItem)
+  return handler
 }
 
 export default Handler

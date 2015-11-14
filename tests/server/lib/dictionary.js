@@ -26,7 +26,7 @@ export default (url, name) => {
     })
 
     it('.get random item', (done) => {
-      const index = parseInt(list.length * Math.random())
+      const index = Math.floor(list.length * Math.random())
       request(url)
         .get(`${path}/${list[index]._id}`)
         .end((err, res) => {
@@ -137,7 +137,7 @@ export default (url, name) => {
     })
 
     it('.autocomplete', (done) => {
-      const index = parseInt(list.length * Math.random())
+      const index = Math.floor(list.length * Math.random())
       const query = list[index].name.split(' ')[0]
       request(url)
         .get(`${path}-autocomplete?${name}=${query}`)
@@ -150,7 +150,7 @@ export default (url, name) => {
     })
 
     it('.search', (done) => {
-      const index = parseInt(list.length * Math.random())
+      const index = Math.floor(list.length * Math.random())
       const query = list[index].name
       request(url)
         .get(`${path}-search?${name}=${query}`)

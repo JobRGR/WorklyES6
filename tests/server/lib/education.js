@@ -32,7 +32,7 @@ export default (url) => {
     })
 
     it('.get random item', (done) => {
-      const index = parseInt(list.length * Math.random())
+      const index = Math.floor(list.length * Math.random())
       request(url)
         .get(`${path}/${list[index]._id}`)
         .end((err, res) => {
@@ -65,7 +65,7 @@ export default (url) => {
     })
 
     it('.set item', (done) => {
-      const index = parseInt(list.length * Math.random())
+      const index = Math.floor(list.length * Math.random())
       tmpData.speciality = list[index].speciality._id
       tmpData.university = list[index].university._id
       request(url)
@@ -100,7 +100,7 @@ export default (url) => {
     })
 
     it('.put item', (done) => {
-      const index = parseInt(list.length * Math.random())
+      const index = Math.floor(list.length * Math.random())
       newTmpData.speciality = list[index].speciality._id
       newTmpData.university = list[index].university._id
       request(url)

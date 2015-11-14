@@ -2,8 +2,8 @@ import express from 'express'
 import render from '../handler/render'
 import Dictionary from './services/dictionary'
 import CompanyName from './services/company_name'
-import experienceService from './services/experience'
-import educationService from './services/education'
+import Experience from './services/experience'
+import Education from './services/education'
 
 export default () => {
   let app = express()
@@ -13,8 +13,8 @@ export default () => {
   services.forEach(item => api.use(Dictionary[item]))
 
   api
-    .use(educationService())
-    .use(experienceService())
+    .use(Education)
+    .use(Experience)
     .use(CompanyName)
 
   app

@@ -23,4 +23,3 @@ schema.statics.getRandom = getRandom
 schema.statics.updateItem = updateItem
 
 export default schema
-
