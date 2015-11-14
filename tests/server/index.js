@@ -11,7 +11,7 @@ portscanner.checkPortStatus(port, ip, (error, status) => {
   (status == 'closed') && require('../../src/server')
 })
 
-const microServices = ['speciality', 'university', 'city', 'skill']
+const microServices = ['speciality', 'university', 'city', 'skill', 'position']
 microServices.forEach(name => service(url, name))
 
 education(url)

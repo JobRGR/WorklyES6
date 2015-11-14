@@ -13,12 +13,12 @@ for (let i = 0; i < 100; i++) {
 }
 
 export default (cb) => async.waterfall([
-  (callback) => async.each(data, (item, next) => University.getRandom((university) => {
+  callback => async.each(data, (item, next) => University.getRandom((university) => {
     item.university = university._id
     next()
-  }), (err) => callback()),
-  (callback) => async.each(data, (item, next) => Speciality.getRandom((speciality) => {
+  }), err => callback()),
+  callback => async.each(data, (item, next) => Speciality.getRandom((speciality) => {
     item.speciality = speciality._id
     next()
-  }), (err) => callback())
-], (err) => addArray(Education, data, cb))
+  }), err => callback())
+], err => addArray(Education, data, cb))

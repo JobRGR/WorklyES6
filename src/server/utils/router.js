@@ -1,7 +1,7 @@
 import express from 'express'
 import Handler from './handler'
 
-let route = (name, handler) => {
+export default (name, handler) => {
   let app = express()
 
   let api = express.Router()
@@ -20,9 +20,4 @@ let route = (name, handler) => {
     .use(`/${name}`, api)
 
   return app
-}
-
-export default {
-  route,
-  service: (name, Module, handler = new Handler(name, Module)) => route(name, handler)
 }

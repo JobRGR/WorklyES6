@@ -8,7 +8,7 @@ export default () => {
   let app = express()
   let api = express.Router()
 
-  const services = ['City', 'Skill', 'University', 'Speciality']
+  const services = ['City', 'Skill', 'University', 'Speciality', 'Position']
   services.forEach(item => api.use(Dictionary[item]))
 
   api

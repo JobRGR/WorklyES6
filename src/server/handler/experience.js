@@ -1,4 +1,3 @@
-import routerService from '../utils/router'
 import Handler from '../utils/handler'
 import Experience from '../models/experience'
 
