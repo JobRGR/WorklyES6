@@ -17,7 +17,7 @@ for (let i = 0; i < 100; i++) {
   })
 }
 
-export default (cb) => async.each(data, (item, next) => Position.getRandom(position => {
+export default (cb) => async.each(data, (item, next) => Position.getRandom((err, position) => {
   item.name = position._id
   next()
 }), err => addArray(Experience, data, cb))

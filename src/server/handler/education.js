@@ -3,21 +3,31 @@ import async from 'async'
 import {University, Speciality, Education} from '../models/models'
 
 
+let nextItem = (err, education, req, next) => {
+  req.education = education
+  next(err)
+}
+
+let nextItems = (err, educations, req, next) => {
+  req.educations = educations
+  next(err)
+}
+
 class EducationHandler {
   getAll(req, res, next) {
-    Education.getItem(null, educations => res.send({educations}))
+    Education.getItem(null, (err, educations) => nextItems(err, educations, req, next))
   }
 
   getItem(req, res, next) {
-    Education.getItem(req.params.id, education => res.send({education}))
+    Education.getItem(req.params.id, (err, education) => nextItem(err, education, req, next))
   }
 
   addItem(req, res, next) {
-    Education.addItem(req.body, (err, education) => res.send({err, education}))
+    Education.addItem(req.body, (err, education) => nextItem(err, education, req, next))
   }
 
   updateItem(req, res, next) {
-    Education.updateItem(req.params.id, req.body, (err, education) => res.send({err, education}))
+    Education.updateItem(req.params.id, req.body, (err, education) => nextItem(err, education, req, next))
   }
 
   removeAll(req, res, next) {
@@ -29,11 +39,11 @@ class EducationHandler {
   }
 
   getCount(req, res, next) {
-    Education.getCount(count => res.send({count}))
+    Education.getCount((err, count) => res.send({count}))
   }
 
   getRandom(req, res, next) {
-    Education.getRandom(education => res.send({education}))
+    Education.getRandom((err, education) => nextItem(err, education, req, next))
   }
 
   addNew(req, res, next) {
@@ -42,9 +52,21 @@ class EducationHandler {
       university: (callback) => University.addItem({name: req.body.university}, callback),
       speciality: (callback) => Speciality.addItem({name: req.body.speciality}, callback)
     }, (err, {university, speciality}) => {
+      console.log(university, speciality)
       let data = {start, end, university: university._id, speciality: speciality._id}
-      Education.addItem(data, (err, education) => res.send({err, education}))
+      Education.addItem(data, (err, education) => {
+        console.log(err, education)
+        nextItem(err, education, req, next)
+      })
     })
+  }
+
+  sendItem(req, res, next) {
+    res.send({education: req.education})
+  }
+
+  sendItems(req, res, next) {
+    res.send({educations: req.educations})
   }
 }
 

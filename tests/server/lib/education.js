@@ -106,7 +106,7 @@ export default (url) => {
       request(url)
         .put(`${path}/${tmpModel._id}`)
         .send(newTmpData)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'education')
           assert.property(res.body.education, 'start')
@@ -124,7 +124,7 @@ export default (url) => {
     it('.check put item', (done) => {
       request(url)
         .get(`${path}/${tmpModel._id}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'education')
           assert.property(res.body.education, 'start')
@@ -144,7 +144,7 @@ export default (url) => {
     it('.delete item', (done) => {
       request(url)
         .delete(`${path}/${tmpModel._id}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'ok')
           done()
@@ -154,7 +154,7 @@ export default (url) => {
     it('.check get delete', (done) => {
       request(url)
         .get(`${path}-count`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'count')
           assert.equal(res.body.count, list.length)
@@ -165,7 +165,7 @@ export default (url) => {
     it('.random', (done) => {
       request(url)
         .get(`${path}-random`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'education')
           assert.property(res.body.education, 'start')
@@ -202,7 +202,7 @@ export default (url) => {
     it('.check add new item', (done) => {
       request(url)
         .get(`${path}/${newDataReturn._id}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           newSpeciality = res.body.education.speciality || null
           newUniversity = res.body.education.university || null
           assert.equal(res.status, 200)
@@ -224,7 +224,7 @@ export default (url) => {
     it('.delete item', (done) => {
       request(url)
         .delete(`${path}/${newDataReturn._id}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'ok')
           done()
@@ -234,7 +234,7 @@ export default (url) => {
     it('.get new university', (done) => {
       request(url)
         .get(`/api/university/${newUniversity._id}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'university')
           assert.property(res.body.university, 'name')
@@ -247,7 +247,7 @@ export default (url) => {
     it('.delete new university', (done) => {
       request(url)
         .delete(`/api/university/${newUniversity._id}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'ok')
           done()
@@ -257,7 +257,7 @@ export default (url) => {
     it('.get new speciality', (done) => {
       request(url)
         .get(`/api/speciality/${newSpeciality._id}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'speciality')
           assert.property(res.body.speciality, 'name')
@@ -270,7 +270,7 @@ export default (url) => {
     it('.delete new speciality', (done) => {
       request(url)
         .delete(`/api/speciality/${newSpeciality._id}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'ok')
           done()

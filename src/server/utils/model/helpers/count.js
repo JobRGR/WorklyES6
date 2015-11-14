@@ -1,3 +1,3 @@
 export default function (callback) {
-  this.count({}, (err, count) => callback(count))
+  this.count({}, callback)
 }

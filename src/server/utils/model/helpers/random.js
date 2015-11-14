@@ -5,6 +5,6 @@ export default function(callback) {
     this
       .findOne()
       .skip(skip)
-      .exec((err, item) => callback(err || item))
+      .exec(callback)
   })
 }

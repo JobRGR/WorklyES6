@@ -26,7 +26,7 @@ export default (url) => {
     it('.get list', (done) => {
       request(url)
         .get(path)
-        .end(function(err, res) {
+        .end((err, res) => {
           list = res.body.experiences || []
           assert.equal(res.status, 200)
           assert.property(res.body, 'experiences')
@@ -38,7 +38,7 @@ export default (url) => {
       const index = parseInt(list.length * Math.random())
       request(url)
         .get(`${path}/${list[index]._id}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'experience')
           assert.property(res.body.experience, 'name')
@@ -54,7 +54,7 @@ export default (url) => {
     it('.get count', (done) => {
       request(url)
         .get(`${path}-count`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'count')
           assert.equal(res.body.count, list.length)
@@ -66,7 +66,7 @@ export default (url) => {
       request(url)
         .post(path)
         .send(tmpData)
-        .end(function(err, res) {
+        .end((err, res) => {
           tmpModel = res.body.experience || {}
           assert.equal(res.status, 200)
           assert.property(res.body, 'experience')
@@ -87,7 +87,7 @@ export default (url) => {
     it('.get item', (done) => {
       request(url)
         .get(`${path}/${tmpModel._id}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'experience')
           assert.property(res.body.experience, 'name')
@@ -100,7 +100,7 @@ export default (url) => {
       request(url)
         .put(`${path}/${tmpModel._id}`)
         .send(newTmpData)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'experience')
           assert.property(res.body.experience, 'name')
@@ -121,7 +121,7 @@ export default (url) => {
     it('.check put item', (done) => {
       request(url)
         .get(`${path}/${tmpModel._id}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'experience')
           assert.property(res.body.experience, 'name')
@@ -142,7 +142,7 @@ export default (url) => {
     it('.check get count', (done) => {
       request(url)
         .get(`${path}-count`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'count')
           assert.equal(res.body.count, list.length + 1)
@@ -153,7 +153,7 @@ export default (url) => {
     it('.delete item', (done) => {
       request(url)
         .delete(`${path}/${tmpModel._id}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'ok')
           done()
@@ -163,7 +163,7 @@ export default (url) => {
     it('.check get delete', (done) => {
       request(url)
         .get(`${path}-count`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'count')
           assert.equal(res.body.count, list.length)
@@ -176,7 +176,7 @@ export default (url) => {
       const query = list[index].name.split(' ')[0]
       request(url)
         .get(`${path}-autocomplete?position=${query}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'experiences')
           res.body.experiences.forEach(item => assert.include(item.name.toLowerCase(), query.toLowerCase()))
@@ -189,7 +189,7 @@ export default (url) => {
       const query = list[index].name
       request(url)
         .get(`${path}-search?position=${query}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'experience')
           assert.equal(res.body.experience.name, query)
@@ -202,7 +202,7 @@ export default (url) => {
       const query = list[index].company.split(' ')[0]
       request(url)
         .get(`${path}-autocomplete?company=${query}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'experiences')
           res.body.experiences.forEach(item => assert.include(item.company.toLowerCase(), query.toLowerCase()))
@@ -215,7 +215,7 @@ export default (url) => {
       const query = list[index].company
       request(url)
         .get(`${path}-search?company=${query}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'experience')
           assert.equal(res.body.experience.company, query)
@@ -226,7 +226,7 @@ export default (url) => {
     it('.random', (done) => {
       request(url)
         .get(`${path}-random`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'experience')
           assert.isString(res.body.experience.name)

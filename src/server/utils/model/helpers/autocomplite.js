@@ -3,5 +3,5 @@ export default function (name, callback, type = 'name') {
     .find({[type]: new RegExp(`.*${name}.*`, 'i')})
     .sort({'date': -1})
     .limit(20)
-    .exec((err, items) => callback(items))
+    .exec((err, items) => callback(err, items))
 }

@@ -15,7 +15,7 @@ export default (url, name) => {
     it('.get list', (done) => {
       request(url)
         .get(path)
-        .end(function(err, res) {
+        .end((err, res) => {
           list = res.body[names] || []
           assert.equal(res.status, 200)
           assert.property(res.body, names)
@@ -27,7 +27,7 @@ export default (url, name) => {
       const index = parseInt(list.length * Math.random())
       request(url)
         .get(`${path}/${list[index]._id}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, name)
           assert.property(res.body[name], 'name')
@@ -40,7 +40,7 @@ export default (url, name) => {
     it('.get count', (done) => {
       request(url)
         .get(`${path}-count`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'count')
           assert.equal(res.body.count, list.length)
@@ -52,7 +52,7 @@ export default (url, name) => {
       request(url)
         .post(path)
         .send(tmpData)
-        .end(function(err, res) {
+        .end((err, res) => {
           tmpModel = res.body[name] || {}
           assert.equal(res.status, 200)
           assert.property(res.body, name)
@@ -65,7 +65,7 @@ export default (url, name) => {
     it('.get item', (done) => {
       request(url)
         .get(`${path}/${tmpModel._id}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, name)
           assert.property(res.body[name], 'name')
@@ -79,7 +79,7 @@ export default (url, name) => {
       request(url)
         .put(`${path}/${tmpModel._id}`)
         .send(newTmpData)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, name)
           assert.property(res.body[name], 'name')
@@ -92,7 +92,7 @@ export default (url, name) => {
     it('.check put item', (done) => {
       request(url)
         .get(`${path}/${tmpModel._id}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, name)
           assert.property(res.body[name], 'name')
@@ -105,7 +105,7 @@ export default (url, name) => {
     it('.check get count', (done) => {
       request(url)
         .get(`${path}-count`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'count')
           assert.equal(res.body.count, list.length + 1)
@@ -116,7 +116,7 @@ export default (url, name) => {
     it('.delete item', (done) => {
       request(url)
         .delete(`${path}/${tmpModel._id}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'ok')
           done()
@@ -126,7 +126,7 @@ export default (url, name) => {
     it('.check get delete', (done) => {
       request(url)
         .get(`${path}-count`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'count')
           assert.equal(res.body.count, list.length)
@@ -139,7 +139,7 @@ export default (url, name) => {
       const query = list[index].name.split(' ')[0]
       request(url)
         .get(`${path}-autocomplete?${name}=${query}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, names)
           res.body[names].forEach(item => assert.include(item.name.toLowerCase(), query.toLowerCase()))
@@ -152,7 +152,7 @@ export default (url, name) => {
       const query = list[index].name
       request(url)
         .get(`${path}-search?${name}=${query}`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, name)
           assert.equal(res.body[name].name, query)
@@ -163,7 +163,7 @@ export default (url, name) => {
     it('.random', (done) => {
       request(url)
         .get(`${path}-random`)
-        .end(function(err, res) {
+        .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, name)
           assert.isString(res.body[name].name)

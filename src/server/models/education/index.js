@@ -20,13 +20,13 @@ schema.statics.getItem = function (id, callback) {
     .findById(id)
     .populate('university')
     .populate('speciality')
-    .exec((err, education) => callback(education))
+    .exec(callback)
   else this
     .find({})
     .populate('university')
     .populate('speciality')
     .sort({'start': 1})
-    .exec((err, educations) => callback(educations))
+    .exec(callback)
 }
 
 schema.statics.updateItem = function (id, edit, callback) {
@@ -51,7 +51,7 @@ schema.statics.getRandom = function(callback) {
       .skip(skip)
       .populate('university')
       .populate('speciality')
-      .exec((err, item) => callback(err || item))
+      .exec(callback)
   })
 }
 
