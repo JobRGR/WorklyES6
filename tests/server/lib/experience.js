@@ -1,35 +1,32 @@
 import {assert} from 'chai'
 import request from 'supertest'
-import pluralize from 'pluralize'
 
 export default (url) => {
-  const path = `/api/experience`
-  const tmpData = {
-    name: 'Some experience',
-    start: new Date('09-01-2012'),
-    end: new Date('07-01-2017'),
-    company: 'Some company',
-    about: 'Some text'
+  const path = '/api/experience'
+  let tmpData = {start: new Date('09-01-2012'), end: new Date('07-01-2017')}
+  let newTmpData = {start: new Date('09-01-2011'), end: new Date('07-01-2018')}
+
+  let newData = {
+    start: new Date('09-01-2012'), end: new Date('07-01-2017'),
+    company: 'Stanford', position: 'Computer Science'
   }
-  const newTmpData = {
-    name:'New experience',
-    start: new Date('09-01-2011'),
-    end: new Date('07-01-2018'),
-    company: 'Some new company',
-    about: 'Some new text'
-  }
+
+  let newDataReturn = {}
+  let newcompany = null
+  let newposition = null
 
   let tmpModel = null
   let list = null
 
-  describe(`experience tests`, () => {
+  describe('experience tests', () => {
     it('.get list', (done) => {
       request(url)
         .get(path)
-        .end((err, res) => {
+        .end((err, res) =>  {
           list = res.body.experiences || []
           assert.equal(res.status, 200)
           assert.property(res.body, 'experiences')
+          assert.isAbove(res.body.experiences.length, 0)
           done()
         })
     })
@@ -41,12 +38,17 @@ export default (url) => {
         .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'experience')
-          assert.property(res.body.experience, 'name')
           assert.property(res.body.experience, 'start')
           assert.property(res.body.experience, 'end')
-          assert.property(res.body.experience, 'about')
+          assert.property(res.body.experience, 'position')
           assert.property(res.body.experience, 'company')
-          assert.deepEqual(res.body.experience, list[index])
+          assert.equal(res.body.experience.start, list[index].start)
+          assert.equal(res.body.experience.end, list[index].end)
+          assert.equal(res.body.experience._id, list[index]._id)
+          assert.isObject(res.body.experience.position)
+          assert.isObject(res.body.experience.company)
+          assert.deepEqual(res.body.experience.position, list[index].position)
+          assert.deepEqual(res.body.experience.company, list[index].company)
           done()
         })
     })
@@ -63,57 +65,58 @@ export default (url) => {
     })
 
     it('.set item', (done) => {
+      const index = parseInt(list.length * Math.random())
+      tmpData.position = list[index].position._id
+      tmpData.company = list[index].company._id
       request(url)
         .post(path)
         .send(tmpData)
-        .end((err, res) => {
+        .end(((err, res) => {
           tmpModel = res.body.experience || {}
           assert.equal(res.status, 200)
           assert.property(res.body, 'experience')
-          assert.property(res.body.experience, 'name')
           assert.property(res.body.experience, 'start')
           assert.property(res.body.experience, 'end')
-          assert.property(res.body.experience, 'about')
+          assert.property(res.body.experience, 'position')
           assert.property(res.body.experience, 'company')
-          assert.equal(res.body.experience.name, tmpData.name)
           assert.equal(res.body.experience.start, tmpData.start.toISOString())
           assert.equal(res.body.experience.end, tmpData.end.toISOString())
-          assert.equal(res.body.experience.about, tmpData.about)
+          assert.equal(res.body.experience.position, tmpData.position)
           assert.equal(res.body.experience.company, tmpData.company)
           done()
-        })
+        }))
     })
 
-    it('.get item', (done) => {
+    it('.check set', (done) => {
+      console.log(list.length)
       request(url)
-        .get(`${path}/${tmpModel._id}`)
+        .get(`${path}-count`)
         .end((err, res) => {
           assert.equal(res.status, 200)
-          assert.property(res.body, 'experience')
-          assert.property(res.body.experience, 'name')
-          assert.deepEqual(res.body.experience, tmpModel)
+          assert.property(res.body, 'count')
+          assert.equal(res.body.count, list.length + 1)
           done()
         })
     })
 
     it('.put item', (done) => {
+      const index = parseInt(list.length * Math.random())
+      newTmpData.position = list[index].position._id
+      newTmpData.company = list[index].company._id
       request(url)
         .put(`${path}/${tmpModel._id}`)
         .send(newTmpData)
         .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'experience')
-          assert.property(res.body.experience, 'name')
           assert.property(res.body.experience, 'start')
           assert.property(res.body.experience, 'end')
-          assert.property(res.body.experience, 'about')
+          assert.property(res.body.experience, 'position')
           assert.property(res.body.experience, 'company')
-          assert.equal(res.body.experience.name, newTmpData.name)
           assert.equal(res.body.experience.start, newTmpData.start.toISOString())
           assert.equal(res.body.experience.end, newTmpData.end.toISOString())
-          assert.equal(res.body.experience.about, newTmpData.about)
+          assert.equal(res.body.experience.position, newTmpData.position)
           assert.equal(res.body.experience.company, newTmpData.company)
-          assert.equal(res.body.experience._id, tmpModel._id)
           done()
         })
     })
@@ -124,28 +127,16 @@ export default (url) => {
         .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'experience')
-          assert.property(res.body.experience, 'name')
           assert.property(res.body.experience, 'start')
           assert.property(res.body.experience, 'end')
-          assert.property(res.body.experience, 'about')
+          assert.property(res.body.experience, 'position')
           assert.property(res.body.experience, 'company')
-          assert.equal(res.body.experience.name, newTmpData.name)
           assert.equal(res.body.experience.start, newTmpData.start.toISOString())
           assert.equal(res.body.experience.end, newTmpData.end.toISOString())
-          assert.equal(res.body.experience.about, newTmpData.about)
-          assert.equal(res.body.experience.company, newTmpData.company)
-          assert.equal(res.body.experience._id, tmpModel._id)
-          done()
-        })
-    })
-
-    it('.check get count', (done) => {
-      request(url)
-        .get(`${path}-count`)
-        .end((err, res) => {
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'count')
-          assert.equal(res.body.count, list.length + 1)
+          assert.isObject(res.body.experience.position)
+          assert.isObject(res.body.experience.company)
+          assert.equal(res.body.experience.position._id, newTmpData.position)
+          assert.equal(res.body.experience.company._id, newTmpData.company)
           done()
         })
     })
@@ -171,65 +162,117 @@ export default (url) => {
         })
     })
 
-    it('.autocomplete position', (done) => {
-      const index = parseInt(list.length * Math.random())
-      const query = list[index].name.split(' ')[0]
-      request(url)
-        .get(`${path}-autocomplete?position=${query}`)
-        .end((err, res) => {
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'experiences')
-          res.body.experiences.forEach(item => assert.include(item.name.toLowerCase(), query.toLowerCase()))
-          done()
-        })
-    })
-
-    it('.search position', (done) => {
-      const index = parseInt(list.length * Math.random())
-      const query = list[index].name
-      request(url)
-        .get(`${path}-search?position=${query}`)
-        .end((err, res) => {
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'experience')
-          assert.equal(res.body.experience.name, query)
-          done()
-        })
-    })
-
-    it('.autocomplete company', (done) => {
-      const index = parseInt(list.length * Math.random())
-      const query = list[index].company.split(' ')[0]
-      request(url)
-        .get(`${path}-autocomplete?company=${query}`)
-        .end((err, res) => {
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'experiences')
-          res.body.experiences.forEach(item => assert.include(item.company.toLowerCase(), query.toLowerCase()))
-          done()
-        })
-    })
-
-    it('.search company', (done) => {
-      const index = parseInt(list.length * Math.random())
-      const query = list[index].company
-      request(url)
-        .get(`${path}-search?company=${query}`)
-        .end((err, res) => {
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'experience')
-          assert.equal(res.body.experience.company, query)
-          done()
-        })
-    })
-
     it('.random', (done) => {
       request(url)
         .get(`${path}-random`)
         .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'experience')
-          assert.isString(res.body.experience.name)
+          assert.property(res.body.experience, 'start')
+          assert.property(res.body.experience, 'end')
+          assert.property(res.body.experience, 'position')
+          assert.property(res.body.experience, 'company')
+          assert.isString(res.body.experience.start)
+          assert.isString(res.body.experience.end)
+          assert.isObject(res.body.experience.position)
+          assert.isObject(res.body.experience.company)
+          done()
+        })
+    })
+
+
+    it('.add new item', (done) => {
+      request(url)
+        .post(`${path}-add`)
+        .send(newData)
+        .end(((err, res) => {
+          newDataReturn = res.body.experience || {}
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'experience')
+          assert.property(res.body.experience, 'start')
+          assert.property(res.body.experience, 'end')
+          assert.property(res.body.experience, 'position')
+          assert.property(res.body.experience, 'company')
+          assert.equal(res.body.experience.start, newData.start.toISOString())
+          assert.equal(res.body.experience.end, newData.end.toISOString())
+          done()
+        }))
+    })
+
+    it('.check add new item', (done) => {
+      request(url)
+        .get(`${path}/${newDataReturn._id}`)
+        .end((err, res) => {
+          newposition = res.body.experience.position || null
+          newcompany = res.body.experience.company || null
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'experience')
+          assert.property(res.body.experience, 'start')
+          assert.property(res.body.experience, 'end')
+          assert.property(res.body.experience, 'position')
+          assert.property(res.body.experience, 'company')
+          assert.equal(res.body.experience.start, newData.start.toISOString())
+          assert.equal(res.body.experience.end, newData.end.toISOString())
+          assert.isObject(res.body.experience.position)
+          assert.isObject(res.body.experience.company)
+          assert.equal(res.body.experience.position._id, newDataReturn.position)
+          assert.equal(res.body.experience.company._id, newDataReturn.company)
+          done()
+        })
+    })
+
+    it('.delete item', (done) => {
+      request(url)
+        .delete(`${path}/${newDataReturn._id}`)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'ok')
+          done()
+        })
+    })
+
+    it('.get new company', (done) => {
+      request(url)
+        .get(`/api/company-name/${newcompany._id}`)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'company')
+          assert.property(res.body.company, 'name')
+          assert.equal(res.body.company.name, newData.company)
+          assert.equal(res.body.company._id, newcompany._id)
+          done()
+        })
+    })
+
+    it('.delete new company', (done) => {
+      request(url)
+        .delete(`/api/company-name/${newcompany._id}`)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'ok')
+          done()
+        })
+    })
+
+    it('.get new position', (done) => {
+      request(url)
+        .get(`/api/position/${newposition._id}`)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'position')
+          assert.property(res.body.position, 'name')
+          assert.equal(res.body.position.name, newData.position)
+          assert.equal(res.body.position._id, newposition._id)
+          done()
+        })
+    })
+
+    it('.delete new position', (done) => {
+      request(url)
+        .delete(`/api/position/${newposition._id}`)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'ok')
           done()
         })
     })

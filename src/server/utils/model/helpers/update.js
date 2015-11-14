@@ -4,6 +4,6 @@ export default function (id, update, callback) {
     for (let key in  update)
       if (update[key])
         item[key] = update[key]
-    item.save(callback)
+    item.save(err => callback(err, item))
   })
 }

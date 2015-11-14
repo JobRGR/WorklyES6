@@ -1,29 +1,61 @@
-import Handler from '../utils/handler'
+import express from 'express'
+import async from 'async'
 import Next from '../utils/handler/helpers/next'
-import Experience from '../models/experience'
+import {Position, CompanyName, Experience} from '../models/models'
 
-
-let handler = new Handler('experience', Experience)
 let {nextItem, nextItems} = new Next('experience')
 
-handler.autocomplete = (req, res, next) => {
-  let callback = (err, experiences) => nextItems(err, experiences, req, next)
-  if (req.query.company) {
-    Experience.autocomplete(req.query.company, callback, 'company')
+class experienceHandler {
+  getAll(req, res, next) {
+    Experience.getItem(null, (err, experiences) => nextItems(err, experiences, req, next))
   }
-  else if (req.query.position) {
-    Experience.autocomplete(req.query.position, callback, 'name')
+
+  getItem(req, res, next) {
+    Experience.getItem(req.params.id, (err, experience) => nextItem(err, experience, req, next))
+  }
+
+  addItem(req, res, next) {
+    Experience.addItem(req.body, (err, experience) => nextItem(err, experience, req, next))
+  }
+
+  updateItem(req, res, next) {
+    Experience.updateItem(req.params.id, req.body, (err, experience) => nextItem(err, experience, req, next))
+  }
+
+  removeAll(req, res, next) {
+    Experience.removeItem(null, err => res.send({ok: err || true}))
+  }
+
+  removeItem(req, res, next) {
+    Experience.removeItem(req.params.id, err => res.send({ok: err || true}))
+  }
+
+  getCount(req, res, next) {
+    Experience.getCount((err, count) => res.send({count}))
+  }
+
+  getRandom(req, res, next) {
+    Experience.getRandom((err, experience) => nextItem(err, experience, req, next))
+  }
+
+  addNew(req, res, next) {
+    let {start, end} = req.body
+    async.parallel({
+      company: (callback) => CompanyName.addItem({name: req.body.company}, callback),
+      position: (callback) => Position.addItem({name: req.body.position}, callback)
+    }, (err, {company, position}) => {
+      let data = {start, end, position: position._id, company: company._id}
+      Experience.addItem(data, (err, experience) => nextItem(err, experience, req, next))
+    })
+  }
+
+  sendItem(req, res, next) {
+    res.send({experience: req.experience})
+  }
+
+  sendItems(req, res, next) {
+    res.send({experiences: req.experiences})
   }
 }
 
-handler.searchItem = (req, res, next) => {
-  let callback = (err, experience) => nextItem(err, experience, req, next)
-  if (req.query.company) {
-    Experience.searchItem(req.query.company, callback, 'company')
-  }
-  else if (req.query.position) {
-    Experience.searchItem(req.query.position,callback, 'name')
-  }
-}
-
-export default handler
+export default new experienceHandler()

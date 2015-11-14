@@ -1,7 +1,8 @@
 import express from 'express'
 import render from '../handler/render'
 import Dictionary from './services/dictionary'
-import Experience from './services/experience'
+import CompanyName from './services/company_name'
+import experienceService from './services/experience'
 import educationService from './services/education'
 
 export default () => {
@@ -13,7 +14,8 @@ export default () => {
 
   api
     .use(educationService())
-    .use(Experience)
+    .use(experienceService())
+    .use(CompanyName)
 
   app
     .use('/api', api)

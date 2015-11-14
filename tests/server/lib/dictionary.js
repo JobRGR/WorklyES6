@@ -4,10 +4,12 @@ import pluralize from 'pluralize'
 
 export default (url, name) => {
   const path = `/api/${name}`
+  if (name == 'company-name') {
+    name = 'company'
+  }
   const tmpData = {name: `Some ${name}`}
   const newTmpData = {name:`New ${name}`}
   const names = pluralize(name, 2)
-
   let tmpModel = null
   let list = null
 
