@@ -1,17 +1,9 @@
 import express from 'express'
 import async from 'async'
+import Next from '../utils/handler/helpers/next'
 import {University, Speciality, Education} from '../models/models'
 
-
-let nextItem = (err, education, req, next) => {
-  req.education = education
-  next(err)
-}
-
-let nextItems = (err, educations, req, next) => {
-  req.educations = educations
-  next(err)
-}
+let {nextItem, nextItems} = new Next('education')
 
 class EducationHandler {
   getAll(req, res, next) {

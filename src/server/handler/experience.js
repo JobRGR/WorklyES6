@@ -1,17 +1,10 @@
 import Handler from '../utils/handler'
+import Next from '../utils/handler/helpers/next'
 import Experience from '../models/experience'
 
+
 let handler = new Handler('experience', Experience)
-
-let nextItem = (err, experience, req, next) => {
-  req.experience = experience
-  next(err)
-}
-
-let nextItems = (err, experiences, req, next) => {
-  req.experiences = experiences
-  next(err)
-}
+let {nextItem, nextItems} = new Next('experience')
 
 handler.autocomplete = (req, res, next) => {
   let callback = (err, experiences) => nextItems(err, experiences, req, next)

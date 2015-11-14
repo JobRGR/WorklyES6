@@ -1,18 +1,11 @@
 import pluralize from 'pluralize'
+import Next from './helpers/next'
 
 let Handler = function (name, Module) {
   this.name = name
   this.names = pluralize(name, 2)
 
-  let nextItem = (err, item, req, next) => {
-    req[this.name] = item
-    next(err)
-  }
-
-  let nextItems = (err, items, req, next) => {
-    req[this.names] = items
-    next(err)
-  }
+  let {nextItem, nextItems} = new Next(this.name)
 
   return {
     getItem: (req, res, next) => Module.getItem(req.params.id, (err, item) => nextItem(err, item, req, next)),
