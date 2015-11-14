@@ -39,9 +39,6 @@ schema.statics.updateItem = function (id, edit, callback) {
   })
 }
 
-schema.statics.getCount = getCount
-schema.statics.removeItem = removeItem
-
 schema.statics.getRandom = function(callback) {
   this.count((err, count) => {
     if (err) return callback(err)
@@ -54,6 +51,9 @@ schema.statics.getRandom = function(callback) {
       .exec(callback)
   })
 }
+
+schema.statics.getCount = getCount
+schema.statics.removeItem = removeItem
 
 export default mongoose.model('Education', schema)
 

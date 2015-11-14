@@ -18,12 +18,13 @@ schema.statics.addItem = function ({start, end, name, about, company}, callback)
 }
 
 schema.statics.searchItem = searchItem
+schema.statics.getRandom = getRandom
 schema.statics.autocomplete = autocomplite
 schema.statics.getItem = getItem
-schema.statics.getCount = getCount
-schema.statics.removeItem = removeItem
-schema.statics.getRandom = getRandom
 schema.statics.updateItem = updateItem
+
+schema.statics.removeItem = removeItem
+schema.statics.getCount = getCount
 
 export default mongoose.model('Experience', schema)
 

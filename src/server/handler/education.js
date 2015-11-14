@@ -44,12 +44,8 @@ class EducationHandler {
       university: (callback) => University.addItem({name: req.body.university}, callback),
       speciality: (callback) => Speciality.addItem({name: req.body.speciality}, callback)
     }, (err, {university, speciality}) => {
-      console.log(university, speciality)
       let data = {start, end, university: university._id, speciality: speciality._id}
-      Education.addItem(data, (err, education) => {
-        console.log(err, education)
-        nextItem(err, education, req, next)
-      })
+      Education.addItem(data, (err, education) => nextItem(err, education, req, next))
     })
   }
 
