@@ -1,7 +1,7 @@
 import pluralize from 'pluralize'
 import Next from './helpers/next'
 
-let Handler = function (name, Module, autocomplete = true, searchItem = true) {
+let Handler = function (name, Module, searchItem = true, autocomplete = true) {
   this.name = name
   this.names = pluralize(name, 2)
   let {nextItem, nextItems} = new Next(this.name)

@@ -1,4 +1,4 @@
-import routerService from '../../utils/router'
+import router from '../../utils/router'
 import handler from '../../handler/company_name'
 
-export default routerService('company-name', handler)
+export default router('company-name', handler)
