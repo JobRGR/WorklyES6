@@ -4,7 +4,7 @@ import Handler from '../utils/handler'
 import {University, Speciality, Education} from '../models/models'
 
 let {nextItem, nextItems} = new Next('education')
-let handler = new Handler('education', Education)
+let handler = new Handler('education', Education, false, false)
 
 let addModel = ({university, speciality}, cb) => {
   async.parallel({

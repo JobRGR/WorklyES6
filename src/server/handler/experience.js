@@ -4,7 +4,7 @@ import Handler from '../utils/handler'
 import {Position, CompanyName, Experience} from '../models/models'
 
 let {nextItem, nextItems} = new Next('experience')
-let handler = new Handler('experience', Experience)
+let handler = new Handler('experience', Experience, false, false)
 
 
 let addModel = ({company, position}, cb) => {
