@@ -1,5 +1,5 @@
 import mongoose from '../index'
-import {removeItem, getCount} from '../../utils/model/helpers'
+import {removeItem, getCount, updateItem} from '../../utils/model/helpers'
 
 let {Schema} = mongoose
 let schema = new Schema({
@@ -29,14 +29,8 @@ schema.statics.getItem = function (id, callback) {
     .exec(callback)
 }
 
-schema.statics.updateItem = function (id, edit, callback) {
-  this.findById(id, (err, education) => {
-    if (err) return callback(err)
-    for (let key in  edit)
-      if (edit[key])
-        education[key] = /speciality|university/.test(key) ? mongoose.Types.ObjectId(edit[key]) : edit[key]
-    education.save(err => callback(err, education))
-  })
+schema.statics.updateItem = function (id, update, callback) {
+  return updateItem.apply(this, [id, update, callback, ['university', 'speciality']])
 }
 
 schema.statics.getRandom = function(callback) {

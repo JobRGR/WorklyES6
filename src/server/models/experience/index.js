@@ -1,5 +1,5 @@
 import mongoose from '../index'
-import {removeItem, getCount, getRandom, getItem, updateItem, autocomplite, searchItem} from '../../utils/model/helpers'
+import {removeItem, getCount, updateItem} from '../../utils/model/helpers'
 
 let {Schema} = mongoose
 let schema = new Schema({
@@ -30,14 +30,8 @@ schema.statics.getItem = function (id, callback) {
     .exec(callback)
 }
 
-schema.statics.updateItem = function (id, edit, callback) {
-  this.findById(id, (err, education) => {
-    if (err) return callback(err)
-    for (let key in  edit)
-      if (edit[key])
-        education[key] = /position|company/.test(key) ? mongoose.Types.ObjectId(edit[key]) : edit[key]
-    education.save(err => callback(err, education))
-  })
+schema.statics.updateItem = function (id, update, callback) {
+  return updateItem.apply(this, [id, update, callback, ['position', 'company']])
 }
 
 schema.statics.getRandom = function(callback) {
@@ -51,22 +45,6 @@ schema.statics.getRandom = function(callback) {
       .populate('company')
       .exec(callback)
   })
-}
-
-schema.statics.searchByCompany = function (company, callback) {
-  this
-    .find({company})
-    .populate('position')
-    .populate('company')
-    .exec(callback)
-}
-
-schema.statics.searchByCompany = function (position, callback) {
-  this
-    .find({position})
-    .populate('position')
-    .populate('company')
-    .exec(callback)
 }
 
 schema.statics.removeItem = removeItem
