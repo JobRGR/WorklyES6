@@ -2,8 +2,7 @@ import express from 'express'
 import render from '../handler/render'
 import Dictionary from './services/dictionary'
 import CompanyName from './services/company_name'
-import Experience from './services/education_experience/experience'
-import Education from './services/education_experience/education'
+import {Experience, Education} from './services/education_experience/'
 
 export default () => {
   let app = express()
