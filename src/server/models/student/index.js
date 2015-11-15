@@ -39,13 +39,17 @@ schema.statics.getItem = function (id, callback) {
     .exec(callback)
 }
 
-schema.statics.updateItem = function (id, edit, callback) {
+schema.statics.updateItem = function (id, update, callback) {
   this.findById(id, (err, student) => {
     let check = (key, obj) => /education|city|experience|skill/.test(key) ? mongoose.Types.ObjectId(obj[key]) : obj[key]
     if (err) return callback(err)
-    for (let key in  edit)
-      if (edit[key])
-        student[key] = /education|city|experience|skill/.test(key) ? mongoose.Types.ObjectId(edit[key]) : edit[key]
+    for (let key in  update)
+      if (update[key]) {
+        if (/education|experience|skill/.test(key) && !Array.isArray(update[key]))
+          student.push(mongoose.Types.ObjectId(update[key]))
+        else
+          student[key] = check(key, update)
+      }
     student.save(err => callback(err, student))
   })
 }
