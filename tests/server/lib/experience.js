@@ -8,7 +8,12 @@ export default (url) => {
 
   let newData = {
     start: new Date('09-01-2012'), end: new Date('07-01-2017'),
-    company: 'Stanford', position: 'Computer Science'
+    company: 'Google', position: 'Data Analyst'
+  }
+
+  let editNewData = {
+    start: new Date('01-01-2012'), end: new Date('01-01-2017'),
+    company: 'Google', position: 'Data Analyst'
   }
 
   let newDataReturn = {}
@@ -217,6 +222,25 @@ export default (url) => {
           assert.isObject(res.body.experience.company)
           assert.equal(res.body.experience.position._id, newDataReturn.position)
           assert.equal(res.body.experience.company._id, newDataReturn.company)
+          done()
+        })
+    })
+
+    it('.put new item', (done) => {
+      request(url)
+        .put(`${path}-update/${newDataReturn._id}`)
+        .send(editNewData)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'experience')
+          assert.property(res.body.experience, 'start')
+          assert.property(res.body.experience, 'end')
+          assert.property(res.body.experience, 'position')
+          assert.property(res.body.experience, 'company')
+          assert.equal(res.body.experience.start, editNewData.start.toISOString())
+          assert.equal(res.body.experience.end, editNewData.end.toISOString())
+          assert.equal(res.body.experience.position._id, newDataReturn.position._id)
+          assert.equal(res.body.experience.company._id, newDataReturn.company._id)
           done()
         })
     })

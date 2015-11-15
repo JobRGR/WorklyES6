@@ -11,6 +11,11 @@ export default (url) => {
     university: 'Stanford', speciality: 'Computer Science'
   }
 
+  let editNewData = {
+    start: new Date('01-01-2012'), end: new Date('01-01-2017'),
+    university: 'Stanford', speciality: 'Computer Science'
+  }
+
   let newDataReturn = {}
   let newUniversity = null
   let newSpeciality = null
@@ -217,6 +222,25 @@ export default (url) => {
           assert.isObject(res.body.education.university)
           assert.equal(res.body.education.speciality._id, newDataReturn.speciality)
           assert.equal(res.body.education.university._id, newDataReturn.university)
+          done()
+        })
+    })
+
+    it('.put new item', (done) => {
+      request(url)
+        .put(`${path}-update/${newDataReturn._id}`)
+        .send(editNewData)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'education')
+          assert.property(res.body.education, 'start')
+          assert.property(res.body.education, 'end')
+          assert.property(res.body.education, 'speciality')
+          assert.property(res.body.education, 'university')
+          assert.equal(res.body.education.start, editNewData.start.toISOString())
+          assert.equal(res.body.education.end, editNewData.end.toISOString())
+          assert.equal(res.body.education.speciality._id, newDataReturn.speciality._id)
+          assert.equal(res.body.education.university._id, newDataReturn.university._id)
           done()
         })
     })
