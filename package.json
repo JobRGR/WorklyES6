@@ -25,6 +25,7 @@
     "babel-runtime": "^5.4.7",
     "body-parser": "^1.13.3",
     "charlatan": "^1.0.0",
+    "crypto": "0.0.3",
     "del": "^1.1.1",
     "express": "^4.12.4",
     "gulp": "^3.9.0",

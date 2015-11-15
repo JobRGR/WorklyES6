@@ -5,7 +5,7 @@ import addArray from '../utils/add_array'
 
 let data = []
 
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 200; i++) {
   data.push({
     start: Charlatan.Date.birthday(4, 7),
     end: Charlatan.Date.birthday(0, 4)

@@ -6,5 +6,6 @@ import Education from './education'
 import Experience from './experience'
 import Position from './position'
 import CompanyName from './company_name'
+import Student from './student'
 
-export default {City, Skill, Speciality, University, Education, Experience, Position, CompanyName}
+export default {City, Skill, Speciality, University, Education, Experience, Position, CompanyName, Student}

@@ -1,3 +1,4 @@
+import crypto from 'crypto'
 import mongoose from '../index'
 import {removeItem, getCount} from '../../utils/model/helpers'
 
@@ -12,8 +13,49 @@ let schema = new Schema({
   experience: [{type: mongoose.Schema.Types.ObjectId, ref: 'Experience'}],
   skill: [{type: mongoose.Schema.Types.ObjectId, ref: 'Skill'}],
   city: [{type: mongoose.Schema.Types.ObjectId, ref: 'City'}],
-  date: {type: Date, required: true, default: Date.now}
+  date: {type: Date, required: true, default: Date.now},
+  hashedPassword: {type: String, required: true},
+  salt: {type: String, required: true}
 })
+
+schema.path('email').validate((value) => {
+  let regex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-?[a-zA-Z0-9])*(\.[a-zA-Z](-?[a-zA-Z0-9])*)+$/
+  return regex.test(value)
+}, 'invalid_email')
+
+schema.methods.encryptPassword = function(password) {
+  return crypto.createHmac('sha1', this.salt).update(password).digest('hex')
+}
+
+schema
+  .virtual('password')
+  .set(function(password) {
+    this._plainPassword = password
+    this.salt = Math.random() + ''
+    this.hashedPassword = this.encryptPassword(password)
+  })
+  .get(function() {
+    return this._plainPassword
+  })
+
+schema.methods.checkPassword = function(password) {
+  return this.encryptPassword(password) === this.hashedPassword
+}
+
+schema.statics.authorize = function ({email, password}, callback) {
+  this
+    .findOne({email})
+    .populate('education')
+    .populate('city')
+    .populate('skill')
+    .populate('experience')
+    .exec((err, user) => {
+      if (err) callback(err, null)
+      else if (!user) callback(null, null)
+      else if (!user.checkPassword(password)) callback(null, null)
+      else callback(null, user)
+    })
+}
 
 schema.statics.addItem = function ({name, email, dob, telephone, about, education, experience, skill, city}, callback) {
   let Student = this
@@ -73,5 +115,5 @@ schema.statics.getRandom = function(callback) {
 schema.statics.getCount = getCount
 schema.statics.removeItem = removeItem
 
-export default mongoose.model('Education', schema)
+export default mongoose.model('Student', schema)
 
