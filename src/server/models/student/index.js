@@ -31,7 +31,7 @@ schema
   .virtual('password')
   .set(function(password) {
     this._plainPassword = password
-    this.salt = Math.random() + ''
+    this.salt = `${Math.random()}`
     this.hashedPassword = this.encryptPassword(password)
   })
   .get(function() {
@@ -57,9 +57,9 @@ schema.statics.authorize = function ({email, password}, callback) {
     })
 }
 
-schema.statics.addItem = function ({name, email, dob, telephone, about, education, experience, skill, city}, callback) {
+schema.statics.addItem = function ({name, email, dob, telephone, about, education, experience, skill, city, password}, callback) {
   let Student = this
-  let student = new Student({name, email, dob, telephone, about, education, experience, skill, city})
+  let student = new Student({name, email, dob, telephone, about, education, experience, skill, city, password})
   student.save(err => callback(err, student))
 }
 

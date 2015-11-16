@@ -14,7 +14,7 @@ for (let i = 0; i < 100; i++) {
     telephone: Charlatan.PhoneNumber.cellPhone(),
     about: Charlatan.Lorem.text(3, 20, '\n'),
     dob: Charlatan.Date.birthday(18, 25),
-    skill: [], city: '',
+    skill: [], city: '', password: '1111',
     education: [], experience: []
   })
 }
