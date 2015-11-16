@@ -1,5 +1,5 @@
 import mongoose from '../index'
-import {removeItem, getCount, updateItem} from '../../utils/model/helpers'
+import {removeItem, getCount, updateItem, randomTowPopulate, getTowPopulation} from '../../utils/model/helpers'
 
 let {Schema} = mongoose
 let schema = new Schema({
@@ -17,34 +17,15 @@ schema.statics.addItem = function ({start, end, position, about, company}, callb
 }
 
 schema.statics.getItem = function (id, callback) {
-  if (id) this
-    .findById(id)
-    .populate('position')
-    .populate('company')
-    .exec(callback)
-  else this
-    .find({})
-    .populate('position')
-    .populate('company')
-    .sort({'start': 1})
-    .exec(callback)
+  return getTowPopulation.apply(this, [id, callback, ['position', 'company']])
 }
 
 schema.statics.updateItem = function (id, update, callback) {
   return updateItem.apply(this, [id, update, callback, ['position', 'company']])
 }
 
-schema.statics.getRandom = function(callback) {
-  this.count((err, count) => {
-    if (err) return callback(err)
-    const skip = Math.floor(Math.random() * count)
-    this
-      .findOne()
-      .skip(skip)
-      .populate('position')
-      .populate('company')
-      .exec(callback)
-  })
+schema.statics.getRandom = function (callback) {
+  return randomTowPopulate.apply(this, [callback, ['position', 'company']])
 }
 
 schema.statics.removeItem = removeItem

@@ -1,5 +1,5 @@
 import mongoose from '../index'
-import {removeItem, getCount, updateItem} from '../../utils/model/helpers'
+import {removeItem, getCount, updateItem, randomTowPopulate, getTowPopulation} from '../../utils/model/helpers'
 
 let {Schema} = mongoose
 let schema = new Schema({
@@ -16,34 +16,15 @@ schema.statics.addItem = function ({start, end, speciality, university}, callbac
 }
 
 schema.statics.getItem = function (id, callback) {
-  if (id) this
-    .findById(id)
-    .populate('university')
-    .populate('speciality')
-    .exec(callback)
-  else this
-    .find({})
-    .populate('university')
-    .populate('speciality')
-    .sort({'start': 1})
-    .exec(callback)
+  return getTowPopulation.apply(this, [id, callback, ['university', 'speciality']])
 }
 
 schema.statics.updateItem = function (id, update, callback) {
   return updateItem.apply(this, [id, update, callback, ['university', 'speciality']])
 }
 
-schema.statics.getRandom = function(callback) {
-  this.count((err, count) => {
-    if (err) return callback(err)
-    const skip = Math.floor(Math.random() * count)
-    this
-      .findOne()
-      .skip(skip)
-      .populate('university')
-      .populate('speciality')
-      .exec(callback)
-  })
+schema.statics.getRandom = function (callback) {
+  return randomTowPopulate.apply(this, [callback, ['university', 'speciality']])
 }
 
 schema.statics.getCount = getCount

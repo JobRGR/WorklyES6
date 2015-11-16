@@ -93,7 +93,6 @@ export default (url) => {
     })
 
     it('.check set', (done) => {
-      console.log(list.length)
       request(url)
         .get(`${path}-count`)
         .end((err, res) => {
