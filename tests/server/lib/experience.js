@@ -1,5 +1,8 @@
 import {assert} from 'chai'
 import request from 'supertest'
+import count from '../helpers/count'
+import deleteItem from '../helpers/delete'
+
 
 export default (url) => {
   const path = '/api/experience'
@@ -24,7 +27,7 @@ export default (url) => {
   let list = null
 
   describe('experience tests', () => {
-    it('.get list', (done) => {
+    it('.get list', done => {
       request(url)
         .get(path)
         .end((err, res) =>  {
@@ -36,7 +39,7 @@ export default (url) => {
         })
     })
 
-    it('.get random item', (done) => {
+    it('.get random item', done => {
       const index = Math.floor(list.length * Math.random())
       request(url)
         .get(`${path}/${list[index]._id}`)
@@ -58,18 +61,9 @@ export default (url) => {
         })
     })
 
-    it('.get count', (done) => {
-      request(url)
-        .get(`${path}-count`)
-        .end((err, res) => {
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'count')
-          assert.equal(res.body.count, list.length)
-          done()
-        })
-    })
+    it('.get count', done => count(url, path, list.length, done))
 
-    it('.set item', (done) => {
+    it('.set item', done => {
       const index = Math.floor(list.length * Math.random())
       tmpData.position = list[index].position._id
       tmpData.company = list[index].company._id
@@ -92,18 +86,9 @@ export default (url) => {
         }))
     })
 
-    it('.check set', (done) => {
-      request(url)
-        .get(`${path}-count`)
-        .end((err, res) => {
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'count')
-          assert.equal(res.body.count, list.length + 1)
-          done()
-        })
-    })
+    it('.check set', done => count(url, path, list.length + 1, done))
 
-    it('.put item', (done) => {
+    it('.put item', done => {
       const index = Math.floor(list.length * Math.random())
       newTmpData.position = list[index].position._id
       newTmpData.company = list[index].company._id
@@ -125,7 +110,7 @@ export default (url) => {
         })
     })
 
-    it('.check put item', (done) => {
+    it('.check put item', done => {
       request(url)
         .get(`${path}/${tmpModel._id}`)
         .end((err, res) => {
@@ -145,28 +130,11 @@ export default (url) => {
         })
     })
 
-    it('.delete item', (done) => {
-      request(url)
-        .delete(`${path}/${tmpModel._id}`)
-        .end((err, res) => {
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'ok')
-          done()
-        })
-    })
+    it('.delete item', done => deleteItem(url, `${path}/${tmpModel._id}`, done))
 
-    it('.check get delete', (done) => {
-      request(url)
-        .get(`${path}-count`)
-        .end((err, res) => {
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'count')
-          assert.equal(res.body.count, list.length)
-          done()
-        })
-    })
+    it('.check get delete', done => count(url, path, list.length, done))
 
-    it('.random', (done) => {
+    it('.random', done => {
       request(url)
         .get(`${path}-random`)
         .end((err, res) => {
@@ -185,7 +153,7 @@ export default (url) => {
     })
 
 
-    it('.add new item', (done) => {
+    it('.add new item', done => {
       request(url)
         .post(`${path}-add`)
         .send(newData)
@@ -203,7 +171,7 @@ export default (url) => {
         }))
     })
 
-    it('.check add new item', (done) => {
+    it('.check add new item', done => {
       request(url)
         .get(`${path}/${newDataReturn._id}`)
         .end((err, res) => {
@@ -225,7 +193,7 @@ export default (url) => {
         })
     })
 
-    it('.put new item', (done) => {
+    it('.put new item', done => {
       request(url)
         .put(`${path}-update/${newDataReturn._id}`)
         .send(editNewData)
@@ -244,17 +212,9 @@ export default (url) => {
         })
     })
 
-    it('.delete item', (done) => {
-      request(url)
-        .delete(`${path}/${newDataReturn._id}`)
-        .end((err, res) => {
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'ok')
-          done()
-        })
-    })
+    it('.delete item', done => deleteItem(url, `${path}/${newDataReturn._id}`, done))
 
-    it('.get new company', (done) => {
+    it('.get new company', done => {
       request(url)
         .get(`/api/company-name/${newcompany._id}`)
         .end((err, res) => {
@@ -267,17 +227,9 @@ export default (url) => {
         })
     })
 
-    it('.delete new company', (done) => {
-      request(url)
-        .delete(`/api/company-name/${newcompany._id}`)
-        .end((err, res) => {
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'ok')
-          done()
-        })
-    })
+    it('.delete new company', done => deleteItem(url, `/api/company-name/${newcompany._id}`, done))
 
-    it('.get new position', (done) => {
+    it('.get new position', done => {
       request(url)
         .get(`/api/position/${newposition._id}`)
         .end((err, res) => {
@@ -290,14 +242,6 @@ export default (url) => {
         })
     })
 
-    it('.delete new position', (done) => {
-      request(url)
-        .delete(`/api/position/${newposition._id}`)
-        .end((err, res) => {
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'ok')
-          done()
-        })
-    })
+    it('.delete new position', done => deleteItem(url, `/api/position/${newposition._id}`, done))
   })
 }

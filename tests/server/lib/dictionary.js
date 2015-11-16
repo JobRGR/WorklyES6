@@ -1,6 +1,9 @@
 import {assert} from 'chai'
 import request from 'supertest'
 import pluralize from 'pluralize'
+import count from '../helpers/count'
+import deleteItem from '../helpers/delete'
+
 
 export default (url, name) => {
   const path = `/api/${name}`
@@ -14,7 +17,7 @@ export default (url, name) => {
   let list = null
 
   describe(`${name} tests`, () => {
-    it('.get list', (done) => {
+    it('.get list', done => {
       request(url)
         .get(path)
         .end((err, res) => {
@@ -25,7 +28,7 @@ export default (url, name) => {
         })
     })
 
-    it('.get random item', (done) => {
+    it('.get random item', done => {
       const index = Math.floor(list.length * Math.random())
       request(url)
         .get(`${path}/${list[index]._id}`)
@@ -39,18 +42,9 @@ export default (url, name) => {
         })
     })
 
-    it('.get count', (done) => {
-      request(url)
-        .get(`${path}-count`)
-        .end((err, res) => {
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'count')
-          assert.equal(res.body.count, list.length)
-          done()
-        })
-    })
+    it('.get count', done => count(url, path, list.length, done))
 
-    it('.set item', (done) => {
+    it('.set item', done => {
       request(url)
         .post(path)
         .send(tmpData)
@@ -64,7 +58,7 @@ export default (url, name) => {
         })
     })
 
-    it('.get item', (done) => {
+    it('.get item', done => {
       request(url)
         .get(`${path}/${tmpModel._id}`)
         .end((err, res) => {
@@ -77,7 +71,7 @@ export default (url, name) => {
         })
     })
 
-    it('.put item', (done) => {
+    it('.put item', done => {
       request(url)
         .put(`${path}/${tmpModel._id}`)
         .send(newTmpData)
@@ -91,7 +85,7 @@ export default (url, name) => {
         })
     })
 
-    it('.check put item', (done) => {
+    it('.check put item', done => {
       request(url)
         .get(`${path}/${tmpModel._id}`)
         .end((err, res) => {
@@ -104,39 +98,13 @@ export default (url, name) => {
         })
     })
 
-    it('.check get count', (done) => {
-      request(url)
-        .get(`${path}-count`)
-        .end((err, res) => {
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'count')
-          assert.equal(res.body.count, list.length + 1)
-          done()
-        })
-    })
+    it('.check get count', done => count(url, path, list.length + 1, done))
 
-    it('.delete item', (done) => {
-      request(url)
-        .delete(`${path}/${tmpModel._id}`)
-        .end((err, res) => {
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'ok')
-          done()
-        })
-    })
+    it('.delete item', done => deleteItem(url, `${path}/${tmpModel._id}`, done))
 
-    it('.check get delete', (done) => {
-      request(url)
-        .get(`${path}-count`)
-        .end((err, res) => {
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'count')
-          assert.equal(res.body.count, list.length)
-          done()
-        })
-    })
+    it('.check get delete', done => count(url, path, list.length, done))
 
-    it('.autocomplete', (done) => {
+    it('.autocomplete', done => {
       const index = Math.floor(list.length * Math.random())
       const query = list[index].name.split(' ')[0]
       request(url)
@@ -149,7 +117,7 @@ export default (url, name) => {
         })
     })
 
-    it('.search', (done) => {
+    it('.search', done => {
       const index = Math.floor(list.length * Math.random())
       const query = list[index].name
       request(url)
@@ -162,7 +130,7 @@ export default (url, name) => {
         })
     })
 
-    it('.random', (done) => {
+    it('.random', done => {
       request(url)
         .get(`${path}-random`)
         .end((err, res) => {

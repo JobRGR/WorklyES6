@@ -1,5 +1,6 @@
 import {assert} from 'chai'
 import request from 'supertest'
+import count from '../helpers/count'
 
 export default (url) => {
   const path = '/api/student'
@@ -51,5 +52,7 @@ export default (url) => {
           done()
         })
     })
+
+    it('.get count', done => count(url, path, list.length, done))
   })
 }
