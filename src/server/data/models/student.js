@@ -33,18 +33,22 @@ export default (cb) => async.waterfall([
     callback()
   }),
   callback => Education.getItem(null, (err, educations) => {
+    let j = 0
     for (let i = 0; i < data.length; i++) {
       data[i].education.push(educations[i]._id)
-      i++
+      j++
       data[i].education.push(educations[i]._id)
+      j++
     }
     callback()
   }),
   callback => Experience.getItem(null, (err, experience) => {
+    let j = 0
     for (let i = 0; i < data.length; i++) {
       data[i].experience.push(experience[i]._id)
-      i++
+      j++
       data[i].experience.push(experience[i]._id)
+      j++
     }
     callback()
   })

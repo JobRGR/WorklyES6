@@ -12,7 +12,7 @@ let schema = new Schema({
   education: [{type: mongoose.Schema.Types.ObjectId, ref: 'Education'}],
   experience: [{type: mongoose.Schema.Types.ObjectId, ref: 'Experience'}],
   skill: [{type: mongoose.Schema.Types.ObjectId, ref: 'Skill'}],
-  city: [{type: mongoose.Schema.Types.ObjectId, ref: 'City'}],
+  city: {type: mongoose.Schema.Types.ObjectId, ref: 'City'},
   date: {type: Date, required: true, default: Date.now},
   hashedPassword: {type: String, required: true},
   salt: {type: String, required: true}
