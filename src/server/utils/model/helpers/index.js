@@ -7,6 +7,7 @@ import autocomplite from './lib/autocomplite'
 import searchItem from './lib/search'
 import randomTowPopulate from './lib/random_tow_populate'
 import getTowPopulation from './lib/get_tow_population'
+import toJson from './lib/to_json'
 
 export default {
   removeItem,
@@ -17,5 +18,6 @@ export default {
   autocomplite,
   searchItem,
   randomTowPopulate,
-  getTowPopulation
+  getTowPopulation,
+  toJson
 }

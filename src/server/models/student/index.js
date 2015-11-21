@@ -1,6 +1,6 @@
 import crypto from 'crypto'
 import mongoose from '../index'
-import {removeItem, getCount} from '../../utils/model/helpers'
+import {removeItem, getCount, toJson} from '../../utils/model/helpers'
 
 let {Schema} = mongoose
 let schema = new Schema({
@@ -112,6 +112,7 @@ schema.statics.getRandom = function(callback) {
   })
 }
 
+schema.methods.toJSON = toJson
 schema.statics.getCount = getCount
 schema.statics.removeItem = removeItem
 
