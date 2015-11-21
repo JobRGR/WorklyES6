@@ -1,13 +1,17 @@
 import {assert} from 'chai'
 import request from 'supertest'
 import count from '../helpers/count'
+import deleteItem from '../helpers/delete'
 
 export default (url) => {
   const path = '/api/student'
   let list = []
 
+  let tmpStudent = {name: 'Alex Loud', password: '1111', email: 'alex@gmail.com'}
+  let tmpModel = null
+
   describe('student tests', () => {
-    it('.get list', (done) => {
+    it('.get list', done => {
       request(url)
         .get(path)
         .end((err, res) => {
@@ -19,7 +23,7 @@ export default (url) => {
         })
     })
 
-    it('.get item by id', (done) => {
+    it('.get item by id', done => {
       const index = Math.floor(list.length * Math.random())
       request(url)
         .get(`${path}/${list[index]._id}`)
@@ -54,5 +58,37 @@ export default (url) => {
     })
 
     it('.get count', done => count(url, path, list.length, done))
+
+    it('.set new student', done => {
+      request(url)
+        .post(path)
+        .send(tmpStudent)
+        .end((err, res) => {
+          tmpModel = res.body.student || {}
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'student')
+          assert.equal(res.body.student.name, tmpStudent.name)
+          assert.equal(res.body.student.email, tmpStudent.email)
+          done()
+        })
+    })
+
+    it('.check set student', done => count(url, path, list.length + 1, done))
+
+    it('.get new student', done => {
+      request(url)
+        .get(`${path}/${tmpModel._id}`)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'student')
+          assert.equal(res.body.student.name, tmpStudent.name)
+          assert.equal(res.body.student.email, tmpStudent.email)
+          done()
+        })
+    })
+
+    it('.delete item', done => deleteItem(url, `${path}/${tmpModel._id}`, done))
+
+    it('.check get delete', done => count(url, path, list.length, done))
   })
 }
