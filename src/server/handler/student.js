@@ -9,9 +9,11 @@ let handler = new Handler('student', Student)
 handler.addItem = (req, res, next) => {
   let {email, password, name} = req.body
   Student.addItem( {email, password, name}, (err, student) => {
-    if (!err && student) req.session.student = student._id
+    req.session._student = student._id
     nextItem(err, student, req, next)
   })
 }
+
+handler.getStudent = (req, res, next) => nextItem(null, req._student, req, next)
 
 export default handler

@@ -1,11 +1,11 @@
-import connect from 'connect'
-import mongoose from 'mongoose'
-import sessionMongoose from 'session-mongoose'
 import session from 'express-session'
+import mongoose from 'mongoose'
+import connect from 'connect'
+import sessionMongoosee from 'session-mongoose'
 import config from '../config'
 
-let SessionStore = sessionMongoose(connect)
-let store = new SessionStore({connection: mongoose.connection})
+let sessionStore = sessionMongoosee(connect)
+let store = new sessionStore({connection: mongoose.connection})
 
 export default session({
   secret: config.session.secret,

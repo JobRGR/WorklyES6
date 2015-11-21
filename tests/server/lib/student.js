@@ -93,6 +93,20 @@ export default (url) => {
         })
     })
 
+    xit('.get session student', done => {
+      request(url)
+        .get(`${path}-status`)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'student')
+          assert.equal(res.body.student.name, tmpStudent.name)
+          assert.equal(res.body.student.email, tmpStudent.email)
+          assert.notProperty(res.body.student, 'salt')
+          assert.notProperty(res.body.student, 'hashedPassword')
+          done()
+        })
+    })
+
     it('.delete item', done => deleteItem(url, `${path}/${tmpModel._id}`, done))
 
     it('.check get delete', done => count(url, path, list.length, done))

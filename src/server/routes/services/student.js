@@ -6,6 +6,7 @@ let router = (name, handler) => {
   return express()
     .get(`/${name}-count`, handler.getCount)
     .get(`/${name}-random`, handler.getRandom, handler.sendItem)
+    .get(`/${name}-status`, handler.getStudent, handler.sendItem)
     .use(`/${name}`, rest(handler))
 }
 

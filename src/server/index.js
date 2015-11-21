@@ -1,5 +1,6 @@
 import express from 'express'
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 import morgan from 'morgan'
 import routes from './routes'
 import session from './utils/session_store'
@@ -13,6 +14,7 @@ app
   .use(express.static(`${__dirname}/../../dist`))
   .use(bodyParser.urlencoded({limit: '50mb', extended: false}))
   .use(bodyParser.json({limit: '50mb'}))
+  .use(cookieParser())
   .use(morgan('dev'))
   .use(session)
   .use(studentLoader)
