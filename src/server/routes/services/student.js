@@ -7,6 +7,7 @@ let router = (name, handler) => {
     .get(`/${name}-count`, handler.getCount)
     .get(`/${name}-random`, handler.getRandom, handler.sendItem)
     .get(`/${name}-status`, handler.getStudent, handler.sendItem)
+    .post(`/${name}-login`, handler.login, handler.sendItem)
     .use(`/${name}`, rest(handler))
 }
 
