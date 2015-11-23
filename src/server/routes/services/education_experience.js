@@ -9,6 +9,7 @@ let router = (name, handler) => {
     .get(`/${name}-count`, handler.getCount)
     .get(`/${name}-random`, handler.getRandom, handler.sendItem)
     .post(`/${name}-add`, handler.addOne, handler.sendItem)
+    .post(`/${name}-search`, handler.searchItems, handler.searchItems)
     .put(`/${name}-update/:id`, handler.updateOne, handler.sendItem)
     .use(`/${name}`, api)
 }

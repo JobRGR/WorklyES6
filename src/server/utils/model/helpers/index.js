@@ -8,6 +8,7 @@ import searchItem from './lib/search'
 import randomTowPopulate from './lib/random_tow_populate'
 import getTowPopulation from './lib/get_tow_population'
 import toJson from './lib/to_json'
+import searchTowPopulation from './lib/search_tow_population'
 
 export default {
   removeItem,
@@ -19,5 +20,6 @@ export default {
   searchItem,
   randomTowPopulate,
   getTowPopulation,
+  searchTowPopulation,
   toJson
 }

@@ -8,8 +8,8 @@ let handler = new Handler('education', Education, false, false)
 
 let addModel = ({university, speciality}, cb) => {
   async.parallel({
-    university: (callback) => University.addItem({name: university}, callback),
-    speciality: (callback) => Speciality.addItem({name: speciality}, callback)
+    university: callback => University.addItem({name: university}, callback),
+    speciality: callback => Speciality.addItem({name: speciality}, callback)
   }, cb)
 }
 
@@ -28,5 +28,24 @@ handler.updateOne = (req, res, next) => {
     Education.updateItem(req.params.id, data, (err, education) => nextItem(err, education, req, next))
   })
 }
+
+handler.searchItems = (req, res, next) => {
+  if (req.body.education) {
+    async.parallel({
+      university: callback => University.searchItems(req.body.education.university, callback),
+      speciality: callback => Speciality.searchItems(req.body.education.speciality, callback)
+    }, (err, {speciality, university}) => {
+      let search = {}
+      if (speciality.length) search.speciality = {$in: speciality}
+      if (university.length) search.university = {$in: university}
+      if (!Object.keys(search).length) return nextItem(null, null, req, next)
+      Education.searchItems(search, (err, educations) => nextItem(err, educations, req, next))
+    })
+  }
+  else {
+    nextItem(null, null, req, next)
+  }
+}
+
 
 export default handler

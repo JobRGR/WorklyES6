@@ -124,8 +124,8 @@ export default (url, name) => {
         .get(`${path}-search?${name}=${query}`)
         .end((err, res) => {
           assert.equal(res.status, 200)
-          assert.property(res.body, name)
-          assert.equal(res.body[name].name, query)
+          assert.property(res.body, names)
+          assert.equal(res.body[names][0].name, query)
           done()
         })
     })
