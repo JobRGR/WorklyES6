@@ -9,8 +9,24 @@ export default (url) => {
 
   let tmpStudent = {name: 'Alex Loud', password: '1111', email: 'alex@gmail.com'}
   let tmpModel = null
+  let token = null
 
   describe('student tests', () => {
+    let getSession = done => {
+      request(url)
+        .get(`${path}-status?token=${token}`)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'student')
+          assert.equal(res.body.student.name, tmpStudent.name)
+          assert.equal(res.body.student.email, tmpStudent.email)
+          assert.notProperty(res.body.student, 'salt')
+          assert.notProperty(res.body.student, 'hashedPassword')
+          done()
+        })
+    }
+
+
     it('.get list', done => {
       request(url)
         .get(path)
@@ -67,6 +83,7 @@ export default (url) => {
         .send(tmpStudent)
         .end((err, res) => {
           tmpModel = res.body.student || {}
+          token = res.body.student.token
           assert.equal(res.status, 200)
           assert.property(res.body, 'student')
           assert.equal(res.body.student.name, tmpStudent.name)
@@ -93,10 +110,14 @@ export default (url) => {
         })
     })
 
-    xit('.get session student', done => {
+    it('.get session student', getSession)
+
+    it('.login student', done => {
       request(url)
-        .get(`${path}-status`)
+        .post(`${path}-login`)
+        .send(tmpStudent)
         .end((err, res) => {
+          token = res.body.student.token
           assert.equal(res.status, 200)
           assert.property(res.body, 'student')
           assert.equal(res.body.student.name, tmpStudent.name)
@@ -107,20 +128,7 @@ export default (url) => {
         })
     })
 
-    it('.login student', done => {
-      request(url)
-        .post(`${path}-login`)
-        .send(tmpStudent)
-        .end((err, res) => {
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'student')
-          assert.equal(res.body.student.name, tmpStudent.name)
-          assert.equal(res.body.student.email, tmpStudent.email)
-          assert.notProperty(res.body.student, 'salt')
-          assert.notProperty(res.body.student, 'hashedPassword')
-          done()
-        })
-    })
+    it('.check login - get session student', getSession)
 
     it('.delete item', done => deleteItem(url, `${path}/${tmpModel._id}`, done))
 

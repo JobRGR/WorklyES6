@@ -3,8 +3,7 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import morgan from 'morgan'
 import routes from './routes'
-import session from './utils/session_store'
-import studentLoader from './middeware/student'
+import loadStudent from './middeware/load_student'
 
 const port = process.env.PORT || 3333
 let app = express()
@@ -16,8 +15,7 @@ app
   .use(bodyParser.json({limit: '50mb'}))
   .use(cookieParser())
   .use(morgan('dev'))
-  .use(session)
-  .use(studentLoader)
+  .use(loadStudent)
   .use(routes())
   .use((error, req, res, next) =>
     res
