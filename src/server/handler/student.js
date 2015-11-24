@@ -1,7 +1,7 @@
-import async from 'async'
 import Next from '../utils/handler/helpers/next'
 import Handler from '../utils/handler'
 import getDate from '../utils/get_date'
+import toObjectArray from '../utils/to_object_array'
 import {Student, City, Skill, Position, CompanyName, Education, University, Speciality} from '../models/models'
 
 let {nextItem, nextItems} = new Next('student')
@@ -21,27 +21,14 @@ handler.getStudent = (req, res, next) => nextItem(null, req._student, req, next)
 
 handler.searchItems = (req, res, next) => {
   let search = {}
-  if (req.body.email) search.email = req.query.email
-  if (req.body.age)  {
-    search.dob = getDate(req.body.age.min, req.body.age.max)
-  }
+  if (req.body.age) search.dob = getDate(req.body.age.min, req.body.age.max)
+  if (req.body.email) search.email = req.body.email
   if (req.body.name) search.name = req.body.name
-  async.waterfall([
-    callback => {
-      if (req.body.city) City.searchItem(req.body.city, (err, city) => {
-        search.city = {$in: city}
-        callback()
-      })
-      else callback()
-    },
-    callback => {
-      if (req.body.skill) Skill.searchItem(req.body.skill, (err, skill) => {
-        search.skill = {$in: skill}
-        callback()
-      })
-      else callback()
-    }
-  ], () => Student.searchItem(search, (err, students) => nextItems(err, students, req, next)))
+  if (req.cities && req.cities.length) search.city = {$in: toObjectArray(req.cities)}
+  if (req.skills && req.skills.length) search.skill = {$in: toObjectArray(req.skills)}
+  if (req.educations) search.education = {$in: toObjectArray(req.educations)}
+  if (req.experiences) search.experience = {$in: toObjectArray(req.experiences)}
+  Student.searchItem(search, (err, students) => nextItems(err, students, req, next))
 }
 
 export default handler
