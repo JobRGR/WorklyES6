@@ -6,7 +6,7 @@ export default {
     cookie: {
       path: '/',
       httpOnly: true,
-      maxAge: null
+      maxAge: 1000000
     }
   }
 }
