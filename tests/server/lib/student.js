@@ -2,6 +2,8 @@ import {assert} from 'chai'
 import request from 'supertest'
 import count from '../helpers/count'
 import deleteItem from '../helpers/delete'
+import superagent from 'superagent'
+let agent = superagent.agent()
 
 export default (url) => {
   const path = '/api/student'
@@ -11,6 +13,22 @@ export default (url) => {
   let tmpModel = null
 
   describe('student tests', () => {
+    let getSession = done => {
+      let req = request(url)
+        .get(`${path}-status`)
+      agent.attachCookies(req)
+
+      req.end((err, res) => {
+        assert.equal(res.status, 200)
+        assert.property(res.body, 'student')
+        assert.equal(res.body.student.name, tmpStudent.name)
+        assert.equal(res.body.student.email, tmpStudent.email)
+        assert.notProperty(res.body.student, 'salt')
+        assert.notProperty(res.body.student, 'hashedPassword')
+        done()
+      })
+    }
+
     it('.get list', done => {
       request(url)
         .get(path)
@@ -67,6 +85,7 @@ export default (url) => {
         .send(tmpStudent)
         .end((err, res) => {
           tmpModel = res.body.student || {}
+          agent.saveCookies(res)
           assert.equal(res.status, 200)
           assert.property(res.body, 'student')
           assert.equal(res.body.student.name, tmpStudent.name)
@@ -93,10 +112,14 @@ export default (url) => {
         })
     })
 
-    xit('.get session student', done => {
+    it('.get session set student', getSession)
+
+    it('.login student', done => {
       request(url)
-        .get(`${path}-status`)
+        .post(`${path}-login`)
+        .send(tmpStudent)
         .end((err, res) => {
+          agent.saveCookies(res)
           assert.equal(res.status, 200)
           assert.property(res.body, 'student')
           assert.equal(res.body.student.name, tmpStudent.name)
@@ -107,20 +130,7 @@ export default (url) => {
         })
     })
 
-    it('.login student', done => {
-      request(url)
-        .post(`${path}-login`)
-        .send(tmpStudent)
-        .end((err, res) => {
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'student')
-          assert.equal(res.body.student.name, tmpStudent.name)
-          assert.equal(res.body.student.email, tmpStudent.email)
-          assert.notProperty(res.body.student, 'salt')
-          assert.notProperty(res.body.student, 'hashedPassword')
-          done()
-        })
-    })
+    it('.get session login student', getSession)
 
     it('.delete item', done => deleteItem(url, `${path}/${tmpModel._id}`, done))
 
