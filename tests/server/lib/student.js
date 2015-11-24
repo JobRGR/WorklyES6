@@ -2,6 +2,8 @@ import {assert} from 'chai'
 import request from 'supertest'
 import count from '../helpers/count'
 import deleteItem from '../helpers/delete'
+import superagent from 'superagent'
+let agent = superagent.agent()
 
 export default (url) => {
   const path = '/api/student'
@@ -67,6 +69,7 @@ export default (url) => {
         .send(tmpStudent)
         .end((err, res) => {
           tmpModel = res.body.student || {}
+          agent.saveCookies(res)
           assert.equal(res.status, 200)
           assert.property(res.body, 'student')
           assert.equal(res.body.student.name, tmpStudent.name)
@@ -93,10 +96,12 @@ export default (url) => {
         })
     })
 
-    xit('.get session student', done => {
-      request(url)
+    it('.get session student', done => {
+      let req = request(url)
         .get(`${path}-status`)
-        .end((err, res) => {
+      agent.attachCookies(req)
+
+      req.end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'student')
           assert.equal(res.body.student.name, tmpStudent.name)

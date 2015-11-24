@@ -16,7 +16,8 @@
     "react-hot-loader": "^1.2.2",
     "shelljs": "^0.5.0",
     "source-map-support": "^0.3.1",
-    "supertest": "^1.1.0"
+    "supertest": "^1.1.0",
+    "superagent": "^1.4.0"
   },
   "dependencies": {
     "async": "^1.4.2",
@@ -52,7 +53,7 @@
     "webpack": "^1.9.10"
   },
   "scripts": {
-    "test": "./node_modules/.bin/nodemon ./node_modules/.bin/mocha --compilers js:babel/register ./tests/server",
+    "test": "./node_modules/.bin/mocha --compilers js:babel/register ./tests/server",
     "db": "./node_modules/.bin/babel-node ./src/server/data",
     "postinstall": "./node_modules/.bin/gulp build",
     "dev": "./node_modules/.bin/gulp",

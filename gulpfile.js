@@ -3,7 +3,6 @@ var webpack = require('webpack')
 var del = require('del')
 var sh = require('shelljs')
 
-
 var watch = require('gulp-watch')
 
 var rename = require("gulp-rename")
@@ -73,7 +72,7 @@ gulp.task('style', function () {
 })
 
 gulp.task('server', function (done) {
-  sh.exec(nodemon + server + ' ' + babelNode + server, function() { done() })
+  sh.exec(nodemon + server + ' ' + babelNode  + server, function() { done() })
 })
 
 gulp.task('server:debug', function(done) {
