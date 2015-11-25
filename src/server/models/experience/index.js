@@ -1,5 +1,5 @@
 import mongoose from '../index'
-import {removeItem, getCount, updateItem, randomTwoPopulate, getTwoPopulation, searchTwoPopulation} from '../../utils/model/helpers'
+import {removeItem, getCount, updateItem, randomPopulate, getPopulate, searchPopulate} from '../../utils/model/helpers'
 
 let {Schema} = mongoose
 let schema = new Schema({
@@ -17,7 +17,7 @@ schema.statics.addItem = function ({start, end, position, about, company}, callb
 }
 
 schema.statics.getItem = function (id, callback) {
-  return getTwoPopulation.apply(this, [id, callback, ['position', 'company']])
+  return getPopulate.apply(this, [id, callback, ['position', 'company']])
 }
 
 schema.statics.updateItem = function (id, update, callback) {
@@ -25,11 +25,11 @@ schema.statics.updateItem = function (id, update, callback) {
 }
 
 schema.statics.getRandom = function (callback) {
-  return randomTwoPopulate.apply(this, [callback, ['position', 'company']])
+  return randomPopulate.apply(this, [callback, ['position', 'company']])
 }
 
 schema.statics.searchItems = function (search, callback) {
-  return searchTwoPopulation.apply(this, [search, callback, ['position', 'company']])
+  return searchPopulate.apply(this, [search, callback, ['position', 'company']])
 }
 
 schema.statics.removeItem = removeItem

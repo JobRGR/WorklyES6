@@ -1,4 +1,5 @@
 import crypto from 'crypto'
+import deepPopulate from '../../utils/deep_populate'
 import mongoose from '../index'
 import {removeItem, getCount, toJson} from '../../utils/model/helpers'
 
@@ -66,17 +67,11 @@ schema.statics.addItem = function ({name, email, dob, telephone, about, educatio
 schema.statics.getItem = function (id, callback) {
   if (id) this
     .findById(id)
-    .populate('education')
-    .populate('city')
-    .populate('skill')
-    .populate('experience')
+    .deepPopulate(['education.speciality', 'experience.company', 'education.university', 'experience.position', 'city', 'skill'])
     .exec(callback)
   else this
     .find({})
-    .populate('education')
-    .populate('city')
-    .populate('skill')
-    .populate('experience')
+    .deepPopulate(['education.speciality', 'experience.company', 'education.university', 'experience.position', 'city', 'skill'])
     .sort({'date': -1})
     .exec(callback)
 }
@@ -103,10 +98,7 @@ schema.statics.getRandom = function(callback) {
     this
       .findOne()
       .skip(skip)
-      .populate('education')
-      .populate('city')
-      .populate('skill')
-      .populate('experience')
+      .deepPopulate(['education.speciality', 'experience.company', 'education.university', 'experience.position', 'city', 'skill'])
       .sort({'date': -1})
       .exec(callback)
   })
@@ -115,10 +107,7 @@ schema.statics.getRandom = function(callback) {
 schema.statics.searchItem = function(search, callback) {
   this
     .find(search)
-    .populate('education')
-    .populate('city')
-    .populate('skill')
-    .populate('experience')
+    .deepPopulate(['education.speciality', 'experience.company', 'education.university', 'experience.position', 'city', 'skill'])
     .sort({'date': -1})
     .exec(callback)
 }
@@ -126,6 +115,7 @@ schema.statics.searchItem = function(search, callback) {
 schema.methods.toJSON = toJson
 schema.statics.getCount = getCount
 schema.statics.removeItem = removeItem
+schema.plugin(deepPopulate)
 
 export default mongoose.model('Student', schema)
 

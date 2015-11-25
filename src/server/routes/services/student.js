@@ -4,7 +4,6 @@ import Dictionaries from '../../handler/dictionary'
 import CompanyName from '../../handler/company_name'
 import Education from '../../handler/education'
 import Experience from '../../handler/experience'
-
 import rest from '../../utils/router/helpers/rest'
 
 let router = (name, handler) =>
