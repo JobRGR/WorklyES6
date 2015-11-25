@@ -256,7 +256,6 @@ export default (url) => {
           assert.isAbove(res.body.students.length, 0)
           res.body.students.forEach((item) => {
             let cur = new Date(item.dob).getFullYear()
-            console.log(item.dob, someStudent.dob)
             assert(cur >= below)
             assert(cur <= above)
           })
