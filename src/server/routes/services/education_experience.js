@@ -30,8 +30,6 @@ let router = (name, handler, [handlerFirst, handlerSecond]) => {
     .use(`/${name}`, rest(handler))
 }
 
-//.post(`/${name}-search`, handlerFirst.searchItems, handlerSecond.searchItems, handler.searchItems, handler.searchItems)
-
 export default {
   Experience: router('experience', Experience, [CompanyName, Dictionary['Position']]),
   Education: router('education', Education, [Dictionary['University'], Dictionary['Speciality']])
