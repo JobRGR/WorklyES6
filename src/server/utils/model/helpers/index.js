@@ -5,9 +5,9 @@ import getItem from './lib/get'
 import updateItem from './lib/update'
 import autocomplite from './lib/autocomplite'
 import searchItem from './lib/search'
-import randomTwoPopulate from './lib/random_two_populate'
-import getTwoPopulation from './lib/get_two_population'
-import searchTwoPopulation from './lib/search_two_population'
+import randomPopulate from './lib/random_populate'
+import getPopulate from './lib/get_populate'
+import searchPopulate from './lib/search_populate'
 import toJson from './lib/to_json'
 
 export default {
@@ -18,8 +18,8 @@ export default {
   updateItem,
   autocomplite,
   searchItem,
-  randomTwoPopulate,
-  getTwoPopulation,
-  searchTwoPopulation,
+  randomPopulate,
+  getPopulate,
+  searchPopulate,
   toJson
 }
