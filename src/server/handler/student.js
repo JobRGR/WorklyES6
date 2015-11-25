@@ -24,10 +24,10 @@ handler.searchItems = (req, res, next) => {
   if (req.body.age) search.dob = getDate(req.body.age.min, req.body.age.max)
   if (req.body.email) search.email = req.body.email
   if (req.body.name) search.name = req.body.name
-  if (req.cities && req.cities.length) search.city = {$in: toObjectArray(req.cities)}
-  if (req.skills && req.skills.length) search.skill = {$in: toObjectArray(req.skills)}
-  if (req.educations) search.education = {$in: toObjectArray(req.educations)}
-  if (req.experiences) search.experience = {$in: toObjectArray(req.experiences)}
+  if (req.cities.length) search.city = {$in: toObjectArray(req.cities)}
+  if (req.skills.length) search.skill = {$in: toObjectArray(req.skills)}
+  if (req.educations.length) search.education = {$in: toObjectArray(req.educations)}
+  if (req.experiences.length) search.experience = {$in: toObjectArray(req.experiences)}
   Student.searchItem(search, (err, students) => nextItems(err, students, req, next))
 }
 

@@ -1,6 +1,7 @@
 import express from 'express'
 import Student from '../../handler/student'
 import Dictionaries from '../../handler/dictionary'
+import CompanyName from '../../handler/company_name'
 import Education from '../../handler/education'
 import Experience from '../../handler/experience'
 
@@ -15,6 +16,10 @@ let router = (name, handler) =>
     .post(`/${name}-search`,
       Dictionaries['City'].searchItems,
       Dictionaries['Skill'].searchItems,
+      Dictionaries['University'].searchItems,
+      Dictionaries['Speciality'].searchItems,
+      Dictionaries['Position'].searchItems,
+      CompanyName.searchItems,
       Education.searchItems,
       Experience.searchItems,
       handler.searchItems,

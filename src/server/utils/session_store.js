@@ -11,5 +11,7 @@ export default session({
   secret: config.session.secret,
   key: config.session.key,
   cookie: config.session.cookie,
+  resave: config.session.resave,
+  saveUninitialized: config.session.saveUninitialized,
   store
 })

@@ -7,6 +7,7 @@ export default (url, path, expected, done) => {
     .end((err, res) => {
       assert.equal(res.status, 200)
       assert.property(res.body, 'count')
+      assert.isAbove(res.body.count, 0)
       assert.equal(res.body.count, expected)
       done()
     })

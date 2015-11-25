@@ -3,6 +3,8 @@ export default {
   session: {
     secret: 'someSecret',
     key: 'sid',
+    resave: true,
+    saveUninitialized: true,
     cookie: {
       path: '/',
       httpOnly: true,

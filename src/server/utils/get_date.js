@@ -1,7 +1,6 @@
 let getDate = (val) => {
   let date = new Date()
-  date.setFullYear($lt.getFullYear() - val)
-  date.setDate($lt.getDate() - 1)
+  date.setFullYear(date.getFullYear() - val)
   return date
 }
 
