@@ -9,7 +9,7 @@ export default (name, handler, search = true, autocomplete = true) => {
     .get(`/${name}-count`, handler.getCount)
     .get(`/${name}-random`, handler.getRandom, handler.sendItem)
     .use(`/${name}`, api)
-  search && app.get(`/${name}-search`, handler.searchItem, handler.sendItem)
+  search && app.get(`/${name}-search`, handler.searchItems, handler.sendItems)
   autocomplete && app.get(`/${name}-autocomplete`, handler.autocomplete, handler.sendItems)
   return app
 }

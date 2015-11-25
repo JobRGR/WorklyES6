@@ -112,6 +112,17 @@ schema.statics.getRandom = function(callback) {
   })
 }
 
+schema.statics.searchItem = function(search, callback) {
+  this
+    .find(search)
+    .populate('education')
+    .populate('city')
+    .populate('skill')
+    .populate('experience')
+    .sort({'date': -1})
+    .exec(callback)
+}
+
 schema.methods.toJSON = toJson
 schema.statics.getCount = getCount
 schema.statics.removeItem = removeItem

@@ -1,3 +1,4 @@
 export default function (name, callback, type = 'name') {
-  this.findOne({[type]: name}, callback)
+  let search = Array.isArray(name) ? {$in: name} : name
+  this.find({[type]: search}, callback)
 }

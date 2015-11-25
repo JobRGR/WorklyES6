@@ -35,11 +35,7 @@ const companName = {
 export default {
   generate: (cb) => {
     async.each([city, skill, university, speciality, position, companName], ({name, data}, callback) => {
-      let newData = []
-      for (let i = 0; i < data.length; i++) {
-        newData.push({name: data[i]})
-      }
-      addArray(Models[name], newData, err => callback())
+      addArray(Models[name], data, err => callback())
     }, err => cb(err))
   },
   city, skill, university, speciality, position

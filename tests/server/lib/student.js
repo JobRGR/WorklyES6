@@ -135,5 +135,132 @@ export default (url) => {
     it('.delete item', done => deleteItem(url, `${path}/${tmpModel._id}`, done))
 
     it('.check get delete', done => count(url, path, list.length, done))
+
+    it('.search by city', done => {
+      const city = list[Math.floor(list.length * Math.random())].city.name
+      request(url)
+        .post(`${path}-search`)
+        .send({city})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'students')
+          assert.isAbove(res.body.students.length, 0);
+          res.body.students.forEach((item) => assert.equal(item.city.name, city))
+          done()
+        })
+    })
+
+    it('.search by skill', done => {
+      const skill = list[Math.floor(list.length * Math.random())].skill.map(({name}) => name)
+      request(url)
+        .post(`${path}-search`)
+        .send({skill})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'students')
+          assert.isAbove(res.body.students.length, 0)
+          res.body.students.forEach((item) => {
+            let cur = item.skill.map(({name}) => name).filter(name => skill.indexOf(name) > -1)
+            //assert.isAbove(cur.length, 0)
+            assert.includeMembers(skill, cur)
+          })
+          done()
+        })
+    })
+
+    it('.search by skill and city', done => {
+      const someStudent = list[Math.floor(list.length * Math.random())]
+      const skill = someStudent.skill.map(({name}) => name)
+      const city = someStudent.city.name
+      request(url)
+        .post(`${path}-search`)
+        .send({skill, city})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'students')
+          assert.isAbove(res.body.students.length, 0)
+          res.body.students.forEach((item) => {
+            let cur = item.skill.map(({name}) => name).filter(name => skill.indexOf(name) > -1)
+            //assert.isAbove(cur.length, 0)
+            assert.equal(item.city.name, city)
+            assert.includeMembers(skill, cur)
+          })
+          done()
+        })
+    })
+
+    it('.search by email', done => {
+      const someStudent = list[Math.floor(list.length * Math.random())]
+      const {email} = someStudent
+      request(url)
+        .post(`${path}-search`)
+        .send({email})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'students')
+          assert.isAbove(res.body.students.length, 0)
+          res.body.students.forEach((item) => {
+            assert.equal(item.email, email)
+          })
+          done()
+        })
+    })
+
+    it('.search by name', done => {
+      const someStudent = list[Math.floor(list.length * Math.random())]
+      const {name} = someStudent
+      request(url)
+        .post(`${path}-search`)
+        .send({name})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'students')
+          assert.isAbove(res.body.students.length, 0)
+          res.body.students.forEach((item) => {
+            assert.equal(item.name, name)
+          })
+          done()
+        })
+    })
+
+    it('.search by name and email', done => {
+      const someStudent = list[Math.floor(list.length * Math.random())]
+      const {name, email} = someStudent
+      request(url)
+        .post(`${path}-search`)
+        .send({name, email})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'students')
+          assert.isAbove(res.body.students.length, 0)
+          res.body.students.forEach((item) => {
+            assert.equal(item.name, name)
+            assert.equal(item.email, email)
+          })
+          done()
+        })
+    })
+
+    it('.search by age', done => {
+      const someStudent = list[Math.floor(list.length * Math.random())]
+      let date = new Date(someStudent.dob)
+      let age = (new Date()).getFullYear() - date.getFullYear()
+      let above = date.getFullYear() + 1
+      let below = date.getFullYear() - 1
+      request(url)
+        .post(`${path}-search`)
+        .send({age: {min: age + 1, max: age - 1}})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'students')
+          assert.isAbove(res.body.students.length, 0)
+          res.body.students.forEach((item) => {
+            let cur = new Date(item.dob).getFullYear()
+            assert(cur >= below)
+            assert(cur <= above)
+          })
+          done()
+        })
+    })
   })
 }

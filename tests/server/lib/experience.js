@@ -243,5 +243,54 @@ export default (url) => {
     })
 
     it('.delete new position', done => deleteItem(url, `/api/position/${newposition._id}`, done))
+
+    it('.search experience by company name', done => {
+      const index = Math.floor(list.length * Math.random())
+      request(url)
+        .post(`${path}-search`)
+        .send({company: list[index].company.name})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'experiences')
+          assert.isAbove(res.body.experiences.length, 0)
+          res.body.experiences.forEach((item) => assert.equal(item.company.name, list[index].company.name))
+          done()
+        })
+    })
+
+    it('.search experience by position', done => {
+      const index = Math.floor(list.length * Math.random())
+      request(url)
+        .post(`${path}-search`)
+        .send({position: list[index].position.name})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'experiences')
+          assert.isAbove(res.body.experiences.length, 0)
+          res.body.experiences.forEach((item) => assert.equal(item.position.name, list[index].position.name))
+          done()
+        })
+    })
+
+    it('.search experience by position and company', done => {
+      const index = Math.floor(list.length * Math.random())
+      request(url)
+        .post(`${path}-search`)
+        .send({
+          position: list[index].position.name,
+          company: list[index].company.name
+        })
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'experiences')
+          assert.isAbove(res.body.experiences.length, 0)
+          res.body.experiences.forEach((item) => {
+            assert.equal(item.position.name, list[index].position.name)
+            assert.equal(item.company.name, list[index].company.name)
+          })
+          done()
+        })
+    })
   })
 }
