@@ -71,6 +71,10 @@ export default (url) => {
           assert.deepEqual(res.body.student.education, list[index].education)
           assert.deepEqual(res.body.student.experience, list[index].experience)
           assert.deepEqual(res.body.student.city, list[index].city)
+          assert.isObject(res.body.student.experience[0].position)
+          assert.isObject(res.body.student.experience[0].company)
+          assert.isObject(res.body.student.education[0].university)
+          assert.isObject(res.body.student.education[0].speciality)
           assert.notProperty(res.body.student, 'salt')
           assert.notProperty(res.body.student, 'hashedPassword')
           done()
@@ -258,6 +262,138 @@ export default (url) => {
             let cur = new Date(item.dob).getFullYear()
             assert(cur >= below)
             assert(cur <= above)
+          })
+          done()
+        })
+    })
+
+    it('.search by age and name', done => {
+      const someStudent = list[Math.floor(list.length * Math.random())]
+      const name = someStudent.name
+      let date = new Date(someStudent.dob)
+      let age = (new Date()).getFullYear() - date.getFullYear()
+      let above = date.getFullYear() + 1
+      let below = date.getFullYear() - 1
+      request(url)
+        .post(`${path}-search`)
+        .send({age: {min: age + 1, max: age - 1}, name})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'students')
+          assert.isAbove(res.body.students.length, 0)
+          res.body.students.forEach((item) => {
+            let cur = new Date(item.dob).getFullYear()
+            assert.equal(item.name, name)
+            assert(cur >= below)
+            assert(cur <= above)
+          })
+          done()
+        })
+    })
+
+    it('.search by speciality', done => {
+      const someStudent = list[Math.floor(list.length * Math.random())]
+      const speciality = someStudent.education[0].speciality.name
+      request(url)
+        .post(`${path}-search`)
+        .send({speciality})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'students')
+          assert.isAbove(res.body.students.length, 0)
+          res.body.students.forEach(item => assert.include(item.education.map(x => x.speciality.name), speciality))
+          done()
+        })
+    })
+
+    it('.search by university', done => {
+      const someStudent = list[Math.floor(list.length * Math.random())]
+      const university = someStudent.education[0].university.name
+      request(url)
+        .post(`${path}-search`)
+        .send({university})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'students')
+          assert.isAbove(res.body.students.length, 0)
+          res.body.students.forEach(item => assert.include(item.education.map(x => x.university.name), university))
+          done()
+        })
+    })
+
+    it('.search by position', done => {
+      const someStudent = list[Math.floor(list.length * Math.random())]
+      const position = someStudent.experience[0].position.name
+      request(url)
+        .post(`${path}-search`)
+        .send({position})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'students')
+          assert.isAbove(res.body.students.length, 0)
+          res.body.students.forEach(item => assert.include(item.experience.map(x => x.position.name), position))
+          done()
+        })
+    })
+
+    it('.search by company name', done => {
+      const someStudent = list[Math.floor(list.length * Math.random())]
+      const company = someStudent.experience[0].company.name
+      request(url)
+        .post(`${path}-search`)
+        .send({company})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'students')
+          assert.isAbove(res.body.students.length, 0)
+          res.body.students.forEach(item => assert.include(item.experience.map(x => x.company.name), company))
+          done()
+        })
+    })
+
+    it('.search by company name and age', done => {
+      const someStudent = list[Math.floor(list.length * Math.random())]
+      const company = someStudent.experience[0].company.name
+      let date = new Date(someStudent.dob)
+      let age = (new Date()).getFullYear() - date.getFullYear()
+      let above = date.getFullYear() + 1
+      let below = date.getFullYear() - 1
+      request(url)
+        .post(`${path}-search`)
+        .send({age: {min: age + 1, max: age - 1}, company})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'students')
+          assert.isAbove(res.body.students.length, 0)
+          res.body.students.forEach(item => {
+            let cur = new Date(item.dob).getFullYear()
+            assert(cur >= below)
+            assert(cur <= above)
+            assert.include(item.experience.map(x => x.company.name), company)
+          })
+          done()
+        })
+    })
+
+    it('.search by position and age', done => {
+      const someStudent = list[Math.floor(list.length * Math.random())]
+      const position = someStudent.experience[0].position.name
+      let date = new Date(someStudent.dob)
+      let age = (new Date()).getFullYear() - date.getFullYear()
+      let above = date.getFullYear() + 1
+      let below = date.getFullYear() - 1
+      request(url)
+        .post(`${path}-search`)
+        .send({age: {min: age + 1, max: age - 1}, position})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'students')
+          assert.isAbove(res.body.students.length, 0)
+          res.body.students.forEach(item => {
+            let cur = new Date(item.dob).getFullYear()
+            assert(cur >= below)
+            assert(cur <= above)
+            assert.include(item.experience.map(x => x.position.name), position)
           })
           done()
         })
