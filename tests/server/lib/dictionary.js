@@ -12,8 +12,10 @@ export default (url, name) => {
   }
   const tmpData = {name: `Some ${name}`}
   const newTmpData = {name:`New ${name}`}
+  const newTmpArray = [`Some ${name}`, `New ${name}`]
   const names = pluralize(name, 2)
   let tmpModel = null
+  let tmpArrayList = null
   let list = null
 
   describe(`${name} tests`, () => {
@@ -140,5 +142,33 @@ export default (url, name) => {
           done()
         })
     })
+
+    it('.add items', done => {
+      request(url)
+        .post(`${path}s-add`)
+        .send({[names]: newTmpArray})
+        .end((err, res) => {
+          tmpArrayList = res.body[names] || []
+          assert.equal(res.status, 200)
+          assert.property(res.body, names)
+          res.body[names].forEach((item, index) => assert.equal(item.name, newTmpArray[index]))
+          done()
+        })
+    })
+
+    it('.check add items - get count', done => count(url, path, list.length + 2, done))
+
+    it('.remove items', done => {
+      request(url)
+        .delete(`${path}s-remove`)
+        .send({[names]: tmpArrayList.map(({_id}) => _id)})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'ok')
+          done()
+        })
+    })
+
+    it('.check remove items - get count', done => count(url, path, list.length, done))
   })
 }

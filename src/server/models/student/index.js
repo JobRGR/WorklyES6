@@ -78,15 +78,16 @@ schema.statics.getItem = function (id, callback) {
 
 schema.statics.updateItem = function (id, update, callback) {
   this.findById(id, (err, student) => {
-    let check = (key, obj) => /education|city|experience|skill/.test(key) ? mongoose.Types.ObjectId(obj[key]) : obj[key]
-    if (err) return callback(err)
-    for (let key in  update)
+    for (let key in  update) {
       if (update[key]) {
-        if (/education|experience|skill/.test(key) && !Array.isArray(update[key]))
-          student.push(mongoose.Types.ObjectId(update[key]))
-        else
-          student[key] = check(key, update)
+        if (
+          /education|experience|skill/.test(key)
+          && !Array.isArray(update[key])
+        ) student.push(mongoose.Types.ObjectId(update[key]))
+        else if (key == 'city') student[key] = mongoose.Types.ObjectId(update[key])
+        else student[key] = update[key]
       }
+    }
     student.save(err => callback(err, student))
   })
 }
@@ -110,6 +111,40 @@ schema.statics.searchItem = function(search, callback) {
     .deepPopulate(['education.speciality', 'experience.company', 'education.university', 'experience.position', 'city', 'skill'])
     .sort({'date': -1})
     .exec(callback)
+}
+
+schema.statics.changeMyPassword = function(password, callback) {
+  var student = req._student
+  student.hashedPassword = user.encryptPassword(password)
+  student.save(err => callback(err, student))
+}
+
+schema.statics.changeSomePassword = function(id, password, callback) {
+  this.findById(id, function(err, student){
+    if (err || !student) return callback(err || true)
+    student.hashedPassword = student.encryptPassword(password)
+    student.save(err => callback(err, student))
+  })
+}
+
+schema.statics.changeMyMail = function (email, callback) {
+  var student = req._student
+  this.findOne({email}, (err, res) => {
+    if (res) return callback(true)
+    student.email = email
+    student.save(err => callback(err, student))
+  })
+}
+
+schema.statics.changeSomeMail = function (id, email, callback) {
+  var student = req._student
+  this.findOne({email}, (err, res) => {
+    if (err || !student) return callback(err || true)
+    this.findById(id, function(err, student) {
+      student.email = email
+      student.save(err => callback(err, student))
+    })
+  })
 }
 
 schema.methods.toJSON = toJson

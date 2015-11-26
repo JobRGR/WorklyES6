@@ -1,6 +1,6 @@
 import mongoose from '../../models'
-import {removeItem, getCount, getRandom, getItem, updateItem, autocomplite, searchItem} from './helpers'
-
+import async from 'async'
+import {removeItem, getCount, getRandom, getItem, updateItem, autocomplite, searchItem, addArray, removeArray} from './helpers'
 
 let {Schema} = mongoose
 let schema = new Schema({name: {type: String, unique: true, required: true}})
@@ -21,5 +21,7 @@ schema.statics.getCount = getCount
 schema.statics.removeItem = removeItem
 schema.statics.getRandom = getRandom
 schema.statics.updateItem = updateItem
+schema.statics.addArray = addArray
+schema.statics.removeArray = removeArray
 
 export default schema
