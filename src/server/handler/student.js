@@ -45,4 +45,9 @@ handler.updateItem = (req, res, next) => {
   Student.updateItem(req.param.id, data, (err, student) => nextItem(err, student, req, next))
 }
 
+handler.changeMyPassword = (req, res, next) => Student.changeMyPassword(req._student, req.body.password, err => res.send({ok: err || true}))
+handler.changePassword = (req, res, next) => Student.changePassword(req.params.id, req.body.password, err => res.send({ok: err || true}))
+handler.changeMyEmail = (req, res, next) => Student.changeMyEmail(req._student, req.body.email, err => res.send({ok: err || true}))
+handler.changeEmail = (req, res, next) => Student.changeEmail(req.params.id, req.body.email, err => res.send({ok: err || true}))
+
 export default handler

@@ -50,11 +50,11 @@ schema.statics.authorize = function ({email, password}, callback) {
     .populate('city')
     .populate('skill')
     .populate('experience')
-    .exec((err, user) => {
+    .exec((err, student) => {
       if (err) callback(err, null)
-      else if (!user) callback(null, null)
-      else if (!user.checkPassword(password)) callback(null, null)
-      else callback(null, user)
+      else if (!student) callback(null, null)
+      else if (!student.checkPassword(password)) callback(null, null)
+      else callback(null, student)
     })
 }
 
@@ -113,22 +113,20 @@ schema.statics.searchItem = function(search, callback) {
     .exec(callback)
 }
 
-schema.statics.changeMyPassword = function(password, callback) {
-  var student = req._student
-  student.hashedPassword = user.encryptPassword(password)
+schema.statics.changeMyPassword = function(student, password, callback) {
+  student.hashedPassword = student.encryptPassword(password)
   student.save(err => callback(err, student))
 }
 
-schema.statics.changeSomePassword = function(id, password, callback) {
-  this.findById(id, function(err, student){
-    if (err || !student) return callback(err || true)
+schema.statics.changePassword = function(id, password, callback) {
+  this.findById(id, (err, student) => {
+    if (err || !student) return callback(err || new Error())
     student.hashedPassword = student.encryptPassword(password)
     student.save(err => callback(err, student))
   })
 }
 
-schema.statics.changeMyMail = function (email, callback) {
-  var student = req._student
+schema.statics.changeMyEmail = function (student, email, callback) {
   this.findOne({email}, (err, res) => {
     if (res) return callback(true)
     student.email = email
@@ -136,11 +134,11 @@ schema.statics.changeMyMail = function (email, callback) {
   })
 }
 
-schema.statics.changeSomeMail = function (id, email, callback) {
-  var student = req._student
+schema.statics.changeEmail = function (id, email, callback) {
   this.findOne({email}, (err, res) => {
-    if (err || !student) return callback(err || true)
-    this.findById(id, function(err, student) {
+    if (err) return callback(err)
+    if (res) return res._id == id ? callback(null, res) : callback(new Error())
+    this.findById(id, (err, student) => {
       student.email = email
       student.save(err => callback(err, student))
     })
