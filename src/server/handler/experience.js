@@ -30,4 +30,15 @@ handler.searchItems = (req, res, next) => {
   Experience.searchItems(search, (err, experiences) => nextItems(err, experiences, req, next))
 }
 
+handler.updateStudent = (req, res, next) => {
+  let remove = data => Experience.removeArray(
+    toObjectArray(req._student.experience.map(({_id}) => _id)),
+    err => nextItems(err, data, req, next))
+
+  if (!req.body.experience) nextItems(null, null, req, next)
+  else if (req.body.experience.length) remove([])
+  else Experience.addArray(req.body.experience,
+      (err, experiences) => err ? next(err) : remove(experiences))
+}
+
 export default handler

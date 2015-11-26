@@ -1,5 +1,5 @@
 import mongoose from '../index'
-import {removeItem, getCount, updateItem, randomPopulate, getPopulate, searchPopulate} from '../../utils/model/helpers'
+import {removeItem, getCount, updateItem, randomPopulate, getPopulate, searchPopulate, addArray, removeArray} from '../../utils/model/helpers'
 
 let {Schema} = mongoose
 let schema = new Schema({
@@ -34,6 +34,8 @@ schema.statics.searchItems = function (search, callback) {
 
 schema.statics.removeItem = removeItem
 schema.statics.getCount = getCount
+schema.statics.addArray = addArray
+schema.statics.removeArray = removeArray
 
 export default mongoose.model('Experience', schema)
 

@@ -18,6 +18,8 @@ handler.addItem = (req, res, next) => {
 }
 handler.login = (req, res, next) => Student.authorize(req.body, (err, student) => saveSession(err, student, req, next))
 handler.getStudent = (req, res, next) => nextItem(null, req._student, req, next)
+handler.changePassword = (req, res, next) => Student.changePassword(req.body.password, err => res.send({ok: err || true}))
+handler.changeEmail = (req, res, next) => Student.changeEmail(req.body.password, err => res.send({ok: err || true}))
 
 handler.searchItems = (req, res, next) => {
   let search = {}
@@ -30,5 +32,22 @@ handler.searchItems = (req, res, next) => {
   if (req.experiences.length) search.experience = {$in: toObjectArray(req.experiences)}
   Student.searchItem(search, (err, students) => nextItems(err, students, req, next))
 }
+
+handler.updateItem = (req, res, next) => {
+  let data = ['dob', 'telephone', 'name', 'about'].reduce((memo, key) => {
+    if (req.body[key]) memo[key] = req.body[key]
+    return memo
+  }, {})
+  if (req.city) data.city = req.city._id
+  if (req.skills) data.skills = toObjectArray(req.skills)
+  if (req.educations) data.educations = toObjectArray(req.educations)
+  if (req.experiences) data.experiences = toObjectArray(req.experiences)
+  Student.updateItem(req.param.id, data, (err, student) => nextItem(err, student, req, next))
+}
+
+handler.changeMyPassword = (req, res, next) => Student.changeMyPassword(req._student, req.body.password, err => res.send({ok: err || true}))
+handler.changePassword = (req, res, next) => Student.changePassword(req.params.id, req.body.password, err => res.send({ok: err || true}))
+handler.changeMyEmail = (req, res, next) => Student.changeMyEmail(req._student, req.body.email, err => res.send({ok: err || true}))
+handler.changeEmail = (req, res, next) => Student.changeEmail(req.params.id, req.body.email, err => res.send({ok: err || true}))
 
 export default handler

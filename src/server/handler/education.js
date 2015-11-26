@@ -29,5 +29,15 @@ handler.searchItems = (req, res, next) => {
   Education.searchItems(search, (err, educations) => nextItems(err, educations, req, next))
 }
 
+handler.updateStudent = (req, res, next) => {
+  let remove = data => Education.removeArray(
+    toObjectArray(req.user.education.map(({_id}) => _id)),
+    err => nextItems(err, data, req, next))
+
+  if (!req.body.education) nextItems(null, null, req, next)
+  else if (req.body.education.length) remove([])
+  else Education.addArray(req.body.education,
+      (err, educations) => err ? next(err) : remove(educations))
+}
 
 export default handler

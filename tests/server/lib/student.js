@@ -136,6 +136,44 @@ export default (url) => {
 
     it('.get session login student', getSession)
 
+    it('.change password', done => {
+      request(url)
+        .put(`${path}-password/${tmpModel._id}`)
+        .send({password: '1111'})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'ok')
+          done()
+        })
+    })
+
+    it('.change email', done => {
+      tmpModel.email = 'alex1@gmail.com'
+      request(url)
+        .put(`${path}-email/${tmpModel._id}`)
+        .send({email: tmpModel.email})
+        .end((err, res) => {
+          console.log(res.body)
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'ok')
+          done()
+        })
+    })
+
+    it('.get check change email', done => {
+      request(url)
+        .get(`${path}/${tmpModel._id}`)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'student')
+          assert.equal(res.body.student.name, tmpModel.name)
+          assert.equal(res.body.student.email, tmpModel.email)
+          assert.notProperty(res.body.student, 'salt')
+          assert.notProperty(res.body.student, 'hashedPassword')
+          done()
+        })
+    })
+
     it('.delete item', done => deleteItem(url, `${path}/${tmpModel._id}`, done))
 
     it('.check get delete', done => count(url, path, list.length, done))

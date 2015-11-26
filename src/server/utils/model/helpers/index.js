@@ -8,6 +8,8 @@ import searchItem from './lib/search'
 import randomPopulate from './lib/random_populate'
 import getPopulate from './lib/get_populate'
 import searchPopulate from './lib/search_populate'
+import addArray from './lib/add_array'
+import removeArray from './lib/remove_array'
 import toJson from './lib/to_json'
 
 export default {
@@ -21,5 +23,7 @@ export default {
   randomPopulate,
   getPopulate,
   searchPopulate,
+  addArray,
+  removeArray,
   toJson
 }
