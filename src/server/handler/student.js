@@ -7,17 +7,17 @@ import {Student, City, Skill, Position, CompanyName, Education, University, Spec
 let {nextItem, nextItems} = new Next('student')
 let handler = new Handler('student', Student)
 
-let saveSession = (err, student, req, next) => {
+let saveSession = (err, student, req, res, next) => {
   req.session._student = student._id
-  nextItem(err, student, req, next)
+  nextItem(err, student, res, next)
 }
 
 handler.addItem = (req, res, next) => {
   let {email, password, name} = req.body
-  Student.addItem( {email, password, name}, (err, student) => saveSession(err, student, req, next))
+  Student.addItem({email, password, name}, (err, student) => saveSession(err, student, req, res, next))
 }
-handler.login = (req, res, next) => Student.authorize(req.body, (err, student) => saveSession(err, student, req, next))
-handler.getStudent = (req, res, next) => nextItem(null, req._student, req, next)
+handler.login = (req, res, next) => Student.authorize(req.body, (err, student) => saveSession(err, student, req, res, next))
+handler.getStudent = (req, res, next) => nextItem(null, req._student, res, next)
 handler.changePassword = (req, res, next) => Student.changePassword(req.body.password, err => res.send({ok: err || true}))
 handler.changeEmail = (req, res, next) => Student.changeEmail(req.body.password, err => res.send({ok: err || true}))
 
@@ -26,11 +26,11 @@ handler.searchItems = (req, res, next) => {
   if (req.body.age) search.dob = getDate(req.body.age.min, req.body.age.max)
   if (req.body.email) search.email = req.body.email
   if (req.body.name) search.name = req.body.name
-  if (req.cities.length) search.city = {$in: toObjectArray(req.cities)}
-  if (req.skills.length) search.skill = {$in: toObjectArray(req.skills)}
-  if (req.educations.length) search.education = {$in: toObjectArray(req.educations)}
-  if (req.experiences.length) search.experience = {$in: toObjectArray(req.experiences)}
-  Student.searchItem(search, (err, students) => nextItems(err, students, req, next))
+  if (res.cities.length) search.city = {$in: toObjectArray(res.cities)}
+  if (res.skills.length) search.skill = {$in: toObjectArray(res.skills)}
+  if (res.educations.length) search.education = {$in: toObjectArray(res.educations)}
+  if (res.experiences.length) search.experience = {$in: toObjectArray(res.experiences)}
+  Student.searchItem(search, (err, students) => nextItems(err, students, res, next))
 }
 
 handler.updateItem = (req, res, next) => {
@@ -38,11 +38,11 @@ handler.updateItem = (req, res, next) => {
     if (req.body[key]) memo[key] = req.body[key]
     return memo
   }, {})
-  if (req.city) data.city = req.city._id
-  if (req.skills) data.skills = toObjectArray(req.skills)
-  if (req.educations) data.educations = toObjectArray(req.educations)
-  if (req.experiences) data.experiences = toObjectArray(req.experiences)
-  Student.updateItem(req.param.id, data, (err, student) => nextItem(err, student, req, next))
+  if (res.city) data.city = res.city._id
+  if (res.skills) data.skills = toObjectArray(res.skills)
+  if (res.educations) data.educations = toObjectArray(res.educations)
+  if (res.experiences) data.experiences = toObjectArray(res.experiences)
+  Student.updateItem(req.param.id, data, (err, student) => nextItem(err, student, res, next))
 }
 
 handler.changeMyPassword = (req, res, next) => Student.changeMyPassword(req._student, req.body.password, err => res.send({ok: err || true}))

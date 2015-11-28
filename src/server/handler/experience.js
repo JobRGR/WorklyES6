@@ -10,32 +10,32 @@ let handler = new Handler('experience', Experience, false, false)
 
 handler.addOne = (req, res, next) => {
   let {start, end} = req.body
-  let {position, company} = req
+  let {position, company} = res
   let data = {start, end, position: position._id, company: company._id}
-  Experience.addItem(data, (err, experience) => nextItem(err, experience, req, next))
+  Experience.addItem(data, (err, experience) => nextItem(err, experience, res, next))
 }
 
 handler.updateOne = (req, res, next) => {
   let {start, end} = req.body
-  let {position, company} = req
+  let {position, company} = res
   let data = {start, end, position: position._id, company: company._id}
-  Experience.updateItem(req.params.id, data, (err, experience) => nextItem(err, experience, req, next))
+  Experience.updateItem(req.params.id, data, (err, experience) => nextItem(err, experience, res, next))
 }
 
 handler.searchItems = (req, res, next) => {
   let search = {}
-  if (req.companies.length) search.company = {$in: toObjectArray(req.companies)}
-  if (req.positions.length) search.position = {$in: toObjectArray(req.positions)}
-  if (!Object.keys(search).length) return nextItems(null, [], req, next)
-  Experience.searchItems(search, (err, experiences) => nextItems(err, experiences, req, next))
+  if (res.companies.length) search.company = {$in: toObjectArray(res.companies)}
+  if (res.positions.length) search.position = {$in: toObjectArray(res.positions)}
+  if (!Object.keys(search).length) return nextItems(null, [], res, next)
+  Experience.searchItems(search, (err, experiences) => nextItems(err, experiences, res, next))
 }
 
 handler.updateStudent = (req, res, next) => {
   let remove = data => Experience.removeArray(
     toObjectArray(req._student.experience.map(({_id}) => _id)),
-    err => nextItems(err, data, req, next))
+    err => nextItems(err, data, res, next))
 
-  if (!req.body.experience) nextItems(null, null, req, next)
+  if (!req.body.experience) nextItems(null, null, res, next)
   else if (req.body.experience.length) remove([])
   else Experience.addArray(req.body.experience,
       (err, experiences) => err ? next(err) : remove(experiences))
