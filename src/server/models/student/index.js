@@ -121,27 +121,23 @@ schema.statics.changeMyPassword = function(student, password, callback) {
 schema.statics.changePassword = function(id, password, callback) {
   this.findById(id, (err, student) => {
     if (err || !student) return callback(err || new Error())
-    student.hashedPassword = student.encryptPassword(password)
-    student.save(err => callback(err, student))
+    this.changeMyPassword(student, password, callback)
   })
 }
 
 schema.statics.changeMyEmail = function (student, email, callback) {
   this.findOne({email}, (err, res) => {
-    if (res) return callback(true)
+    if (err) return callback(err)
+    if (res) return res._id == student._id ? callback(null, res) : callback(new Error())
     student.email = email
     student.save(err => callback(err, student))
   })
 }
 
 schema.statics.changeEmail = function (id, email, callback) {
-  this.findOne({email}, (err, res) => {
-    if (err) return callback(err)
-    if (res) return res._id == id ? callback(null, res) : callback(new Error())
-    this.findById(id, (err, student) => {
-      student.email = email
-      student.save(err => callback(err, student))
-    })
+  this.findById(id, (err, student) => {
+    if (err || !student) return callback(err || new Error())
+    this.changeMyEmail(student, email, callback)
   })
 }
 
