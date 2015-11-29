@@ -8,5 +8,6 @@ import Position from './position'
 import CompanyName from './company_name'
 import Student from './student'
 import OpenQuestion from './open_question'
+import TestQuestion from './test_question'
 
-export default {City, Skill, Speciality, University, Education, Experience, Position, CompanyName, Student, OpenQuestion}
+export default {City, Skill, Speciality, University, Education, Experience, Position, CompanyName, Student, OpenQuestion, TestQuestion}

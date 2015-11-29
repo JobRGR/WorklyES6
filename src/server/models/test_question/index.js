@@ -4,15 +4,16 @@ import {removeItem, getCount, randomTowPopulate, getTowPopulation, getItem, upda
 let {Schema} = mongoose
 let schema = new Schema({
     question: {type: String, required: true},
-    answer: {type: String, required: true},
+    rightAns : {type: Number, required: true},
+    answer: {type: [String], required: true},
     //owner: {type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true},
     privat: {type: Boolean, required: true} //"privat", not "private". Word "private" is reserved
 })
 
-schema.statics.addItem = function ({question, answer, privat}, callback) {
-    const OpenQuestion = this
-    let openQuestion = new OpenQuestion({question, answer, privat})
-    openQuestion.save(err => callback(err, openQuestion))
+schema.statics.addItem = function ({question, answer, rightAns, privat}, callback) {
+    const TestQuestion = this
+    let testQuestion = new TestQuestion({question, answer, rightAns, privat})
+    testQuestion.save(err => callback(err, testQuestion))
 }
 
 //schema.statics.getItem = function (id, callback) {
@@ -33,5 +34,5 @@ schema.statics.getItem = getItem
 schema.statics.getCount = getCount
 schema.statics.removeItem = removeItem
 
-export default mongoose.model('OpenQuestion', schema)
+export default mongoose.model('TestQuestion', schema)
 
