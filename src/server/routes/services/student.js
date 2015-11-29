@@ -24,7 +24,7 @@ let router = (name, handler) =>
       handler.searchItems,
       handler.sendItems
     )
-    .post(`/${name}-password`, handler.changeMyPassword)
+    .put(`/${name}-password`, handler.changeMyPassword)
     .put(`/${name}-password/:id`, handler.changePassword)
     .put(`/${name}-email`, handler.changeMyEmail)
     .put(`/${name}-email/:id`, handler.changeEmail)
