@@ -52,7 +52,7 @@
     "webpack": "^1.9.10"
   },
   "scripts": {
-    "test": "./node_modules/.bin/nodemon ./node_modules/.bin/mocha --compilers js:babel/register ./tests/server",
+    "test": "./node_modules/.bin/nodemon ./node_modules/.bin/mocha --compilers js:babel/register ./tests/server mocha",
     "db": "./node_modules/.bin/babel-node ./src/server/data",
     "postinstall": "./node_modules/.bin/gulp build",
     "dev": "./node_modules/.bin/gulp",
