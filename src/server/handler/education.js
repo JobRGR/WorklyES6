@@ -40,4 +40,27 @@ handler.updateStudent = (req, res, next) => {
       (err, educations) => err ? next(err) : remove(educations))
 }
 
+handler.updateStudent = (req, res, next) => {
+  let remove = data => Education.removeArray(
+    toObjectArray(req._student.education.map(({_id}) => _id)),
+    err => nextItems(err, data, res, next))
+
+  if (!req.body.education) return nextItems(null, null, res, next)
+  if (!req.body.education.length) return remove([])
+
+  async.map(req.body.education, (item, cb) => {
+    async.parallel({
+      university: (callback) => University.addItem({name: item.university}, callback),
+      speciality: (callback) => Speciality.addItem({name: item.speciality}, callback)
+    }, (err, {university, speciality}) => {
+      item.university = university._id
+      item.speciality = speciality._id
+      cb(err, item)
+    })
+    }, (err, education) =>
+      err ? next(err) : Education.addArray(req.body.education,
+        (err, educations) => err ? next(err) : remove(educations))
+  )
+}
+
 export default handler

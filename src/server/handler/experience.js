@@ -35,10 +35,21 @@ handler.updateStudent = (req, res, next) => {
     toObjectArray(req._student.experience.map(({_id}) => _id)),
     err => nextItems(err, data, res, next))
 
-  if (!req.body.experience) nextItems(null, null, res, next)
-  else if (req.body.experience.length) remove([])
-  else Experience.addArray(req.body.experience,
+  if (!req.body.experience) return nextItems(null, null, res, next)
+  if (req.body.experience.length) return remove([])
+  async.map(req.body.experience, (item, cb) => {
+    async.parallel({
+      position: (callback) => Position.addItem({name: item.position}, callback),
+      company: (callback) => CompanyName.addItem({name: item.company}, callback)
+    }, (err, {position, company}) => {
+      item.position = position._id
+      item.company = company._id
+      cb(err, item)
+    })
+  }, (err, experience) =>
+    err ? next(err) : Experience.addArray(experience,
       (err, experiences) => err ? next(err) : remove(experiences))
+  )
 }
 
 export default handler
