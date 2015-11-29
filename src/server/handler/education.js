@@ -34,17 +34,6 @@ handler.updateStudent = (req, res, next) => {
     toObjectArray(req._student.education.map(({_id}) => _id)),
     err => nextItems(err, data, res, next))
 
-  if (!req.body.education) nextItems(null, null, res, next)
-  else if (!req.body.education.length) remove([])
-  else Education.addArray(req.body.education,
-      (err, educations) => err ? next(err) : remove(educations))
-}
-
-handler.updateStudent = (req, res, next) => {
-  let remove = data => Education.removeArray(
-    toObjectArray(req._student.education.map(({_id}) => _id)),
-    err => nextItems(err, data, res, next))
-
   if (!req.body.education) return nextItems(null, null, res, next)
   if (!req.body.education.length) return remove([])
 
