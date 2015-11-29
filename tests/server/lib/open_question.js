@@ -10,13 +10,13 @@ export default (url) => {
     let tmpData = {
         question: "Which came first, the chicken or the egg?",
         answer: "the chicken egg came first because the genetic recombination that produced the first 'chicken'occurred in germ-line cells in a non-chicken ancestor",
-        privat: false
+        free: true
     }
 
     let newTmpData = {
         question: "Can God create a stone so heavy that it cannot lift it?",
         answer: "No",
-        privat: true
+        free: false
     }
 
     let newData = tmpData
@@ -52,14 +52,14 @@ export default (url) => {
                     assert.property(res.body, 'open_question')
                     assert.property(res.body.open_question, 'question')
                     assert.property(res.body.open_question, 'answer')
-                    assert.property(res.body.open_question, 'privat')
+                    assert.property(res.body.open_question, 'free')
                     assert.equal(res.body.open_question.question, list[index].question)
                     assert.equal(res.body.open_question.answer, list[index].answer)
-                    assert.equal(res.body.open_question.privat, list[index].privat)
+                    assert.equal(res.body.open_question.free, list[index].free)
                     assert.equal(res.body.open_question._id, list[index]._id)
                     assert.isString(res.body.open_question.question)
                     assert.isString(res.body.open_question.answer)
-                    assert.isBoolean(res.body.open_question.privat)
+                    assert.isBoolean(res.body.open_question.free)
                     done()
                 })
         })
@@ -76,10 +76,10 @@ export default (url) => {
                     assert.property(res.body, 'open_question')
                     assert.property(res.body.open_question, 'question')
                     assert.property(res.body.open_question, 'answer')
-                    assert.property(res.body.open_question, 'privat')
+                    assert.property(res.body.open_question, 'free')
                     assert.equal(res.body.open_question.question, tmpData.question)
                     assert.equal(res.body.open_question.answer, tmpData.answer)
-                    assert.equal(res.body.open_question.privat, tmpData.privat)
+                    assert.equal(res.body.open_question.free, tmpData.free)
                     done()
                 }))
         })
@@ -95,10 +95,10 @@ export default (url) => {
                     assert.property(res.body, 'open_question')
                     assert.property(res.body.open_question, 'question')
                     assert.property(res.body.open_question, 'answer')
-                    assert.property(res.body.open_question, 'privat')
+                    assert.property(res.body.open_question, 'free')
                     assert.equal(res.body.open_question.question, newTmpData.question)
                     assert.equal(res.body.open_question.answer, newTmpData.answer)
-                    assert.equal(res.body.open_question.privat, newTmpData.privat)
+                    assert.equal(res.body.open_question.free, newTmpData.free)
                     done()
                 })
         })
@@ -111,10 +111,10 @@ export default (url) => {
                     assert.property(res.body, 'open_question')
                     assert.property(res.body.open_question, 'question')
                     assert.property(res.body.open_question, 'answer')
-                    assert.property(res.body.open_question, 'privat')
+                    assert.property(res.body.open_question, 'free')
                     assert.equal(res.body.open_question.question, newTmpData.question)
                     assert.equal(res.body.open_question.answer, newTmpData.answer)
-                    assert.equal(res.body.open_question.privat, newTmpData.privat)
+                    assert.equal(res.body.open_question.free, newTmpData.free)
                     done()
                 })
         })
@@ -131,10 +131,10 @@ export default (url) => {
                     assert.property(res.body, 'open_question')
                     assert.property(res.body.open_question, 'question')
                     assert.property(res.body.open_question, 'answer')
-                    assert.property(res.body.open_question, 'privat')
+                    assert.property(res.body.open_question, 'free')
                     assert.isString(res.body.open_question.question)
                     assert.isString(res.body.open_question.answer)
-                    assert.isBoolean(res.body.open_question.privat)
+                    assert.isBoolean(res.body.open_question.free)
                     done()
                 })
         })

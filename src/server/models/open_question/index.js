@@ -1,30 +1,30 @@
 import mongoose from '../index'
-import {removeItem, getCount, randomTowPopulate, getTowPopulation, getItem, updateItem, getRandom} from '../../utils/model/helpers'
+import {removeItem, getCount, randomPopulate, getPopulate, getItem, updateItem, getRandom} from '../../utils/model/helpers'
 
 let {Schema} = mongoose
 let schema = new Schema({
     question: {type: String, required: true},
     answer: {type: String, required: true},
     //owner: {type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true},
-    privat: {type: Boolean, required: true} //"privat", not "private". Word "private" is reserved
+    free: {type: Boolean, required: true}
 })
 
-schema.statics.addItem = function ({question, answer, privat}, callback) {
+schema.statics.addItem = function ({question, answer, free}, callback) {
     const OpenQuestion = this
-    let openQuestion = new OpenQuestion({question, answer, privat})
+    let openQuestion = new OpenQuestion({question, answer, free})
     openQuestion.save(err => callback(err, openQuestion))
 }
 
 //schema.statics.getItem = function (id, callback) {
-//    return getPopulation.apply(this, [id, callback, ['company']])
+//    return getPopulation.apply(this, [id, callback, ['owner']])
 //}
 //
 //schema.statics.updateItem = function (id, update, callback) {
-//    return updateItem.apply(this, [id, update, callback, ['company']])
+//    return updateItem.apply(this, [id, update, callback, ['owner']])
 //}
 //
 //schema.statics.getRandom = function (callback) {
-//    return randomPopulate.apply(this, [callback, ['company']])
+//    return randomPopulate.apply(this, [callback, ['owner']])
 //}
 
 schema.statics.getRandom = getRandom
