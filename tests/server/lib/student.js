@@ -29,6 +29,26 @@ export default (url) => {
       })
     }
 
+    let checkLogin = () => {
+      it('.login student', done => {
+        request(url)
+          .post(`${path}-login`)
+          .send(tmpStudent)
+          .end((err, res) => {
+            agent.saveCookies(res)
+            assert.equal(res.status, 200)
+            assert.property(res.body, 'student')
+            assert.equal(res.body.student.name, tmpStudent.name)
+            assert.equal(res.body.student.email, tmpStudent.email)
+            assert.notProperty(res.body.student, 'salt')
+            assert.notProperty(res.body.student, 'hashedPassword')
+            done()
+          })
+      })
+
+      it('.get session login student', getSession)
+    }
+
     it('.get list', done => {
       request(url)
         .get(path)
@@ -118,28 +138,27 @@ export default (url) => {
 
     it('.get session set student', getSession)
 
-    it('.login student', done => {
-      request(url)
-        .post(`${path}-login`)
-        .send(tmpStudent)
-        .end((err, res) => {
-          agent.saveCookies(res)
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'student')
-          assert.equal(res.body.student.name, tmpStudent.name)
-          assert.equal(res.body.student.email, tmpStudent.email)
-          assert.notProperty(res.body.student, 'salt')
-          assert.notProperty(res.body.student, 'hashedPassword')
-          done()
-        })
+    checkLogin()
+
+    it('.change my password', done => {
+      tmpStudent.password = '2222'
+      let req = request(url).put(`${path}-password`)
+      agent.attachCookies(req)
+      req.send({password: tmpStudent.password})
+      req.end((err, res) => {
+        assert.equal(res.status, 200)
+        assert.property(res.body, 'ok')
+        done()
+      })
     })
 
-    it('.get session login student', getSession)
+    checkLogin()
 
     it('.change password', done => {
+      tmpStudent.password = '111'
       request(url)
         .put(`${path}-password/${tmpModel._id}`)
-        .send({password: '1111'})
+        .send({password: tmpStudent.password})
         .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'ok')
@@ -147,11 +166,28 @@ export default (url) => {
         })
     })
 
-    it('.change email', done => {
-      tmpModel.email = 'alex1@gmail.com'
+    checkLogin()
+
+    it('.change my email', done => {
+      tmpStudent.email = 'alex2@gmail.com'
       request(url)
         .put(`${path}-email/${tmpModel._id}`)
-        .send({email: tmpModel.email})
+        .send({email: tmpStudent.email})
+        .end((err, res) => {
+          console.log(res.body)
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'ok')
+          done()
+        })
+    })
+
+    checkLogin()
+
+    it('.change email', done => {
+      tmpStudent.email = 'alex1@gmail.com'
+      request(url)
+        .put(`${path}-email/${tmpModel._id}`)
+        .send({email: tmpStudent.email})
         .end((err, res) => {
           console.log(res.body)
           assert.equal(res.status, 200)
@@ -166,8 +202,8 @@ export default (url) => {
         .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'student')
-          assert.equal(res.body.student.name, tmpModel.name)
-          assert.equal(res.body.student.email, tmpModel.email)
+          assert.equal(res.body.student.name, tmpStudent.name)
+          assert.equal(res.body.student.email, tmpStudent.email)
           assert.notProperty(res.body.student, 'salt')
           assert.notProperty(res.body.student, 'hashedPassword')
           done()
