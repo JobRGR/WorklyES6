@@ -33,7 +33,7 @@ handler.searchItems = (req, res, next) => {
   Student.searchItem(search, (err, students) => nextItems(err, students, res, next))
 }
 
-handler.updateItem = (req, res, next) => {
+handler.updateStudent = (req, res, next) => {
   let data = ['dob', 'telephone', 'name', 'about'].reduce((memo, key) => {
     if (req.body[key]) memo[key] = req.body[key]
     return memo
@@ -42,7 +42,7 @@ handler.updateItem = (req, res, next) => {
   if (res.skills) data.skills = toObjectArray(res.skills)
   if (res.educations) data.educations = toObjectArray(res.educations)
   if (res.experiences) data.experiences = toObjectArray(res.experiences)
-  Student.updateItem(req.param.id, data, (err, student) => nextItem(err, student, res, next))
+  Student.updateOne(req._student, data, (err, student) => nextItem(err, student, res, next))
 }
 
 handler.changeMyPassword = (req, res, next) => Student.changeMyPassword(req._student, req.body.password, err => res.send({ok: err || true}))

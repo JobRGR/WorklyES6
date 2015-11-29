@@ -24,6 +24,14 @@ let router = (name, handler) =>
       handler.searchItems,
       handler.sendItems
     )
+    .put(`/${name}`,
+      Dictionaries['City'].addItem,
+      Dictionaries['Skill'].addItems,
+      Education.updateStudent,
+      Experience.updateStudent,
+      handler.updateStudent,
+      handler.sendItem
+    )
     .put(`/${name}-password`, handler.changeMyPassword)
     .put(`/${name}-password/:id`, handler.changePassword)
     .put(`/${name}-email`, handler.changeMyEmail)

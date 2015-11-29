@@ -76,20 +76,22 @@ schema.statics.getItem = function (id, callback) {
     .exec(callback)
 }
 
-schema.statics.updateItem = function (id, update, callback) {
-  this.findById(id, (err, student) => {
-    for (let key in  update) {
-      if (update[key]) {
-        if (
-          /education|experience|skill/.test(key)
-          && !Array.isArray(update[key])
-        ) student.push(mongoose.Types.ObjectId(update[key]))
-        else if (key == 'city') student[key] = mongoose.Types.ObjectId(update[key])
-        else student[key] = update[key]
-      }
+schema.statics.updateOne = function (student, update, callback) {
+  for (let key in  update) {
+    if (update[key]) {
+      if (
+        /education|experience|skill/.test(key)
+        && !Array.isArray(update[key])
+      ) student.push(mongoose.Types.ObjectId(update[key]))
+      else if (key == 'city') student[key] = mongoose.Types.ObjectId(update[key])
+      else student[key] = update[key]
     }
-    student.save(err => callback(err, student))
-  })
+  }
+  student.save(err => callback(err, student))
+}
+
+schema.statics.updateItem = function (id, update, callback) {
+  this.findById(id, (err, student) => err || !student ? next(err || new Error()) : updateOne(student, update, callback))
 }
 
 schema.statics.getRandom = function(callback) {
