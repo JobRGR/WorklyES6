@@ -1,4 +1,5 @@
 import crypto from 'crypto'
+import deepPopulate from '../../utils/deep_populate'
 import mongoose from '../index'
 import {removeItem, getCount, toJson} from '../../utils/model/helpers'
 
@@ -49,11 +50,11 @@ schema.statics.authorize = function ({email, password}, callback) {
     .populate('city')
     .populate('skill')
     .populate('experience')
-    .exec((err, user) => {
+    .exec((err, student) => {
       if (err) callback(err, null)
-      else if (!user) callback(null, null)
-      else if (!user.checkPassword(password)) callback(null, null)
-      else callback(null, user)
+      else if (!student) callback(null, null)
+      else if (!student.checkPassword(password)) callback(null, null)
+      else callback(null, student)
     })
 }
 
@@ -66,32 +67,27 @@ schema.statics.addItem = function ({name, email, dob, telephone, about, educatio
 schema.statics.getItem = function (id, callback) {
   if (id) this
     .findById(id)
-    .populate('education')
-    .populate('city')
-    .populate('skill')
-    .populate('experience')
+    .deepPopulate(['education.speciality', 'experience.company', 'education.university', 'experience.position', 'city', 'skill'])
     .exec(callback)
   else this
     .find({})
-    .populate('education')
-    .populate('city')
-    .populate('skill')
-    .populate('experience')
+    .deepPopulate(['education.speciality', 'experience.company', 'education.university', 'experience.position', 'city', 'skill'])
     .sort({'date': -1})
     .exec(callback)
 }
 
 schema.statics.updateItem = function (id, update, callback) {
   this.findById(id, (err, student) => {
-    let check = (key, obj) => /education|city|experience|skill/.test(key) ? mongoose.Types.ObjectId(obj[key]) : obj[key]
-    if (err) return callback(err)
-    for (let key in  update)
+    for (let key in  update) {
       if (update[key]) {
-        if (/education|experience|skill/.test(key) && !Array.isArray(update[key]))
-          student.push(mongoose.Types.ObjectId(update[key]))
-        else
-          student[key] = check(key, update)
+        if (
+          /education|experience|skill/.test(key)
+          && !Array.isArray(update[key])
+        ) student.push(mongoose.Types.ObjectId(update[key]))
+        else if (key == 'city') student[key] = mongoose.Types.ObjectId(update[key])
+        else student[key] = update[key]
       }
+    }
     student.save(err => callback(err, student))
   })
 }
@@ -103,18 +99,52 @@ schema.statics.getRandom = function(callback) {
     this
       .findOne()
       .skip(skip)
-      .populate('education')
-      .populate('city')
-      .populate('skill')
-      .populate('experience')
+      .deepPopulate(['education.speciality', 'experience.company', 'education.university', 'experience.position', 'city', 'skill'])
       .sort({'date': -1})
       .exec(callback)
+  })
+}
+
+schema.statics.searchItem = function(search, callback) {
+  this
+    .find(search)
+    .deepPopulate(['education.speciality', 'experience.company', 'education.university', 'experience.position', 'city', 'skill'])
+    .sort({'date': -1})
+    .exec(callback)
+}
+
+schema.statics.changeMyPassword = function(student, password, callback) {
+  student.hashedPassword = student.encryptPassword(password)
+  student.save(err => callback(err, student))
+}
+
+schema.statics.changePassword = function(id, password, callback) {
+  this.findById(id, (err, student) => {
+    if (err || !student) return callback(err || new Error())
+    this.changeMyPassword(student, password, callback)
+  })
+}
+
+schema.statics.changeMyEmail = function (student, email, callback) {
+  this.findOne({email}, (err, res) => {
+    if (err) return callback(err)
+    if (res) return res._id == student._id ? callback(null, res) : callback(new Error())
+    student.email = email
+    student.save(err => callback(err, student))
+  })
+}
+
+schema.statics.changeEmail = function (id, email, callback) {
+  this.findById(id, (err, student) => {
+    if (err || !student) return callback(err || new Error())
+    this.changeMyEmail(student, email, callback)
   })
 }
 
 schema.methods.toJSON = toJson
 schema.statics.getCount = getCount
 schema.statics.removeItem = removeItem
+schema.plugin(deepPopulate)
 
 export default mongoose.model('Student', schema)
 

@@ -5,16 +5,16 @@ export default function (name) {
   this.names = pluralize(name, 2)
 
   return {
-    nextItem: (err, item, req, next) => {
-      req[this.name] = item
+    nextItem: (err, item, res, next) => {
+      res[this.name] = item
       next(err)
     },
-    nextItems: (err, items, req, next) => {
-      req[this.names] = items
+    nextItems: (err, items, res, next) => {
+      res[this.names] = items
       next(err)
     },
-    nextCount: (err, count, req, next) => {
-      req.count = count
+    nextCount: (err, count, res, next) => {
+      res.count = count
       next(err)
     }
   }

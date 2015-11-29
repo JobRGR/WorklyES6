@@ -243,5 +243,54 @@ export default (url) => {
     })
 
     it('.delete new speciality', done => deleteItem(url, `/api/speciality/${newSpeciality._id}`, done))
+    
+    it('.search education by university', done => {
+      const index = Math.floor(list.length * Math.random())
+      request(url)
+        .post(`${path}-search`)
+        .send({university: list[index].university.name})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'educations')
+          assert.isAbove(res.body.educations.length, 0)
+          res.body.educations.forEach((item) => assert.equal(item.university.name, list[index].university.name))
+          done()
+        })
+    })
+
+    it('.search education by speciality', done => {
+      const index = Math.floor(list.length * Math.random())
+      request(url)
+        .post(`${path}-search`)
+        .send({speciality: list[index].speciality.name})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'educations')
+          assert.isAbove(res.body.educations.length, 0)
+          res.body.educations.forEach((item) => assert.equal(item.speciality.name, list[index].speciality.name))
+          done()
+        })
+    })
+
+    it('.search education by company position and company', done => {
+      const index = Math.floor(list.length * Math.random())
+      request(url)
+        .post(`${path}-search`)
+        .send({
+          university: list[index].university.name,
+          speciality: list[index].speciality.name
+        })
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'educations')
+          assert.isAbove(res.body.educations.length, 0)
+          res.body.educations.forEach((item) => {
+            assert.equal(item.speciality.name, list[index].speciality.name)
+            assert.equal(item.university.name, list[index].university.name)
+          })
+          done()
+        })
+    })
   })
 }

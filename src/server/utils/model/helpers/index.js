@@ -5,8 +5,11 @@ import getItem from './lib/get'
 import updateItem from './lib/update'
 import autocomplite from './lib/autocomplite'
 import searchItem from './lib/search'
-import randomTowPopulate from './lib/random_tow_populate'
-import getTowPopulation from './lib/get_tow_population'
+import randomPopulate from './lib/random_populate'
+import getPopulate from './lib/get_populate'
+import searchPopulate from './lib/search_populate'
+import addArray from './lib/add_array'
+import removeArray from './lib/remove_array'
 import toJson from './lib/to_json'
 
 export default {
@@ -17,7 +20,10 @@ export default {
   updateItem,
   autocomplite,
   searchItem,
-  randomTowPopulate,
-  getTowPopulation,
+  randomPopulate,
+  getPopulate,
+  searchPopulate,
+  addArray,
+  removeArray,
   toJson
 }
