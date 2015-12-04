@@ -15,7 +15,7 @@ var stylus = require('gulp-stylus')
 var nodemon = './node_modules/.bin/nodemon --watch '
 var babelNode = './node_modules/.bin/babel-node '
 var inspector = './node_modules/.bin/node-inspector --web-port=8084'
-var server = './src/server'
+var server = './src/server '
 
 var autoprefixerBrowsers = [
   'ie >= 9',
@@ -72,15 +72,19 @@ gulp.task('style', function () {
 })
 
 gulp.task('server', function (done) {
-  sh.exec(nodemon + server + ' ' + babelNode  + server, function() { done() })
+  sh.exec(babelNode + server, function () {
+    done()
+  })
 })
 
 gulp.task('server:debug', function(done) {
-  sh.exec(nodemon + server + ' ' + babelNode + '--debug --stage 0 -- ' + server +' --debug', function() { done() })
+  sh.exec(babelNode + '--debug --stage 0 -- ' + server + ' --debug', function () {
+    done()
+  })
 })
 
 gulp.task('inspector', function(done) {
-  sh.exec(nodemon + server + ' ' + inspector,
+  sh.exec('bash ' + nodemon + server + inspector,
     function() { done() })
 })
 

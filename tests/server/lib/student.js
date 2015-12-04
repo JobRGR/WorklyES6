@@ -92,7 +92,7 @@ export default (url) => {
           assert.deepEqual(res.body.student.experience, list[index].experience)
           assert.deepEqual(res.body.student.city, list[index].city)
           assert.isObject(res.body.student.experience[0].position)
-          assert.isObject(res.body.student.experience[0].company)
+          assert.isObject(res.body.student.experience[0].companyName)
           assert.isObject(res.body.student.education[0].university)
           assert.isObject(res.body.student.education[0].speciality)
           assert.notProperty(res.body.student, 'salt')
@@ -412,29 +412,29 @@ export default (url) => {
 
     it('.search by company name', done => {
       const someStudent = list[Math.floor(list.length * Math.random())]
-      const company = someStudent.experience[0].company.name
+      const companyName = someStudent.experience[0].companyName.name
       request(url)
         .post(`${path}-search`)
-        .send({company})
+        .send({companyName})
         .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'students')
           assert.isAbove(res.body.students.length, 0)
-          res.body.students.forEach(item => assert.include(item.experience.map(x => x.company.name), company))
+          res.body.students.forEach(item => assert.include(item.experience.map(x => x.companyName.name), companyName))
           done()
         })
     })
 
     it('.search by company name and age', done => {
       const someStudent = list[Math.floor(list.length * Math.random())]
-      const company = someStudent.experience[0].company.name
+      const companyName = someStudent.experience[0].companyName.name
       let date = new Date(someStudent.dob)
       let age = (new Date()).getFullYear() - date.getFullYear()
       let above = date.getFullYear() + 1
       let below = date.getFullYear() - 1
       request(url)
         .post(`${path}-search`)
-        .send({age: {min: age + 1, max: age - 1}, company})
+        .send({age: {min: age + 1, max: age - 1}, companyName})
         .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'students')
@@ -443,7 +443,7 @@ export default (url) => {
             let cur = new Date(item.dob).getFullYear()
             assert(cur >= below)
             assert(cur <= above)
-            assert.include(item.experience.map(x => x.company.name), company)
+            assert.include(item.experience.map(x => x.companyName.name), companyName)
           })
           done()
         })

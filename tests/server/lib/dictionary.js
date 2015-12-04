@@ -7,9 +7,8 @@ import deleteItem from '../helpers/delete'
 
 export default (url, name) => {
   const path = `/api/${name}`
-  if (name == 'company-name') {
-    name = 'company'
-  }
+  if (name == 'company-name')
+    name = 'companyName'
   const tmpData = {name: `Some ${name}`}
   const newTmpData = {name:`New ${name}`}
   const newTmpArray = [`Some ${name}`, `New ${name}`]

@@ -2,6 +2,7 @@ import express from 'express'
 import render from '../handler/render'
 import Dictionary from './services/dictionary'
 import CompanyName from './services/company_name'
+import Company from './services/company'
 import Student from './services/student'
 import {Experience, Education} from './services/education_experience'
 import OpenQuestion from './services/open_question'
@@ -17,6 +18,7 @@ export default () => {
     .use(Education)
     .use(Experience)
     .use(CompanyName)
+    .use(Company)
     .use(Student)
     .use(OpenQuestion)
   app

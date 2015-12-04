@@ -11,16 +11,16 @@ export default (url) => {
 
   let newData = {
     start: new Date('09-01-2012'), end: new Date('07-01-2017'),
-    company: 'Google', position: 'Data Analyst'
+    companyName: 'Google', position: 'Data Analyst'
   }
 
   let editNewData = {
     start: new Date('01-01-2012'), end: new Date('01-01-2017'),
-    company: 'Google', position: 'Data Analyst'
+    companyName: 'Google', position: 'Data Analyst'
   }
 
   let newDataReturn = {}
-  let newcompany = null
+  let newcompanyName = null
   let newposition = null
 
   let tmpModel = null
@@ -49,14 +49,14 @@ export default (url) => {
           assert.property(res.body.experience, 'start')
           assert.property(res.body.experience, 'end')
           assert.property(res.body.experience, 'position')
-          assert.property(res.body.experience, 'company')
+          assert.property(res.body.experience, 'companyName')
           assert.equal(res.body.experience.start, list[index].start)
           assert.equal(res.body.experience.end, list[index].end)
           assert.equal(res.body.experience._id, list[index]._id)
           assert.isObject(res.body.experience.position)
-          assert.isObject(res.body.experience.company)
+          assert.isObject(res.body.experience.companyName)
           assert.deepEqual(res.body.experience.position, list[index].position)
-          assert.deepEqual(res.body.experience.company, list[index].company)
+          assert.deepEqual(res.body.experience.companyName, list[index].companyName)
           done()
         })
     })
@@ -66,7 +66,7 @@ export default (url) => {
     it('.set item', done => {
       const index = Math.floor(list.length * Math.random())
       tmpData.position = list[index].position._id
-      tmpData.company = list[index].company._id
+      tmpData.companyName = list[index].companyName._id
       request(url)
         .post(path)
         .send(tmpData)
@@ -77,11 +77,11 @@ export default (url) => {
           assert.property(res.body.experience, 'start')
           assert.property(res.body.experience, 'end')
           assert.property(res.body.experience, 'position')
-          assert.property(res.body.experience, 'company')
+          assert.property(res.body.experience, 'companyName')
           assert.equal(res.body.experience.start, tmpData.start.toISOString())
           assert.equal(res.body.experience.end, tmpData.end.toISOString())
           assert.equal(res.body.experience.position, tmpData.position)
-          assert.equal(res.body.experience.company, tmpData.company)
+          assert.equal(res.body.experience.companyName, tmpData.companyName)
           done()
         }))
     })
@@ -91,7 +91,7 @@ export default (url) => {
     it('.put item', done => {
       const index = Math.floor(list.length * Math.random())
       newTmpData.position = list[index].position._id
-      newTmpData.company = list[index].company._id
+      newTmpData.companyName = list[index].companyName._id
       request(url)
         .put(`${path}/${tmpModel._id}`)
         .send(newTmpData)
@@ -101,11 +101,11 @@ export default (url) => {
           assert.property(res.body.experience, 'start')
           assert.property(res.body.experience, 'end')
           assert.property(res.body.experience, 'position')
-          assert.property(res.body.experience, 'company')
+          assert.property(res.body.experience, 'companyName')
           assert.equal(res.body.experience.start, newTmpData.start.toISOString())
           assert.equal(res.body.experience.end, newTmpData.end.toISOString())
           assert.equal(res.body.experience.position, newTmpData.position)
-          assert.equal(res.body.experience.company, newTmpData.company)
+          assert.equal(res.body.experience.companyName, newTmpData.companyName)
           done()
         })
     })
@@ -119,13 +119,13 @@ export default (url) => {
           assert.property(res.body.experience, 'start')
           assert.property(res.body.experience, 'end')
           assert.property(res.body.experience, 'position')
-          assert.property(res.body.experience, 'company')
+          assert.property(res.body.experience, 'companyName')
           assert.equal(res.body.experience.start, newTmpData.start.toISOString())
           assert.equal(res.body.experience.end, newTmpData.end.toISOString())
           assert.isObject(res.body.experience.position)
-          assert.isObject(res.body.experience.company)
+          assert.isObject(res.body.experience.companyName)
           assert.equal(res.body.experience.position._id, newTmpData.position)
-          assert.equal(res.body.experience.company._id, newTmpData.company)
+          assert.equal(res.body.experience.companyName._id, newTmpData.companyName)
           done()
         })
     })
@@ -143,11 +143,11 @@ export default (url) => {
           assert.property(res.body.experience, 'start')
           assert.property(res.body.experience, 'end')
           assert.property(res.body.experience, 'position')
-          assert.property(res.body.experience, 'company')
+          assert.property(res.body.experience, 'companyName')
           assert.isString(res.body.experience.start)
           assert.isString(res.body.experience.end)
           assert.isObject(res.body.experience.position)
-          assert.isObject(res.body.experience.company)
+          assert.isObject(res.body.experience.companyName)
           done()
         })
     })
@@ -158,13 +158,14 @@ export default (url) => {
         .post(`${path}-add`)
         .send(newData)
         .end(((err, res) => {
+          console.log(newDataReturn)
           newDataReturn = res.body.experience || {}
           assert.equal(res.status, 200)
           assert.property(res.body, 'experience')
           assert.property(res.body.experience, 'start')
           assert.property(res.body.experience, 'end')
           assert.property(res.body.experience, 'position')
-          assert.property(res.body.experience, 'company')
+          assert.property(res.body.experience, 'companyName')
           assert.equal(res.body.experience.start, newData.start.toISOString())
           assert.equal(res.body.experience.end, newData.end.toISOString())
           done()
@@ -176,19 +177,19 @@ export default (url) => {
         .get(`${path}/${newDataReturn._id}`)
         .end((err, res) => {
           newposition = res.body.experience.position || null
-          newcompany = res.body.experience.company || null
+          newcompanyName = res.body.experience.companyName || null
           assert.equal(res.status, 200)
           assert.property(res.body, 'experience')
           assert.property(res.body.experience, 'start')
           assert.property(res.body.experience, 'end')
           assert.property(res.body.experience, 'position')
-          assert.property(res.body.experience, 'company')
+          assert.property(res.body.experience, 'companyName')
           assert.equal(res.body.experience.start, newData.start.toISOString())
           assert.equal(res.body.experience.end, newData.end.toISOString())
           assert.isObject(res.body.experience.position)
-          assert.isObject(res.body.experience.company)
+          assert.isObject(res.body.experience.companyName)
           assert.equal(res.body.experience.position._id, newDataReturn.position)
-          assert.equal(res.body.experience.company._id, newDataReturn.company)
+          assert.equal(res.body.experience.companyName._id, newDataReturn.companyName)
           done()
         })
     })
@@ -203,31 +204,31 @@ export default (url) => {
           assert.property(res.body.experience, 'start')
           assert.property(res.body.experience, 'end')
           assert.property(res.body.experience, 'position')
-          assert.property(res.body.experience, 'company')
+          assert.property(res.body.experience, 'companyName')
           assert.equal(res.body.experience.start, editNewData.start.toISOString())
           assert.equal(res.body.experience.end, editNewData.end.toISOString())
           assert.equal(res.body.experience.position._id, newDataReturn.position._id)
-          assert.equal(res.body.experience.company._id, newDataReturn.company._id)
+          assert.equal(res.body.experience.companyName._id, newDataReturn.companyName._id)
           done()
         })
     })
 
     it('.delete item', done => deleteItem(url, `${path}/${newDataReturn._id}`, done))
 
-    it('.get new company', done => {
+    it('.get new companyName', done => {
       request(url)
-        .get(`/api/company-name/${newcompany._id}`)
+        .get(`/api/company-name/${newcompanyName._id}`)
         .end((err, res) => {
           assert.equal(res.status, 200)
-          assert.property(res.body, 'company')
-          assert.property(res.body.company, 'name')
-          assert.equal(res.body.company.name, newData.company)
-          assert.equal(res.body.company._id, newcompany._id)
+          assert.property(res.body, 'companyName')
+          assert.property(res.body.companyName, 'name')
+          assert.equal(res.body.companyName.name, newData.companyName)
+          assert.equal(res.body.companyName._id, newcompanyName._id)
           done()
         })
     })
 
-    it('.delete new company', done => deleteItem(url, `/api/company-name/${newcompany._id}`, done))
+    it('.delete new companyName', done => deleteItem(url, `/api/company-name/${newcompanyName._id}`, done))
 
     it('.get new position', done => {
       request(url)
@@ -244,17 +245,17 @@ export default (url) => {
 
     it('.delete new position', done => deleteItem(url, `/api/position/${newposition._id}`, done))
 
-    it('.search experience by company name', done => {
+    it('.search experience by companyName name', done => {
       const index = Math.floor(list.length * Math.random())
       request(url)
         .post(`${path}-search`)
-        .send({company: list[index].company.name})
+        .send({companyName: list[index].companyName.name})
         .end((err, res) => {
           assert.equal(res.status, 200)
           assert.equal(res.status, 200)
           assert.property(res.body, 'experiences')
           assert.isAbove(res.body.experiences.length, 0)
-          res.body.experiences.forEach((item) => assert.equal(item.company.name, list[index].company.name))
+          res.body.experiences.forEach((item) => assert.equal(item.companyName.name, list[index].companyName.name))
           done()
         })
     })
@@ -273,13 +274,13 @@ export default (url) => {
         })
     })
 
-    it('.search experience by position and company', done => {
+    it('.search experience by position and companyName', done => {
       const index = Math.floor(list.length * Math.random())
       request(url)
         .post(`${path}-search`)
         .send({
           position: list[index].position.name,
-          company: list[index].company.name
+          companyName: list[index].companyName.name
         })
         .end((err, res) => {
           assert.equal(res.status, 200)
@@ -287,7 +288,7 @@ export default (url) => {
           assert.isAbove(res.body.experiences.length, 0)
           res.body.experiences.forEach((item) => {
             assert.equal(item.position.name, list[index].position.name)
-            assert.equal(item.company.name, list[index].company.name)
+            assert.equal(item.companyName.name, list[index].companyName.name)
           })
           done()
         })

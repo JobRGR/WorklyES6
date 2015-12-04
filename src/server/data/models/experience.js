@@ -19,8 +19,8 @@ export default (cb) => async.waterfall([
     item.position = position._id
     next()
   }), err => callback()),
-  callback => async.each(data, (item, next) => CompanyName.getRandom((err, company) => {
-    item.company = company._id
+  callback => async.each(data, (item, next) => CompanyName.getRandom((err, companyName) => {
+    item.companyName = companyName._id
     next()
   }), err => callback())
 ], err => addArray(Experience, data, cb))

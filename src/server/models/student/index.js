@@ -67,11 +67,11 @@ schema.statics.addItem = function ({name, email, dob, telephone, about, educatio
 schema.statics.getItem = function (id, callback) {
   if (id) this
     .findById(id)
-    .deepPopulate(['education.speciality', 'experience.company', 'education.university', 'experience.position', 'city', 'skill'])
+    .deepPopulate(['education.speciality', 'experience.companyName', 'education.university', 'experience.position', 'city', 'skill'])
     .exec(callback)
   else this
     .find({})
-    .deepPopulate(['education.speciality', 'experience.company', 'education.university', 'experience.position', 'city', 'skill'])
+    .deepPopulate(['education.speciality', 'experience.companyName', 'education.university', 'experience.position', 'city', 'skill'])
     .sort({'date': -1})
     .exec(callback)
 }
@@ -99,7 +99,7 @@ schema.statics.getRandom = function(callback) {
     this
       .findOne()
       .skip(skip)
-      .deepPopulate(['education.speciality', 'experience.company', 'education.university', 'experience.position', 'city', 'skill'])
+      .deepPopulate(['education.speciality', 'experience.companyName', 'education.university', 'experience.position', 'city', 'skill'])
       .sort({'date': -1})
       .exec(callback)
   })
@@ -108,7 +108,7 @@ schema.statics.getRandom = function(callback) {
 schema.statics.searchItem = function(search, callback) {
   this
     .find(search)
-    .deepPopulate(['education.speciality', 'experience.company', 'education.university', 'experience.position', 'city', 'skill'])
+    .deepPopulate(['education.speciality', 'experience.companyName', 'education.university', 'experience.position', 'city', 'skill'])
     .sort({'date': -1})
     .exec(callback)
 }

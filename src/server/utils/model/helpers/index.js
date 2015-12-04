@@ -3,7 +3,7 @@ import getCount from './lib/count'
 import getRandom from './lib/random'
 import getItem from './lib/get'
 import updateItem from './lib/update'
-import autocomplite from './lib/autocomplite'
+import autocomplete from './lib/autocomplete'
 import searchItem from './lib/search'
 import randomPopulate from './lib/random_populate'
 import getPopulate from './lib/get_populate'
@@ -18,7 +18,7 @@ export default {
   getRandom,
   getItem,
   updateItem,
-  autocomplite,
+  autocomplete,
   searchItem,
   randomPopulate,
   getPopulate,
