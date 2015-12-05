@@ -8,6 +8,12 @@ import toObjectArray from '../utils/to_object_array'
 let {nextItem, nextItems} = new Next('experience')
 let handler = new Handler('experience', Experience, false, false)
 
+let addModel = (companyName, position, cb) => async.parallel({
+  companyName: callback => CompanyName.addItem(companyName, callback),
+  position: callback => Position.addItem(position, callback)
+}, cb)
+
+
 handler.addOne = (req, res, next) => {
   let {start, end} = req.body
   let {position, companyName} = res
@@ -32,13 +38,18 @@ handler.searchItems = (req, res, next) => {
 
 handler.updateStudent = (req, res, next) => {
   let remove = data => Experience.removeArray(
-    toObjectArray(req._student.experience.map(({_id}) => _id)),
+    toObjectArray(req.student.experiences.map(({_id}) => _id)),
     err => nextItems(err, data, res, next))
 
-  if (!req.body.experience) nextItems(null, null, res, next)
-  else if (req.body.experience.length) remove([])
-  else Experience.addArray(req.body.experience,
-      (err, experiences) => err ? next(err) : remove(experiences))
+  if (!req.body.experiences) nextItems(null, null, res, next)
+  else if (!req.body.experiences.length) remove([])
+  else async.map(req.body.experiences, ({start, end, about, companyName, position}, callback) =>
+    addModel(companyName, position, (err, {companyName, position}) => callback(err, {
+      start, end, about,
+      companyName: companyName._id,
+      position: position._id
+    })),
+    (err, experiences) => err ? next(err) : Experience.addArray(experiences, (err, experiences) => err ? next(err) : remove(experiences)))
 }
 
 export default handler

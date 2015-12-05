@@ -40,9 +40,9 @@ handler.searchItems = (req, res, next) => {
   if (req.body.email) search.email = req.body.email
   if (req.body.name) search.name = req.body.name
   if (res.cities.length) search.city = {$in: toObjectArray(res.cities)}
-  if (res.skills.length) search.skill = {$in: toObjectArray(res.skills)}
-  if (res.educations.length) search.education = {$in: toObjectArray(res.educations)}
-  if (res.experiences.length) search.experience = {$in: toObjectArray(res.experiences)}
+  if (res.skills.length) search.skills = {$in: toObjectArray(res.skills)}
+  if (res.educations.length) search.educations = {$in: toObjectArray(res.educations)}
+  if (res.experiences.length) search.experiences = {$in: toObjectArray(res.experiences)}
   Student.searchItem(search, (err, students) => nextItems(err, students, res, next))
 }
 
@@ -55,7 +55,7 @@ handler.updateItem = (req, res, next) => {
   if (res.skills) data.skills = toObjectArray(res.skills)
   if (res.educations) data.educations = toObjectArray(res.educations)
   if (res.experiences) data.experiences = toObjectArray(res.experiences)
-  Student.updateItem(req.param.id, data, (err, student) => nextItem(err, student, res, next))
+  Student.updateOne(req.student, data, (err, student) => nextItem(err, student, res, next))
 }
 
 handler.changePassword = (req, res, next) => Student.changePassword(req.student, req.body.password, err => res.send({ok: err || true}))

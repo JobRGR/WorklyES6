@@ -7,6 +7,11 @@ import toObjectArray from '../utils/to_object_array'
 let {nextItem, nextItems} = new Next('education')
 let handler = new Handler('education', Education, false, false)
 
+let addModel = (university, speciality, cb) => async.parallel({
+  university: callback => University.addItem(university, callback),
+  speciality: callback => Speciality.addItem(speciality, callback)
+}, cb)
+
 handler.addOne = (req, res, next) => {
   let {start, end} = req.body
   let {university, speciality} = res
@@ -31,13 +36,18 @@ handler.searchItems = (req, res, next) => {
 
 handler.updateStudent = (req, res, next) => {
   let remove = data => Education.removeArray(
-    toObjectArray(req._student.education.map(({_id}) => _id)),
+    toObjectArray(req.student.educations.map(({_id}) => _id)),
     err => nextItems(err, data, res, next))
 
-  if (!req.body.education) nextItems(null, null, res, next)
-  else if (!req.body.education.length) remove([])
-  else Education.addArray(req.body.education,
-      (err, educations) => err ? next(err) : remove(educations))
+  if (!req.body.educations) nextItems(null, null, res, next)
+  else if (!req.body.educations.length) remove([])
+  else async.map(req.body.educations, ({start, end, university, speciality}, callback) =>
+    addModel(university, speciality, (err, {university, speciality}) => callback(err, {
+      start, end,
+      university: university._id,
+      speciality: speciality._id
+    })),
+    (err, educations) => err ? next(err) : Education.addArray(educations, (err, educations) => err ? next(err) : remove(educations)))
 }
 
 export default handler
