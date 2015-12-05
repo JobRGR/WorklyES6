@@ -1,11 +1,17 @@
 import crypto from 'crypto'
 import deepPopulate from '../../utils/deep_populate'
 import mongoose from '../index'
+import Company from '../company'
 import {removeItem, getCount, toJson} from '../../utils/model/helpers'
 
 let {Schema} = mongoose
 let schema = new Schema({
-  email: {type: String, required: true, unique: true},
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    match: /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-?[a-zA-Z0-9])*(\.[a-zA-Z](-?[a-zA-Z0-9])*)+$/
+  },
   name: {type: String, required: true},
   dob: {type: Date},
   telephone: {type: String},
@@ -19,10 +25,11 @@ let schema = new Schema({
   salt: {type: String, required: true}
 })
 
-schema.path('email').validate((value) => {
-  let regex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-?[a-zA-Z0-9])*(\.[a-zA-Z](-?[a-zA-Z0-9])*)+$/
-  return regex.test(value)
-}, 'invalid_email')
+schema.path('email').validate((value, callback) => {
+  Company.find({email: value}, (err, company)=>{
+    callback(!err && !company.length)
+  })
+}, 'this email is already used by some company')
 
 schema.methods.encryptPassword = function(password) {
   return crypto.createHmac('sha1', this.salt).update(password).digest('hex')

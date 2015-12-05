@@ -1,7 +1,6 @@
 import crypto from 'crypto'
 import mongoose from '../index'
 import Student from '../student'
-import CompanyName from '../company_name'
 import {removeItem, getCount, toJson} from '../../utils/model/helpers'
 
 let {Schema} = mongoose

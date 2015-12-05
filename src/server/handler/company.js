@@ -16,7 +16,7 @@ handler.addItem = (req, res, next) => {
   let {email, password, name} = req.body
   CompanyName.addItem(name, (err, companyName) =>
     Company.addItem({email, password, name: companyName._id}, (err, company) =>
-        saveSession(err, company, req, res, next)))
+      saveSession(err, company, req, res, next)))
 }
 handler.login = (req, res, next) => Company.authorize(req.body, (err, company) => saveSession(err, company, req, res, next))
 handler.getCompany = (req, res, next) => nextItem(null, req._company, res, next)
@@ -31,7 +31,6 @@ handler.searchItems = (req, res, next) => {
   Company.searchItem(search, (err, companies) => nextItems(err, companies, res, next))
 }
 
-//invalid function
 handler.updateItem = (req, res, next) => {
   let data = ['site', 'about'].reduce((memo, key) => {
     if (req.body[key]) memo[key] = req.body[key]
