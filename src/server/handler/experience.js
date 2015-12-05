@@ -10,21 +10,21 @@ let handler = new Handler('experience', Experience, false, false)
 
 handler.addOne = (req, res, next) => {
   let {start, end} = req.body
-  let {position, company} = res
-  let data = {start, end, position: position._id, company: company._id}
+  let {position, companyName} = res
+  let data = {start, end, position: position._id, companyName: companyName._id}
   Experience.addItem(data, (err, experience) => nextItem(err, experience, res, next))
 }
 
 handler.updateOne = (req, res, next) => {
   let {start, end} = req.body
-  let {position, company} = res
-  let data = {start, end, position: position._id, company: company._id}
+  let {position, companyName} = res
+  let data = {start, end, position: position._id, companyName: companyName._id}
   Experience.updateItem(req.params.id, data, (err, experience) => nextItem(err, experience, res, next))
 }
 
 handler.searchItems = (req, res, next) => {
   let search = {}
-  if (res.companies.length) search.company = {$in: toObjectArray(res.companies)}
+  if (res.companyNames.length) search.companyName = {$in: toObjectArray(res.companyNames)}
   if (res.positions.length) search.position = {$in: toObjectArray(res.positions)}
   if (!Object.keys(search).length) return nextItems(null, [], res, next)
   Experience.searchItems(search, (err, experiences) => nextItems(err, experiences, res, next))

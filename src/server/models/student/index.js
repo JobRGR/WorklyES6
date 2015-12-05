@@ -1,11 +1,17 @@
 import crypto from 'crypto'
 import deepPopulate from '../../utils/deep_populate'
 import mongoose from '../index'
+import Company from '../company'
 import {removeItem, getCount, toJson} from '../../utils/model/helpers'
 
 let {Schema} = mongoose
 let schema = new Schema({
-  email: {type: String, required: true, unique: true},
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    match: /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-?[a-zA-Z0-9])*(\.[a-zA-Z](-?[a-zA-Z0-9])*)+$/
+  },
   name: {type: String, required: true},
   dob: {type: Date},
   telephone: {type: String},
@@ -19,10 +25,11 @@ let schema = new Schema({
   salt: {type: String, required: true}
 })
 
-schema.path('email').validate((value) => {
-  let regex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-?[a-zA-Z0-9])*(\.[a-zA-Z](-?[a-zA-Z0-9])*)+$/
-  return regex.test(value)
-}, 'invalid_email')
+schema.path('email').validate((value, callback) => {
+  Company.find({email: value}, (err, company)=>{
+    callback(!err && !company.length)
+  })
+}, 'this email is already used by some company')
 
 schema.methods.encryptPassword = function(password) {
   return crypto.createHmac('sha1', this.salt).update(password).digest('hex')
@@ -67,11 +74,11 @@ schema.statics.addItem = function ({name, email, dob, telephone, about, educatio
 schema.statics.getItem = function (id, callback) {
   if (id) this
     .findById(id)
-    .deepPopulate(['education.speciality', 'experience.company', 'education.university', 'experience.position', 'city', 'skill'])
+    .deepPopulate(['education.speciality', 'experience.companyName', 'education.university', 'experience.position', 'city', 'skill'])
     .exec(callback)
   else this
     .find({})
-    .deepPopulate(['education.speciality', 'experience.company', 'education.university', 'experience.position', 'city', 'skill'])
+    .deepPopulate(['education.speciality', 'experience.companyName', 'education.university', 'experience.position', 'city', 'skill'])
     .sort({'date': -1})
     .exec(callback)
 }
@@ -99,7 +106,7 @@ schema.statics.getRandom = function(callback) {
     this
       .findOne()
       .skip(skip)
-      .deepPopulate(['education.speciality', 'experience.company', 'education.university', 'experience.position', 'city', 'skill'])
+      .deepPopulate(['education.speciality', 'experience.companyName', 'education.university', 'experience.position', 'city', 'skill'])
       .sort({'date': -1})
       .exec(callback)
   })
@@ -108,7 +115,7 @@ schema.statics.getRandom = function(callback) {
 schema.statics.searchItem = function(search, callback) {
   this
     .find(search)
-    .deepPopulate(['education.speciality', 'experience.company', 'education.university', 'experience.position', 'city', 'skill'])
+    .deepPopulate(['education.speciality', 'experience.companyName', 'education.university', 'experience.position', 'city', 'skill'])
     .sort({'date': -1})
     .exec(callback)
 }
