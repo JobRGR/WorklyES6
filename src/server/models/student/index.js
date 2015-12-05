@@ -120,19 +120,13 @@ schema.statics.searchItem = function(search, callback) {
     .exec(callback)
 }
 
-schema.statics.changeMyPassword = function(student, password, callback) {
+schema.statics.changePassword = function(student, password, callback) {
   student.hashedPassword = student.encryptPassword(password)
   student.save(err => callback(err, student))
 }
 
-schema.statics.changePassword = function(id, password, callback) {
-  this.findById(id, (err, student) => {
-    if (err || !student) return callback(err || new Error())
-    this.changeMyPassword(student, password, callback)
-  })
-}
 
-schema.statics.changeMyEmail = function (student, email, callback) {
+schema.statics.changeEmail = function (student, email, callback) {
   this.findOne({email}, (err, res) => {
     if (err) return callback(err)
     if (res) return res._id == student._id ? callback(null, res) : callback(new Error())
@@ -141,12 +135,6 @@ schema.statics.changeMyEmail = function (student, email, callback) {
   })
 }
 
-schema.statics.changeEmail = function (id, email, callback) {
-  this.findById(id, (err, student) => {
-    if (err || !student) return callback(err || new Error())
-    this.changeMyEmail(student, email, callback)
-  })
-}
 
 schema.methods.toJSON = toJson
 schema.statics.getCount = getCount

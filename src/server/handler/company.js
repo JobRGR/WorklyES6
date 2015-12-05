@@ -20,8 +20,6 @@ handler.addItem = (req, res, next) => {
 }
 handler.login = (req, res, next) => Company.authorize(req.body, (err, company) => saveSession(err, company, req, res, next))
 handler.getCompany = (req, res, next) => nextItem(null, req._company, res, next)
-handler.changePassword = (req, res, next) => Company.changePassword(req.body.password, err => res.send({ok: err || true}))
-handler.changeEmail = (req, res, next) => Company.changeEmail(req.body.password, err => res.send({ok: err || true}))
 
 handler.searchItems = (req, res, next) => {
   let search = {}

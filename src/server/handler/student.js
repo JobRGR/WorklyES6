@@ -16,10 +16,23 @@ handler.addItem = (req, res, next) => {
   let {email, password, name} = req.body
   Student.addItem({email, password, name}, (err, student) => saveSession(err, student, req, res, next))
 }
+
+handler.initUser = (req, res, next) => {
+  if (req.params.id) {
+    Student.getItem(req.params.id, (err, student) => {
+      if (err || !student) next(err || new Error())
+      req.student = student
+      next()
+    })
+  }
+  else {
+    req.student = req._student
+    next()
+  }
+}
+
 handler.login = (req, res, next) => Student.authorize(req.body, (err, student) => saveSession(err, student, req, res, next))
 handler.getStudent = (req, res, next) => nextItem(null, req._student, res, next)
-handler.changePassword = (req, res, next) => Student.changePassword(req.body.password, err => res.send({ok: err || true}))
-handler.changeEmail = (req, res, next) => Student.changeEmail(req.body.password, err => res.send({ok: err || true}))
 
 handler.searchItems = (req, res, next) => {
   let search = {}
@@ -45,9 +58,7 @@ handler.updateItem = (req, res, next) => {
   Student.updateItem(req.param.id, data, (err, student) => nextItem(err, student, res, next))
 }
 
-handler.changeMyPassword = (req, res, next) => Student.changeMyPassword(req._student, req.body.password, err => res.send({ok: err || true}))
-handler.changePassword = (req, res, next) => Student.changePassword(req.params.id, req.body.password, err => res.send({ok: err || true}))
-handler.changeMyEmail = (req, res, next) => Student.changeMyEmail(req._student, req.body.email, err => res.send({ok: err || true}))
-handler.changeEmail = (req, res, next) => Student.changeEmail(req.params.id, req.body.email, err => res.send({ok: err || true}))
+handler.changePassword = (req, res, next) => Student.changePassword(req.student, req.body.password, err => res.send({ok: err || true}))
+handler.changeEmail = (req, res, next) => Student.changeEmail(req.student, req.body.email, err => res.send({ok: err || true}))
 
 export default handler

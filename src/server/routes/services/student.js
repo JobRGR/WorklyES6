@@ -24,10 +24,10 @@ let router = (name, handler) =>
       handler.searchItems,
       handler.sendItems
     )
-    .put(`/${name}-password`, handler.changeMyPassword)
-    .put(`/${name}-password/:id`, handler.changePassword)
-    .put(`/${name}-email`, handler.changeMyEmail)
-    .put(`/${name}-email/:id`, handler.changeEmail)
+    .put(`/${name}-password`, handler.initUser, handler.changePassword)
+    .put(`/${name}-password/:id`, handler.initUser, handler.changePassword)
+    .put(`/${name}-email`, handler.initUser, handler.changeEmail)
+    .put(`/${name}-email/:id`, handler.initUser, handler.changeEmail)
     .use(`/${name}`, rest(handler))
 
 export default router('student', Student)
