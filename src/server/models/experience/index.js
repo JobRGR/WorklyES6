@@ -10,6 +10,8 @@ let schema = new Schema({
   about: {type: String}
 })
 
+const foreignKeys = ['position', 'companyName']
+
 schema.statics.addItem = function ({start, end, position, about, companyName}, callback) {
   const Experience = this
   let experience = new Experience({start, end, position, about, companyName})
@@ -17,19 +19,19 @@ schema.statics.addItem = function ({start, end, position, about, companyName}, c
 }
 
 schema.statics.getItem = function (id, callback) {
-  return getPopulate.apply(this, [id, callback, ['position', 'companyName']])
+  return getPopulate.apply(this, [id, callback, foreignKeys])
 }
 
 schema.statics.updateItem = function (id, update, callback) {
-  return updateItem.apply(this, [id, update, callback, ['position', 'companyName']])
+  return updateItem.apply(this, [id, update, callback, foreignKeys])
 }
 
 schema.statics.getRandom = function (callback) {
-  return randomPopulate.apply(this, [callback, ['position', 'companyName']])
+  return randomPopulate.apply(this, [callback, foreignKeys])
 }
 
 schema.statics.searchItems = function (search, callback) {
-  return searchPopulate.apply(this, [search, callback, ['position', 'companyName']])
+  return searchPopulate.apply(this, [search, callback, foreignKeys])
 }
 
 schema.statics.removeItem = removeItem
