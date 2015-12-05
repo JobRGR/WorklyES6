@@ -20,10 +20,9 @@ let schema = new Schema({
   experience: [{type: mongoose.Schema.Types.ObjectId, ref: 'Experience'}],
   skill: [{type: mongoose.Schema.Types.ObjectId, ref: 'Skill'}],
   city: {type: mongoose.Schema.Types.ObjectId, ref: 'City'},
-  date: {type: Date, required: true, default: Date.now},
   hashedPassword: {type: String, required: true},
   salt: {type: String, required: true}
-})
+}, { timestamps: true})
 
 schema.path('email').validate((value, callback) => {
   Company.find({email: value}, (err, company)=>{

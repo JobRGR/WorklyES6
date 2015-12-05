@@ -17,10 +17,9 @@ let schema = new Schema({
   site: {type: String},
   about: {type: String},
   city: {type: mongoose.Schema.Types.ObjectId, ref: 'City'},
-  date: {type: Date, required: true, default: Date.now},
   hashedPassword: {type: String, required: true},
   salt: {type: String, required: true}
-})
+}, { timestamps: true})
 
 schema.path('email').validate((value, callback) => {
   Student.find({email: value}, (err, student)=>{
