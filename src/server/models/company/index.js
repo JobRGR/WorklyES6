@@ -1,7 +1,9 @@
 import crypto from 'crypto'
 import mongoose from '../index'
 import Student from '../student'
-import {removeItem, getCount, toJson} from '../../utils/model/helpers'
+import {removeItem, getCount, randomPopulate, getPopulate, searchPopulate, toJson} from '../../utils/model/helpers'
+
+const foreignKeys = ['name', 'city']
 
 let {Schema} = mongoose
 let schema = new Schema({
@@ -48,8 +50,7 @@ schema.methods.checkPassword = function(password) {
 schema.statics.authorize = function ({email, password}, callback) {
   this
     .findOne({email})
-    .populate('name')
-    .populate('city')
+    .populate(foreignKeys)
     .exec((err, company) => {
       if (err) callback(err, null)
       else if (!company) callback(null, null)
@@ -65,17 +66,7 @@ schema.statics.addItem = function ({name, email, site, about, city, password}, c
 }
 
 schema.statics.getItem = function (id, callback) {
-  if (id) this
-    .findById(id)
-    .populate('name')
-    .populate('city')
-    .exec(callback)
-  else this
-    .find({})
-    .populate('name')
-    .populate('city')
-    .sort({'date': -1})
-    .exec(callback)
+  return getPopulate.apply(this, [id, callback, foreignKeys])
 }
 
 schema.statics.updateItem = function (id, update, callback) {
@@ -89,26 +80,11 @@ schema.statics.updateItem = function (id, update, callback) {
 }
 
 schema.statics.getRandom = function(callback) {
-  this.count((err, count) => {
-    if (err) return callback(err)
-    const skip = Math.floor(Math.random() * count)
-    this
-      .findOne()
-      .skip(skip)
-      .populate('name')
-      .populate('city')
-      .sort({'date': -1})
-      .exec(callback)
-  })
+  return randomPopulate.apply(this, [callback, foreignKeys])
 }
 
 schema.statics.searchItem = function(search, callback) {
-  this
-    .find(search)
-    .populate('name')
-    .populate('city')
-    .sort({'date': -1})
-    .exec(callback)
+  return searchPopulate.apply(this, [search, callback, foreignKeys])
 }
 
 schema.statics.changeMyPassword = function(company, password, callback) {
