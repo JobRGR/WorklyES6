@@ -6,7 +6,7 @@ let getDate = (val) => {
 
 export default (start, end) => {
   return {
-    $gt: start ? getDate(start) : new Date(0, 0, 0),
+    $gte: start ? getDate(start) : new Date(0, 0, 0),
     $lt: end ? getDate(end) : new Date()
   }
 }
