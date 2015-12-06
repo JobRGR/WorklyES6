@@ -26,6 +26,7 @@ let router = (name, handler) =>
       handler.sendItems
     )
     .put(`/${name}-update`,
+      checkStudent,
       handler.initUser,
       Dictionaries['City'].addItem,
       Dictionaries['Skill'].addItems,
