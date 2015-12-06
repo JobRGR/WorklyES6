@@ -5,6 +5,7 @@ import CompanyName from '../../handler/company_name'
 import Education from '../../handler/education'
 import Experience from '../../handler/experience'
 import rest from '../../utils/router/helpers/rest'
+import checkStudent from '../../middleware/check_student'
 
 let router = (name, handler) =>
   express()
@@ -42,9 +43,17 @@ let router = (name, handler) =>
       Student.updateItem,
       handler.sendItem
     )
-    .put(`/${name}-password`, handler.initUser, handler.changePassword)
+    .put(`/${name}-password`,
+      checkStudent,
+      handler.initUser,
+      handler.changePassword
+    )
     .put(`/${name}-password/:id`, handler.initUser, handler.changePassword)
-    .put(`/${name}-email`, handler.initUser, handler.changeEmail)
+    .put(`/${name}-email`,
+      checkStudent,
+      handler.initUser,
+      handler.changeEmail
+    )
     .put(`/${name}-email/:id`, handler.initUser, handler.changeEmail)
     .use(`/${name}`, rest(handler))
 

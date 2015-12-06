@@ -2,6 +2,7 @@ import crypto from 'crypto'
 import deepPopulate from '../../utils/deep_populate'
 import mongoose from '../index'
 import Company from '../company'
+import HttpError from '../../utils/error'
 import {removeItem, getCount, toJson} from '../../utils/model/helpers'
 
 let {Schema} = mongoose
@@ -58,8 +59,8 @@ schema.statics.authorize = function ({email, password}, callback) {
     .deepPopulate(foreignKeys)
     .exec((err, student) => {
       if (err) callback(err, null)
-      else if (!student) callback(null, null)
-      else if (!student.checkPassword(password)) callback(null, null)
+      else if (!student) callback(new HttpError(401, 'Not correct email'), null)
+      else if (!student.checkPassword(password)) callback(new HttpError(401, 'Not correct password'), null)
       else callback(null, student)
     })
 }
@@ -84,7 +85,7 @@ schema.statics.getItem = function (id, callback) {
 
 schema.statics.updateItem = function (id, update, callback) {
   this.findById(id, (err, student) => {
-    if (err || !student) return callback(err || new Error())
+    if (err || !student) return callback(err || new HttpError(400, 'Can not find student with such id'))
     this.updateOne(student, update, callback)
   })
 }

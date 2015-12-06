@@ -2,13 +2,15 @@ import Next from '../utils/handler/helpers/next'
 import Handler from '../utils/handler'
 import getDate from '../utils/get_date'
 import toObjectArray from '../utils/to_object_array'
+import HttpError from '../utils/error'
 import {Company, City, CompanyName} from '../models/models'
 
 let {nextItem, nextItems} = new Next('company')
 let handler = new Handler('company', Company)
 
 let saveSession = (err, company, req, res, next) => {
-  req.session._company = company._id
+  if (!err && company) req.session._company = company._id
+  else if (!err) err = new HttpError(401)
   nextItem(err, company, res, next)
 }
 

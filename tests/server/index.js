@@ -5,6 +5,8 @@ import experience from './lib/experience'
 import student from './lib/student'
 import company from './lib/company'
 import openQuestion from './lib/open_question'
+import errorStudent from './error/student'
+import errorCompany from './error/company'
 
 const port = 3333
 const ip = '127.0.0.1'
@@ -22,3 +24,5 @@ experience(url)
 student(url)
 company(url)
 openQuestion(url)
+errorStudent(url)
+errorCompany(url)
