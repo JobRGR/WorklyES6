@@ -1,7 +1,7 @@
 import async from 'async'
 import Models from '../../models/models'
 import addArray from '../utils/add_array'
-import {OpenQuestion} from '../../models/models'
+import {OpenQuestion, Company} from '../../models/models'
 
 const questions =
   ["Why is processing a sorted array faster than an unsorted array?", "How do you undo the last commit?",
@@ -156,10 +156,18 @@ const answers =
 
 export default {
   generate: cb => {
+
     const data = questions.map((question, index) => {
       return {question, answer: answers[index%question.length], free: Math.round(Math.random())}
     })
-    addArray(OpenQuestion, data, err => cb())
+
+    async.waterfall([
+      callback => async.each(data, (item, next) => Company.getRandom((err, company) => {
+        item.owner = company._id
+        next()
+      }), err => callback()),
+      callback => addArray(OpenQuestion, data, err => cb())
+    ], err => addArray(OpenQuestion, data, cb))
   },
   answers, questions
 }
