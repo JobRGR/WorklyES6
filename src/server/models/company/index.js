@@ -19,7 +19,7 @@ let schema = new Schema({
   city: {type: mongoose.Schema.Types.ObjectId, ref: 'City'},
   hashedPassword: {type: String, required: true},
   salt: {type: String, required: true}
-}, { timestamps: true})
+}, { timestamps: { createdAt: ''}})
 
 schema.path('email').validate((value, callback) => {
   Student.find({email: value}, (err, student)=>{
@@ -69,9 +69,12 @@ schema.statics.getItem = function (id, callback) {
 }
 
 schema.statics.updateItem = function (id, update, callback) {
+  for (let key in update)
+    if (/site|about|city/.test(key) == false)
+      delete update[key]
   this.findById(id, (err, company) => {
     for (let key in  update)
-        company[key] = /city|name/.test(key) ?
+        company[key] = key == 'city' ?
           mongoose.Types.ObjectId(update[key]) :
           update[key]
     company.save(err => callback(err, company))
