@@ -61,7 +61,18 @@ export default (url) => {
         .send(tmpStudent)
         .expect(401)
         .end((err, res) => {
-          console.log(res.body.message, 'Unauthorized')
+          assert.equal(res.body.message, 'Unauthorized')
+          done()
+        })
+    })
+
+    it('.error change my data', done => {
+      request(url)
+        .put(`${path}-update`)
+        .send(tmpStudent)
+        .expect(401)
+        .end((err, res) => {
+          assert.equal(res.body.message, 'Unauthorized')
           done()
         })
     })
@@ -72,7 +83,7 @@ export default (url) => {
         .send(tmpStudent)
         .expect(401)
         .end((err, res) => {
-          console.log(res.body.message, 'Unauthorized')
+          assert.equal(res.body.message, 'Unauthorized')
           done()
         })
     })
