@@ -1,6 +1,7 @@
 import crypto from 'crypto'
 import mongoose from '../index'
 import Student from '../student'
+import HttpError from '../../utils/error'
 import {removeItem, getCount, randomPopulate, getPopulate, searchPopulate, toJson} from '../../utils/model/helpers'
 
 const foreignKeys = ['name', 'city']
@@ -52,8 +53,8 @@ schema.statics.authorize = function ({email, password}, callback) {
     .populate(foreignKeys)
     .exec((err, company) => {
       if (err) callback(err, null)
-      else if (!company) callback(null, null)
-      else if (!company.checkPassword(password)) callback(null, null)
+      else if (!company) callback(new HttpError(401, 'Not correct email'), null)
+      else if (!company.checkPassword(password)) callback(new HttpError(401, 'Not correct password'), null)
       else callback(null, company)
     })
 }
@@ -96,7 +97,7 @@ schema.statics.changeMyPassword = function(company, password, callback) {
 
 schema.statics.changePassword = function(id, password, callback) {
   this.findById(id, (err, company) => {
-    if (err || !company) return callback(err || new Error())
+    if (err || !company) return callback(err || new HttpError(400, 'Can not find company with such id'))
     this.changeMyPassword(company, password, callback)
   })
 }
@@ -104,7 +105,7 @@ schema.statics.changePassword = function(id, password, callback) {
 schema.statics.changeMyEmail = function (company, email, callback) {
   this.findOne({email}, (err, res) => {
     if (err) return callback(err)
-    if (res) return res._id == company._id ? callback(null, res) : callback(new Error())
+    if (res) return res._id == company._id ? callback(null, res) : callback(new HttpError(400, 'Such email is already used'))
     company.email = email
     company.save(err => callback(err, company) )
   })
@@ -112,7 +113,7 @@ schema.statics.changeMyEmail = function (company, email, callback) {
 
 schema.statics.changeEmail = function (id, email, callback) {
   this.findById(id, (err, company) => {
-    if (err || !company) return callback(err || new Error())
+    if (err || !company) return callback(err || new HttpError(400, 'Can not find company with such id'))
     this.changeMyEmail(company, email, callback)
   })
 }
