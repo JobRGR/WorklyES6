@@ -5,6 +5,7 @@ import CompanyName from './services/company_name'
 import Student from './services/student'
 import {Experience, Education} from './services/education_experience'
 import OpenQuestion from './services/open_question'
+import TestQuestion from './services/test_question'
 
 export default () => {
   let app = express()
@@ -19,6 +20,7 @@ export default () => {
     .use(CompanyName)
     .use(Student)
     .use(OpenQuestion)
+    .use(TestQuestion)
   app
     .use('/api', api)
     .get('/', render)
