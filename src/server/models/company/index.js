@@ -70,16 +70,21 @@ schema.statics.getItem = function (id, callback) {
 }
 
 schema.statics.updateItem = function (id, update, callback) {
+  this.findById(id, (err, company) => {
+    if (err || !company) return callback(err || new HttpError(400, 'Can not find company with such id'))
+    this.updateOne(company, update, callback)
+  })
+}
+
+schema.statics.updateOne = function(company, update, callback) {
   for (let key in update)
     if (/site|about|city/.test(key) == false)
       delete update[key]
-  this.findById(id, (err, company) => {
-    for (let key in  update)
-        company[key] = key == 'city' ?
-          mongoose.Types.ObjectId(update[key]) :
-          update[key]
-    company.save(err => callback(err, company))
-  })
+  for (let key in  update)
+    company[key] = key == 'city' ?
+      mongoose.Types.ObjectId(update[key]) :
+      update[key]
+  company.save(err => callback(err, company))
 }
 
 schema.statics.getRandom = function(callback) {
@@ -90,31 +95,17 @@ schema.statics.searchItem = function(search, callback) {
   return searchPopulate.apply(this, [search, callback, foreignKeys])
 }
 
-schema.statics.changeMyPassword = function(company, password, callback) {
+schema.statics.changePassword = function(company, password, callback) {
   company.hashedPassword = company.encryptPassword(password)
   company.save(err => callback(err, company))
 }
 
-schema.statics.changePassword = function(id, password, callback) {
-  this.findById(id, (err, company) => {
-    if (err || !company) return callback(err || new HttpError(400, 'Can not find company with such id'))
-    this.changeMyPassword(company, password, callback)
-  })
-}
-
-schema.statics.changeMyEmail = function (company, email, callback) {
+schema.statics.changeEmail = function (company, email, callback) {
   this.findOne({email}, (err, res) => {
     if (err) return callback(err)
-    if (res) return res._id == company._id ? callback(null, res) : callback(new HttpError(400, 'Such email is already used'))
+    if (res) return res._id == company._id ? callback(null, res) : callback(new Error())
     company.email = email
     company.save(err => callback(err, company) )
-  })
-}
-
-schema.statics.changeEmail = function (id, email, callback) {
-  this.findById(id, (err, company) => {
-    if (err || !company) return callback(err || new HttpError(400, 'Can not find company with such id'))
-    this.changeMyEmail(company, email, callback)
   })
 }
 

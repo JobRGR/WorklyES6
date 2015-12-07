@@ -200,6 +200,85 @@ export default (url) => {
         })
     })
 
+    it('.change company by id', done => {
+      const index = Math.floor(list.length * Math.random())
+      tmpCompany.city = list[index].city.name
+      tmpCompany.about = list[index].about
+      tmpCompany.site = list[index].site
+      request(url)
+        .put(`${path}-update/${tmpModel._id}`)
+        .send(tmpCompany)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'company')
+          assert.property(res.body.company, 'email')
+          assert.property(res.body.company, 'name')
+          assert.property(res.body.company, 'city')
+          assert.property(res.body.company, 'about')
+          assert.property(res.body.company, 'site')
+          assert.equal(res.body.company.name.name, tmpCompany.name)
+          assert.equal(res.body.company.email, tmpCompany.email)
+          assert.equal(res.body.company.city, list[index].city._id)
+          assert.equal(res.body.company.site, tmpCompany.site)
+          assert.equal(res.body.company.about, tmpCompany.about)
+          assert.equal(res.body.company._id, tmpModel._id)
+          assert.notProperty(res.body.company, 'salt')
+          assert.notProperty(res.body.company, 'hashedPassword')
+          done()
+        })
+    })
+
+    it('.change my data', done => {
+      const index = Math.floor(list.length * Math.random())
+      tmpCompany.city = list[index].city.name
+      tmpCompany.about = list[index].about
+      tmpCompany.site = list[index].site
+      let req = request(url).put(`${path}-update`)
+      agent.attachCookies(req)
+      req.send(tmpCompany)
+      req.end((err, res) => {
+        assert.equal(res.status, 200)
+        assert.property(res.body, 'company')
+        assert.property(res.body.company, 'email')
+        assert.property(res.body.company, 'name')
+        assert.property(res.body.company, 'city')
+        assert.property(res.body.company, 'about')
+        assert.property(res.body.company, 'site')
+        assert.equal(res.body.company.name.name, tmpCompany.name)
+        assert.equal(res.body.company.email, tmpCompany.email)
+        assert.equal(res.body.company.city, list[index].city._id)
+        assert.equal(res.body.company.site, tmpCompany.site)
+        assert.equal(res.body.company.about, tmpCompany.about)
+        assert.equal(res.body.company._id, tmpModel._id)
+        assert.notProperty(res.body.company, 'salt')
+        assert.notProperty(res.body.company, 'hashedPassword')
+        done()
+      })
+    })
+
+    it('.check change', done => {
+      request(url)
+        .get(`${path}/${tmpModel._id}`)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'company')
+          assert.property(res.body.company, 'email')
+          assert.property(res.body.company, 'name')
+          assert.property(res.body.company, 'city')
+          assert.property(res.body.company, 'about')
+          assert.property(res.body.company, 'site')
+          assert.equal(res.body.company.name.name, tmpCompany.name)
+          assert.equal(res.body.company.email, tmpCompany.email)
+          assert.equal(res.body.company.city.name, tmpCompany.city)
+          assert.equal(res.body.company.site, tmpCompany.site)
+          assert.equal(res.body.company.about, tmpCompany.about)
+          assert.equal(res.body.company._id, tmpModel._id)
+          assert.notProperty(res.body.company, 'salt')
+          assert.notProperty(res.body.company, 'hashedPassword')
+          done()
+        })
+    })
+
     it('.delete item', done => deleteItem(url, `${path}/${tmpModel._id}`, done))
 
     it('.check get delete', done => count(url, path, list.length, done))

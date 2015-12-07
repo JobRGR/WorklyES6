@@ -293,7 +293,7 @@ export default (url) => {
           assert.property(res.body.student, 'telephone')
           assert.property(res.body.student, 'email')
           assert.property(res.body.student, 'name')
-          assert.property(res.body.student, 'date')
+          assert.property(res.body.student, 'createdAt')
           assert.property(res.body.student, 'experiences')
           assert.property(res.body.student, 'city')
           assert.property(res.body.student, 'skills')
