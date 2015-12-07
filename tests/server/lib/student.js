@@ -74,27 +74,27 @@ export default (url) => {
           assert.property(res.body.student, 'name')
           assert.property(res.body.student, 'date')
           assert.property(res.body.student, 'about')
-          assert.property(res.body.student, 'experience')
+          assert.property(res.body.student, 'experiences')
           assert.property(res.body.student, 'city')
-          assert.property(res.body.student, 'skill')
-          assert.property(res.body.student, 'education')
+          assert.property(res.body.student, 'skills')
+          assert.property(res.body.student, 'educations')
           assert.equal(res.body.student.dob, list[index].dob)
           assert.equal(res.body.student.telephone, list[index].telephone)
           assert.equal(res.body.student.name, list[index].name)
           assert.equal(res.body.student.email, list[index].email)
           assert.equal(res.body.student._id, list[index]._id)
-          assert.isArray(res.body.student.education)
-          assert.isArray(res.body.student.skill)
-          assert.isArray(res.body.student.experience)
+          assert.isArray(res.body.student.educations)
+          assert.isArray(res.body.student.skills)
+          assert.isArray(res.body.student.experiences)
           assert.isObject(res.body.student.city)
-          assert.deepEqual(res.body.student.skill, list[index].skill)
-          assert.deepEqual(res.body.student.education, list[index].education)
-          assert.deepEqual(res.body.student.experience, list[index].experience)
+          assert.deepEqual(res.body.student.skills, list[index].skills)
+          assert.deepEqual(res.body.student.educations, list[index].educations)
+          assert.deepEqual(res.body.student.experiences, list[index].experiences)
           assert.deepEqual(res.body.student.city, list[index].city)
-          assert.isObject(res.body.student.experience[0].position)
-          assert.isObject(res.body.student.experience[0].company)
-          assert.isObject(res.body.student.education[0].university)
-          assert.isObject(res.body.student.education[0].speciality)
+          assert.isObject(res.body.student.experiences[0].position)
+          assert.isObject(res.body.student.experiences[0].companyName)
+          assert.isObject(res.body.student.educations[0].university)
+          assert.isObject(res.body.student.educations[0].speciality)
           assert.notProperty(res.body.student, 'salt')
           assert.notProperty(res.body.student, 'hashedPassword')
           done()
@@ -170,15 +170,14 @@ export default (url) => {
 
     it('.change my email', done => {
       tmpStudent.email = 'alex2@gmail.com'
-      request(url)
-        .put(`${path}-email/${tmpModel._id}`)
-        .send({email: tmpStudent.email})
-        .end((err, res) => {
-          console.log(res.body)
-          assert.equal(res.status, 200)
-          assert.property(res.body, 'ok')
-          done()
-        })
+      let req = request(url).put(`${path}-email`)
+      agent.attachCookies(req)
+      req.send({email: tmpStudent.email})
+      req.end((err, res) => {
+        assert.equal(res.status, 200)
+        assert.property(res.body, 'ok')
+        done()
+      })
     })
 
     checkLogin()
@@ -210,6 +209,127 @@ export default (url) => {
         })
     })
 
+    it('.change user by id', done => {
+      const index = Math.floor(list.length * Math.random())
+      tmpStudent.city = list[index].city.name
+      tmpStudent.skills = list[index].skills.map(item => item.name)
+      tmpStudent.educations = list[index].educations.map(({start, end, speciality, university}) => {
+        return {
+          start, end,
+          speciality: speciality.name,
+          university: university.name
+        }
+      })
+      request(url)
+        .put(`${path}-update/${tmpModel._id}`)
+        .send(tmpStudent)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'student')
+          assert.property(res.body.student, 'email')
+          assert.property(res.body.student, 'name')
+          assert.property(res.body.student, 'city')
+          assert.property(res.body.student, 'skills')
+          assert.property(res.body.student, 'educations')
+          assert.equal(res.body.student.name, tmpStudent.name)
+          assert.equal(res.body.student.email, tmpStudent.email)
+          assert.equal(res.body.student._id, tmpModel._id)
+          assert.isArray(res.body.student.educations)
+          assert.isArray(res.body.student.skills)
+          assert.isAbove(res.body.student.skills.length, 0)
+          assert.isAbove(res.body.student.educations.length, 0)
+          assert.notProperty(res.body.student, 'salt')
+          assert.notProperty(res.body.student, 'hashedPassword')
+          done()
+        })
+    })
+
+    it('.change my data', done => {
+      const index = Math.floor(list.length * Math.random())
+      tmpStudent.dob = list[index].dob
+      tmpStudent.telephone = list[index].telephone
+      tmpStudent.experiences = list[index].experiences.map(({start, end, companyName, position, about}) => {
+        return {
+          start, end, about,
+          companyName: companyName.name,
+          position: position.name
+        }
+      })
+      let req = request(url).put(`${path}-update`)
+      agent.attachCookies(req)
+      req.send(tmpStudent)
+      req.end((err, res) => {
+        assert.equal(res.status, 200)
+        assert.property(res.body, 'student')
+        assert.property(res.body.student, 'dob')
+        assert.property(res.body.student, 'telephone')
+        assert.property(res.body.student, 'email')
+        assert.property(res.body.student, 'name')
+        assert.property(res.body.student, 'city')
+        assert.property(res.body.student, 'skills')
+        assert.property(res.body.student, 'educations')
+        assert.equal(res.body.student.name, tmpStudent.name)
+        assert.equal(res.body.student.email, tmpStudent.email)
+        assert.equal(res.body.student._id, tmpModel._id)
+        assert.isArray(res.body.student.educations)
+        assert.isArray(res.body.student.skills)
+        assert.isArray(res.body.student.experiences)
+        assert.isAbove(res.body.student.skills.length, 0)
+        assert.isAbove(res.body.student.educations.length, 0)
+        assert.isAbove(res.body.student.experiences.length, 0)
+        assert.notProperty(res.body.student, 'salt')
+        assert.notProperty(res.body.student, 'hashedPassword')
+        done()
+      })
+    })
+
+    it('.check change', done => {
+      request(url)
+        .get(`${path}/${tmpModel._id}`)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'student')
+          assert.property(res.body.student, 'telephone')
+          assert.property(res.body.student, 'email')
+          assert.property(res.body.student, 'name')
+          assert.property(res.body.student, 'date')
+          assert.property(res.body.student, 'experiences')
+          assert.property(res.body.student, 'city')
+          assert.property(res.body.student, 'skills')
+          assert.property(res.body.student, 'educations')
+          assert.equal(res.body.student.telephone, tmpStudent.telephone)
+          assert.equal(res.body.student.name, tmpStudent.name)
+          assert.equal(res.body.student.email, tmpStudent.email)
+          assert.equal(res.body.student._id, tmpModel._id)
+          assert.isArray(res.body.student.educations)
+          assert.isArray(res.body.student.skills)
+          assert.isArray(res.body.student.experiences)
+          assert.isObject(res.body.student.city)
+          res.body.student.skills.forEach((item, index) => assert.equal(item.name, tmpStudent.skills[index]))
+          res.body.student.educations.forEach((item, index) => {
+            assert.equal(item.university.name, tmpStudent.educations[index].university)
+            assert.equal(item.speciality.name, tmpStudent.educations[index].speciality)
+            assert.equal(item.start, tmpStudent.educations[index].start)
+            assert.equal(item.end, tmpStudent.educations[index].end)
+          })
+          res.body.student.experiences.forEach((item, index) => {
+            assert.equal(item.companyName.name, tmpStudent.experiences[index].companyName)
+            assert.equal(item.position.name, tmpStudent.experiences[index].position)
+            assert.equal(item.about, tmpStudent.experiences[index].about)
+            assert.equal(item.start, tmpStudent.experiences[index].start)
+            assert.equal(item.end, tmpStudent.experiences[index].end)
+          })
+          assert.equal(res.body.student.city.name, tmpStudent.city)
+          assert.isObject(res.body.student.experiences[0].position)
+          assert.isObject(res.body.student.experiences[0].companyName)
+          assert.isObject(res.body.student.educations[0].university)
+          assert.isObject(res.body.student.educations[0].speciality)
+          assert.notProperty(res.body.student, 'salt')
+          assert.notProperty(res.body.student, 'hashedPassword')
+          done()
+        })
+    })
+
     it('.delete item', done => deleteItem(url, `${path}/${tmpModel._id}`, done))
 
     it('.check get delete', done => count(url, path, list.length, done))
@@ -228,40 +348,40 @@ export default (url) => {
         })
     })
 
-    it('.search by skill', done => {
-      const skill = list[Math.floor(list.length * Math.random())].skill.map(({name}) => name)
+    it('.search by skills', done => {
+      const skills = list[Math.floor(list.length * Math.random())].skills.map(({name}) => name)
       request(url)
         .post(`${path}-search`)
-        .send({skill})
+        .send({skills})
         .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'students')
           assert.isAbove(res.body.students.length, 0)
           res.body.students.forEach((item) => {
-            let cur = item.skill.map(({name}) => name).filter(name => skill.indexOf(name) > -1)
+            let cur = item.skills.map(({name}) => name).filter(name => skills.indexOf(name) > -1)
             //assert.isAbove(cur.length, 0)
-            assert.includeMembers(skill, cur)
+            assert.includeMembers(skills, cur)
           })
           done()
         })
     })
 
-    it('.search by skill and city', done => {
+    it('.search by skills and city', done => {
       const someStudent = list[Math.floor(list.length * Math.random())]
-      const skill = someStudent.skill.map(({name}) => name)
+      const skills = someStudent.skills.map(({name}) => name)
       const city = someStudent.city.name
       request(url)
         .post(`${path}-search`)
-        .send({skill, city})
+        .send({skills, city})
         .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'students')
           assert.isAbove(res.body.students.length, 0)
           res.body.students.forEach((item) => {
-            let cur = item.skill.map(({name}) => name).filter(name => skill.indexOf(name) > -1)
+            let cur = item.skills.map(({name}) => name).filter(name => skills.indexOf(name) > -1)
             //assert.isAbove(cur.length, 0)
             assert.equal(item.city.name, city)
-            assert.includeMembers(skill, cur)
+            assert.includeMembers(skills, cur)
           })
           done()
         })
@@ -367,7 +487,7 @@ export default (url) => {
 
     it('.search by speciality', done => {
       const someStudent = list[Math.floor(list.length * Math.random())]
-      const speciality = someStudent.education[0].speciality.name
+      const speciality = someStudent.educations[0].speciality.name
       request(url)
         .post(`${path}-search`)
         .send({speciality})
@@ -375,14 +495,14 @@ export default (url) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'students')
           assert.isAbove(res.body.students.length, 0)
-          res.body.students.forEach(item => assert.include(item.education.map(x => x.speciality.name), speciality))
+          res.body.students.forEach(item => assert.include(item.educations.map(x => x.speciality.name), speciality))
           done()
         })
     })
 
     it('.search by university', done => {
       const someStudent = list[Math.floor(list.length * Math.random())]
-      const university = someStudent.education[0].university.name
+      const university = someStudent.educations[0].university.name
       request(url)
         .post(`${path}-search`)
         .send({university})
@@ -390,14 +510,14 @@ export default (url) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'students')
           assert.isAbove(res.body.students.length, 0)
-          res.body.students.forEach(item => assert.include(item.education.map(x => x.university.name), university))
+          res.body.students.forEach(item => assert.include(item.educations.map(x => x.university.name), university))
           done()
         })
     })
 
     it('.search by position', done => {
       const someStudent = list[Math.floor(list.length * Math.random())]
-      const position = someStudent.experience[0].position.name
+      const position = someStudent.experiences[0].position.name
       request(url)
         .post(`${path}-search`)
         .send({position})
@@ -405,36 +525,36 @@ export default (url) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'students')
           assert.isAbove(res.body.students.length, 0)
-          res.body.students.forEach(item => assert.include(item.experience.map(x => x.position.name), position))
+          res.body.students.forEach(item => assert.include(item.experiences.map(x => x.position.name), position))
           done()
         })
     })
 
     it('.search by company name', done => {
       const someStudent = list[Math.floor(list.length * Math.random())]
-      const company = someStudent.experience[0].company.name
+      const companyName = someStudent.experiences[0].companyName.name
       request(url)
         .post(`${path}-search`)
-        .send({company})
+        .send({companyName})
         .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'students')
           assert.isAbove(res.body.students.length, 0)
-          res.body.students.forEach(item => assert.include(item.experience.map(x => x.company.name), company))
+          res.body.students.forEach(item => assert.include(item.experiences.map(x => x.companyName.name), companyName))
           done()
         })
     })
 
     it('.search by company name and age', done => {
       const someStudent = list[Math.floor(list.length * Math.random())]
-      const company = someStudent.experience[0].company.name
+      const companyName = someStudent.experiences[0].companyName.name
       let date = new Date(someStudent.dob)
       let age = (new Date()).getFullYear() - date.getFullYear()
       let above = date.getFullYear() + 1
       let below = date.getFullYear() - 1
       request(url)
         .post(`${path}-search`)
-        .send({age: {min: age + 1, max: age - 1}, company})
+        .send({age: {min: age + 1, max: age - 1}, companyName})
         .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'students')
@@ -443,7 +563,7 @@ export default (url) => {
             let cur = new Date(item.dob).getFullYear()
             assert(cur >= below)
             assert(cur <= above)
-            assert.include(item.experience.map(x => x.company.name), company)
+            assert.include(item.experiences.map(x => x.companyName.name), companyName)
           })
           done()
         })
@@ -451,7 +571,7 @@ export default (url) => {
 
     it('.search by position and age', done => {
       const someStudent = list[Math.floor(list.length * Math.random())]
-      const position = someStudent.experience[0].position.name
+      const position = someStudent.experiences[0].position.name
       let date = new Date(someStudent.dob)
       let age = (new Date()).getFullYear() - date.getFullYear()
       let above = date.getFullYear() + 1
@@ -467,7 +587,7 @@ export default (url) => {
             let cur = new Date(item.dob).getFullYear()
             assert(cur >= below)
             assert(cur <= above)
-            assert.include(item.experience.map(x => x.position.name), position)
+            assert.include(item.experiences.map(x => x.position.name), position)
           })
           done()
         })

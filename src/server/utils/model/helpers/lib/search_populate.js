@@ -1,8 +1,7 @@
-export default function (search, callback, [firstType, secondType], sort = {'start': 1}) {
+export default function (search, callback, foreignKeys, sort = {'start': 1}) {
   this
     .find(search)
-    .populate(firstType)
-    .populate(secondType)
+    .populate(foreignKeys)
     .sort(sort)
     .exec(callback)
 }

@@ -5,6 +5,7 @@ import CompanyName from '../../handler/company_name'
 import Education from '../../handler/education'
 import Experience from '../../handler/experience'
 import rest from '../../utils/router/helpers/rest'
+import checkStudent from '../../middleware/check_student'
 
 let router = (name, handler) =>
   express()
@@ -24,10 +25,37 @@ let router = (name, handler) =>
       handler.searchItems,
       handler.sendItems
     )
-    .put(`/${name}-password`, handler.changeMyPassword)
-    .put(`/${name}-password/:id`, handler.changePassword)
-    .put(`/${name}-email`, handler.changeMyEmail)
-    .put(`/${name}-email/:id`, handler.changeEmail)
+    .put(`/${name}-update`,
+      checkStudent,
+      handler.initUser,
+      Dictionaries['City'].addItem,
+      Dictionaries['Skill'].addItems,
+      Education.updateStudent,
+      Experience.updateStudent,
+      Student.updateItem,
+      handler.sendItem
+    )
+    .put(`/${name}-update/:id`,
+      handler.initUser,
+      Dictionaries['City'].addItem,
+      Dictionaries['Skill'].addItems,
+      Education.updateStudent,
+      Experience.updateStudent,
+      Student.updateItem,
+      handler.sendItem
+    )
+    .put(`/${name}-password`,
+      checkStudent,
+      handler.initUser,
+      handler.changePassword
+    )
+    .put(`/${name}-password/:id`, handler.initUser, handler.changePassword)
+    .put(`/${name}-email`,
+      checkStudent,
+      handler.initUser,
+      handler.changeEmail
+    )
+    .put(`/${name}-email/:id`, handler.initUser, handler.changeEmail)
     .use(`/${name}`, rest(handler))
 
 export default router('student', Student)

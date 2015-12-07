@@ -1,11 +1,11 @@
-export default function (id, callback, populate, sort = {'start': 1}) {
+export default function (id, callback, foreignKeys, sort = {'start': 1}) {
   if (id) this
     .findById(id)
-    .populate(populate)
+    .populate(foreignKeys)
     .exec(callback)
   else this
     .find({})
-    .populate(populate)
+    .populate(foreignKeys)
     .sort(sort)
     .exec(callback)
 }
