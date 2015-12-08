@@ -1,7 +1,7 @@
 import async from 'async'
 import addArray from '../utils/add_array'
 import {answers, questions} from './open_question'
-import {TestQuestion} from '../../models/models'
+import {TestQuestion, Company} from '../../models/models'
 
 let data = []
 for (let i = 0; i<100; i++){
@@ -18,4 +18,13 @@ for (let i = 0; i<100; i++){
     data[i].free = Math.round(Math.random())
 }
 
-export default (cb) => addArray(TestQuestion, data, err => cb())
+
+export default (cb) => {
+    async.waterfall([
+            callback => async.each(data, (item, next) => Company.getRandom((err, company) => {
+            item.owner = company._id
+            next()
+        }), err => callback()),
+            callback => addArray(TestQuestion, data, err => cb())
+    ], err => addArray(TestQuestion, data, cb))
+}
