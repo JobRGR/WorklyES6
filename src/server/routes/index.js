@@ -24,9 +24,11 @@ export default () => {
     .use(Student)
     .use(OpenQuestion)
     .use(TestQuestion)
+
   app
     .use('/api', api)
     .get('/', render)
     .get('/logout', logout)
+
   return app
 }
