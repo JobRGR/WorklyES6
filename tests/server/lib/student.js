@@ -188,7 +188,6 @@ export default (url) => {
         .put(`${path}-email/${tmpModel._id}`)
         .send({email: tmpStudent.email})
         .end((err, res) => {
-          console.log(res.body)
           assert.equal(res.status, 200)
           assert.property(res.body, 'ok')
           done()

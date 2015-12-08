@@ -158,7 +158,6 @@ export default (url) => {
         .post(`${path}-add`)
         .send(newData)
         .end(((err, res) => {
-          console.log(newDataReturn)
           newDataReturn = res.body.experience || {}
           assert.equal(res.status, 200)
           assert.property(res.body, 'experience')
