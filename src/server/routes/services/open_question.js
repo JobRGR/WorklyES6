@@ -1,9 +1,7 @@
 import express from 'express'
-
 import OpenQuestion from '../../handler/open_question'
 import CompanyNameHandler from '../../handler/company_name'
 import CompanyHandler from '../../handler/company'
-
 import rest from '../../utils/router/helpers/rest'
 
 let router = (handler) => {
@@ -29,14 +27,13 @@ let router = (handler) => {
         )
         .post(`/open-question-byCompanyName`,
             CompanyNameHandler.searchItems,
-            //CompanyHandler.searchByCompanyNameId,
-            //handler.getQuestionsByCompany,
-            handler.sendItems
+            CompanyHandler.searchItems,
+            handler.getQuestionsByCompany,
+            handler.sendItem
         )
         .use(`/open-question`,
             rest(handler)
         )
 }
 
-export default
-    router(OpenQuestion)
+export default router(OpenQuestion)

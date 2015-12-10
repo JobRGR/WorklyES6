@@ -8,7 +8,8 @@ let {nextItem, nextItems} = new Next('openQuestion')
 let handler = new Handler('openQuestion', OpenQuestion, false, false)
 
 handler.getQuestionsByCompany = (req, res, next) => {
-    const search = {owner : res.companies._id}
+    const search = {owner: {$in: toObjectArray(res.companies)}}
+    console.log(search)
     OpenQuestion.searchItems(search, (err, questions) => nextItem(err, questions, res, next))
 }
 

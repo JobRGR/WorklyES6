@@ -26,8 +26,8 @@ handler.getCompany = (req, res, next) => nextItem(null, req._company, res, next)
 handler.searchItems = (req, res, next) => {
   let search = {}
   if (req.body.email) search.email = req.body.email
-  if (res.companyNames.length) search.name = {$in: toObjectArray(res.companyNames)}
-  if (res.cities.length) search.city = {$in: toObjectArray(res.cities)}
+  if (res.companyNames && res.companyNames.length) search.name = {$in: toObjectArray(res.companyNames)}
+  if (res.cities && res.cities.length) search.city = {$in: toObjectArray(res.cities)}
   Company.searchItem(search, (err, companies) => nextItems(err, companies, res, next))
 }
 
@@ -41,11 +41,11 @@ handler.updateItem = (req, res, next) => {
   Company.updateItem(req.param.id, data, (err, company) => nextItem(err, company, res, next))
 }
 
-handler.searchByCompanyNameId = (req, res, next) => {
-  const search = {name: res.companyNames._id};
-  console.log(res)
-  Company.searchItem(search, (err, company) => nextItems(err, company, res, next))
-}
+//handler.searchByCompanyNameId = (req, res, next) => {
+//  const search = {name: res.companyNames._id};
+//  console.log(res)
+//  Company.searchItem(search, (err, company) => nextItems(err, company, res, next))
+//}
 
 
 handler.changeMyPassword = (req, res, next) => Company.changeMyPassword(req._company, req.body.password, err => res.send({ok: err || true}))

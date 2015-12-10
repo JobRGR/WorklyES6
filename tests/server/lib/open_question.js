@@ -157,7 +157,7 @@ export default (url) => {
         })
 
         it('.get questions by companys name', done => {
-            const data = {name: 'Apriorit'}
+            const data = {companyName: 'Abweb'}
             request(url)
                 .post(`/api/open-question-byCompanyName`)
                 .send(data)
