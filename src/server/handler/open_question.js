@@ -8,6 +8,13 @@ import HttpError from '../utils/error'
 let {nextItem, nextItems} = new Next('openQuestion')
 let handler = new Handler('openQuestion', OpenQuestion, false, false)
 
+
+handler.addCompanyQuestion = (req, res, next) => {
+    let data = req.body
+    data.owner = req._company.id
+    OpenQuestion.addItem(data, (err, item) => nextItem(err, item, res, next))
+}
+
 handler.getQuestionsByCompany = (req, res, next) => {
     const search = {owner: {$in: toObjectArray(res.companies)}}
     OpenQuestion.searchItems(search, (err, questions) => nextItem(err, questions, res, next))
