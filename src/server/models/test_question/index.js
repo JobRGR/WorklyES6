@@ -24,13 +24,7 @@ schema.statics.getItem = function (id, callback) {
 }
 
 schema.statics.updateItem = function (id, update, callback) {
-    this.findById(id, (err, question) => {
-        for (let key in  update)
-            question[key] = (key=="owner") ?
-                mongoose.Types.ObjectId(update[key]) :
-                update[key]
-        question.save(err => callback(err, question))
-    })
+    return updateItem.apply(this, [id, update, callback, foreignKeys])
 }
 
 schema.statics.getRandom = function(callback) {

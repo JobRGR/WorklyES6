@@ -156,5 +156,26 @@ export default (url) => {
                 })
         })
 
+        it('.get questions by companys name', done => {
+            const data = {name: 'Apriorit'}
+            request(url)
+                .post(`/api/open-question-byCompanyName`)
+                .send(data)
+                .end((err, res) => {
+                    console.log("CONSOLE LOG - ", res.body);
+                    assert.equal(res.status, 200)
+                    assert.property(res.body, 'openQuestion')
+                    assert.property(res.body.openQuestion, 'question')
+                    assert.property(res.body.openQuestion, 'answer')
+                    assert.property(res.body.openQuestion, 'free')
+                    assert.property(res.body.openQuestion, 'owner')
+                    assert.isString(res.body.openQuestion.question)
+                    assert.isString(res.body.openQuestion.answer)
+                    assert.isBoolean(res.body.openQuestion.free)
+                    assert.isObject(res.body.openQuestion.owner)
+                    done()
+                })
+        })
+
     })
 }

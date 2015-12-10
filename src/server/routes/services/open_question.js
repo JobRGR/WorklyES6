@@ -1,4 +1,42 @@
-import router from '../../utils/router'
-import handler from '../../handler/open_question'
+import express from 'express'
 
-export default router('open-question', handler)
+import OpenQuestion from '../../handler/open_question'
+import CompanyNameHandler from '../../handler/company_name'
+import CompanyHandler from '../../handler/company'
+
+import rest from '../../utils/router/helpers/rest'
+
+let router = (handler) => {
+    return express()
+        .get(`/open-question-count`,
+            handler.getCount
+        )
+        .get(`/open-question-random`,
+            handler.getRandom,
+            handler.sendItem
+        )
+        .get(`/open-question-byCompanyId/:id`,
+            handler.getQuestionsById,
+            handler.sendItem
+        )
+        .get(`/open-question-my`,
+            handler.getMyQuestionsById,
+            handler.sendItem
+        )
+        .get(`/question-my`,
+            handler.getAllMyQuestionsById,
+            handler.sendItem
+        )
+        .post(`/open-question-byCompanyName`,
+            CompanyNameHandler.searchItems,
+            //CompanyHandler.searchByCompanyNameId,
+            //handler.getQuestionsByCompany,
+            handler.sendItems
+        )
+        .use(`/open-question`,
+            rest(handler)
+        )
+}
+
+export default
+    router(OpenQuestion)
