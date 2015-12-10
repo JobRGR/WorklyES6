@@ -24,12 +24,21 @@ export default (url) => {
 
     let tmpCompany = {name: 'InsSolutions', password: '1111', email: 'ins_solutins@somnia.com'}
     let tmpModel = null
+    let tmpCompanyModel = null
     let list = null
 
     describe('open question"s tests', () => {
-        before(() =>{
-           //Company.find()
-        })
+        before(function(done) {
+          request(url)
+            .post(path)
+            .send(tmpCompany)
+            .end((err, res) => {
+              tmpCompanyModel = res.body.company || {}
+              done()
+            })
+         })
+
+      after(done => deleteItem(url, `${path}/${tmpModel._id}`, done))
 
         let getSession = done => {
             let req = request(url)
@@ -50,11 +59,13 @@ export default (url) => {
 
         let checkLogin = () => {
             it('.login company', done => {
+              console.log(tmpCompanyModel)
                 request(url)
                     .post(`/api/company-login`)
                     .send(tmpCompany)
                     .end((err, res) => {
                         agent.saveCookies(res)
+                        console.log(res.body)
                         assert.equal(res.status, 200)
                         assert.property(res.body, 'company')
                         assert.property(res.body.company, 'name')
@@ -243,10 +254,12 @@ export default (url) => {
                 })
         })
 
-        it('.login', done => {
-            checkLogin()
-            done()
-        })
+        checkLogin()
+
+        //it('.login', done => {
+        //    checkLogin()
+        //    done()
+        //})
 
         it('.get my open questions', done => {
             request(url)

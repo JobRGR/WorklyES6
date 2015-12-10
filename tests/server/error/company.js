@@ -21,6 +21,8 @@ export default (url) => {
           done()
         }))
 
+    after(done => deleteItem(url, `${path}/${tmpModel._id}`, done))
+
 
     it('.login student with not correct password', done => {
       let someCompany = {
@@ -51,7 +53,5 @@ export default (url) => {
           done()
         })
     })
-
-    after(done => deleteItem(url, `${path}/${tmpModel._id}`, done))
   })
 }
