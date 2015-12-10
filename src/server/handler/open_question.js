@@ -3,13 +3,13 @@ import Next from '../utils/handler/helpers/next'
 import Handler from '../utils/handler'
 import {OpenQuestion} from '../models/models'
 import toObjectArray from '../utils/to_object_array'
+import HttpError from '../utils/error'
 
 let {nextItem, nextItems} = new Next('openQuestion')
 let handler = new Handler('openQuestion', OpenQuestion, false, false)
 
 handler.getQuestionsByCompany = (req, res, next) => {
     const search = {owner: {$in: toObjectArray(res.companies)}}
-    console.log(search)
     OpenQuestion.searchItems(search, (err, questions) => nextItem(err, questions, res, next))
 }
 
@@ -18,16 +18,17 @@ handler.getQuestionsById = (req, res, next) => {
     OpenQuestion.searchItems(search, (err, questions) => nextItem(err, questions, res, next))
 }
 
-handler.getMyQuestionsById = (req, res, next) => {
-    if (!req._company) nextItem("There is no authorized company", null, res, next);
+handler.getMyQuestions = (req, res, next) => {
+    if (!req._company) nextItem(new HttpError(401, "Unauthorized."), null, res, next);
     else{
-        let data = req._company.open_questions
-        nextItem(null, data, res, next)
+        const search = {owner : req._company._id}
+        console.log(req.openQuestion)
+        OpenQuestion.searchItems(search, (err, questions) => nextItem(err, questions, res, next))
     }
 }
 
-handler.getAllMyQuestionsById = (req, res, next) => {
-    if (!req._company) nextItem("There is no authorized company");
+handler.getAllMyQuestions = (req, res, next) => {
+    if (!req._company) nextItem(new HttpError(401, "Unauthorized."), null, res, next);
     else{
         let data = req._company.open_questions
         data.concat(req._company.test_questions)

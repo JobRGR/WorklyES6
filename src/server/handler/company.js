@@ -41,12 +41,6 @@ handler.updateItem = (req, res, next) => {
   Company.updateItem(req.param.id, data, (err, company) => nextItem(err, company, res, next))
 }
 
-//handler.searchByCompanyNameId = (req, res, next) => {
-//  const search = {name: res.companyNames._id};
-//  console.log(res)
-//  Company.searchItem(search, (err, company) => nextItems(err, company, res, next))
-//}
-
 
 handler.changeMyPassword = (req, res, next) => Company.changeMyPassword(req._company, req.body.password, err => res.send({ok: err || true}))
 handler.changePassword = (req, res, next) => Company.changePassword(req.params.id, req.body.password, err => res.send({ok: err || true}))

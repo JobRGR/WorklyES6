@@ -2,7 +2,10 @@ import {assert} from 'chai'
 import request from 'supertest'
 import count from '../helpers/count'
 import deleteItem from '../helpers/delete'
-
+import Company from '../../../src/server/models/company'
+import async from '../../../node_modules/async'
+import superagent from 'superagent'
+let agent = superagent.agent()
 
 export default (url) => {
     const path = '/api/open-question'
@@ -19,18 +22,53 @@ export default (url) => {
         free: false
     }
 
-    let newData = tmpData
-
-    let editNewData = newTmpData
-
-    let newDataReturn = {}
-    let newUniversity = null
-    let newSpeciality = null
-
+    let tmpCompany = {name: 'InsSolutions', password: '1111', email: 'ins_solutins@somnia.com'}
     let tmpModel = null
     let list = null
 
     describe('open question"s tests', () => {
+        before(() =>{
+           //Company.find()
+        })
+
+        let getSession = done => {
+            let req = request(url)
+                .get(`/api/company-status`)
+            agent.attachCookies(req)
+
+            req.end((err, res) => {
+                assert.equal(res.status, 200)
+                assert.property(res.body, 'company')
+                assert.property(res.body.company, 'name')
+                assert.equal(res.body.company.name.name, tmpCompany.name)
+                assert.equal(res.body.company.email, tmpCompany.email)
+                assert.notProperty(res.body.company, 'salt')
+                assert.notProperty(res.body.company, 'hashedPassword')
+                done()
+            })
+        }
+
+        let checkLogin = () => {
+            it('.login company', done => {
+                request(url)
+                    .post(`/api/company-login`)
+                    .send(tmpCompany)
+                    .end((err, res) => {
+                        agent.saveCookies(res)
+                        assert.equal(res.status, 200)
+                        assert.property(res.body, 'company')
+                        assert.property(res.body.company, 'name')
+                        assert.equal(res.body.company.name.name, tmpCompany.name)
+                        assert.equal(res.body.company.email, tmpCompany.email)
+                        assert.notProperty(res.body.company, 'salt')
+                        assert.notProperty(res.body.company, 'hashedPassword')
+                        done()
+                    })
+            })
+
+            it('.get session login company', getSession)
+        }
+
         it('.get list', done => {
             request(url)
                 .get(path)
@@ -162,17 +200,63 @@ export default (url) => {
                 .post(`/api/open-question-byCompanyName`)
                 .send(data)
                 .end((err, res) => {
-                    console.log("CONSOLE LOG - ", res.body);
+                    //console.log("CONSOLE LOG - ", list);
                     assert.equal(res.status, 200)
                     assert.property(res.body, 'openQuestion')
-                    assert.property(res.body.openQuestion, 'question')
-                    assert.property(res.body.openQuestion, 'answer')
-                    assert.property(res.body.openQuestion, 'free')
-                    assert.property(res.body.openQuestion, 'owner')
-                    assert.isString(res.body.openQuestion.question)
-                    assert.isString(res.body.openQuestion.answer)
-                    assert.isBoolean(res.body.openQuestion.free)
-                    assert.isObject(res.body.openQuestion.owner)
+                    assert.isArray(res.body.openQuestion)
+                    done()
+                })
+        })
+
+        it('.get questions by companys id', done => {
+            const index = Math.floor(list.length * Math.random())
+            const searchId = list[index].owner._id
+            const searchedById  = []
+
+            list.map((el)=>{
+                if (el.owner._id == searchId)
+                    searchedById.push(el)
+            })
+
+            request(url)
+                .get(`/api/open-question-byCompanyId/${searchId}`)
+                .end((err, res) => {
+                    assert.equal(res.status, 200)
+                    assert.property(res.body, 'openQuestion')
+                    assert.isArray(res.body.openQuestion)
+                    assert.deepEqual(res.body.openQuestion, searchedById)
+                    done()
+                })
+        })
+
+        it('.get my open questions', done => {
+            request(url)
+                .get(`/api/open-question-my`)
+                .end((err, res) => {
+                    //console.log(res.body)
+                    assert.equal(res.status, 401)
+                    assert.property(res.body, 'message')
+                    assert.property(res.body, 'error')
+                    assert.isObject(res.body.error)
+                    assert.equal(res.body.message, 'Unauthorized.')
+                    done()
+                })
+        })
+
+        it('.login', done => {
+            checkLogin()
+            done()
+        })
+
+        it('.get my open questions', done => {
+            request(url)
+                .get(`/api/open-question-my`)
+                .end((err, res) => {
+                    console.log(res.body)
+                    assert.equal(res.status, 200)
+                    assert.property(res.body, 'openQuestion')
+                    assert.isArray(res.body.openQuestion)
+                    assert.deepEqual(res.body.openQuestion, searchedById)
                     done()
                 })
         })

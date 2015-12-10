@@ -18,11 +18,11 @@ let router = (handler) => {
             handler.sendItem
         )
         .get(`/open-question-my`,
-            handler.getMyQuestionsById,
+            handler.getMyQuestions,
             handler.sendItem
         )
         .get(`/question-my`,
-            handler.getAllMyQuestionsById,
+            handler.getAllMyQuestions,
             handler.sendItem
         )
         .post(`/open-question-byCompanyName`,
