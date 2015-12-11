@@ -21,10 +21,9 @@ let schema = new Schema({
   experiences: [{type: mongoose.Schema.Types.ObjectId, ref: 'Experience'}],
   skills: [{type: mongoose.Schema.Types.ObjectId, ref: 'Skill'}],
   city: {type: mongoose.Schema.Types.ObjectId, ref: 'City'},
-  date: {type: Date, required: true, default: Date.now},
   hashedPassword: {type: String, required: true},
   salt: {type: String, required: true}
-})
+}, { timestamps: true})
 
 const foreignKeys = ['educations.speciality', 'experiences.companyName', 'educations.university', 'experiences.position', 'city', 'skills']
 

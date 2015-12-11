@@ -5,6 +5,7 @@ import Education from './models/education'
 import Experience from './models/experience'
 import Student from './models/student'
 import Company from './models/company'
+import Vacancy from './models/vacancy'
 import OpenQuestion from './models/open_question'
 import TestQuestion from './models/test_question'
 
@@ -16,5 +17,6 @@ async.waterfall([
   callback => Student(err => callback(err)),
   callback => Company(err => callback(err)),
   callback => OpenQuestion.generate(err => callback(err)),
-  callback => TestQuestion(err => callback(err))
+  callback => TestQuestion(err => callback(err)),
+  callback => Vacancy(err => callback(err))
 ], err => process.exit(err ? 1 : 0))

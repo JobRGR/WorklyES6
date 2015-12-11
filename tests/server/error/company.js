@@ -24,7 +24,7 @@ export default (url) => {
     after(done => deleteItem(url, `${path}/${tmpModel._id}`, done))
 
 
-    it('.login student with not correct password', done => {
+    it('.login company with not correct password', done => {
       let someCompany = {
         email: tmpCompany.email,
         password: '2222'
@@ -39,7 +39,7 @@ export default (url) => {
         })
     })
 
-    it('.login student with not correct email', done => {
+    it('.login company with not correct email', done => {
       let someStudent = {
         email: tmpCompany.email + '1',
         password: '111'
