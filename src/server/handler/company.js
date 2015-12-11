@@ -41,8 +41,8 @@ handler.getCompany = (req, res, next) => nextItem(null, req._company, res, next)
 handler.searchItems = (req, res, next) => {
   let search = {}
   if (req.body.email) search.email = req.body.email
-  if (res.companyNames.length) search.name = {$in: toObjectArray(res.companyNames)}
-  if (res.cities.length) search.city = {$in: toObjectArray(res.cities)}
+  if (res.companyNames && res.companyNames.length) search.name = {$in: toObjectArray(res.companyNames)}
+  if (res.cities && res.cities.length) search.city = {$in: toObjectArray(res.cities)}
   Company.searchItem(search, (err, companies) => nextItems(err, companies, res, next))
 }
 

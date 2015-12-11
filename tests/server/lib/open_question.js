@@ -2,7 +2,10 @@ import {assert} from 'chai'
 import request from 'supertest'
 import count from '../helpers/count'
 import deleteItem from '../helpers/delete'
-
+import Company from '../../../src/server/models/company'
+import async from '../../../node_modules/async'
+import superagent from 'superagent'
+let agent = superagent.agent()
 
 export default (url) => {
     const path = '/api/open-question'
@@ -19,18 +22,62 @@ export default (url) => {
         free: false
     }
 
-    let newData = tmpData
-
-    let editNewData = newTmpData
-
-    let newDataReturn = {}
-    let newUniversity = null
-    let newSpeciality = null
-
+    let tmpCompany = {name: 'InsSolutions', password: '1111', email: 'ins_solutins@somnia.com'}
     let tmpModel = null
+    let tmpCompanyModel = null
     let list = null
 
-    describe('open question"s tests', () => {
+    describe('open question"s tests', function() {
+      before(done => {
+         request(url)
+           .post('/api/company')
+           .send(tmpCompany)
+           .end((err, res) => {
+             tmpCompanyModel = res.body.company || {}
+             done()
+           })
+        })
+
+      after(done => deleteItem(url, `/api/company/${tmpCompanyModel._id}`, done))
+
+        let getSession = done => {
+            let req = request(url)
+                .get(`/api/company-status`)
+            agent.attachCookies(req)
+
+            req.end((err, res) => {
+                assert.equal(res.status, 200)
+                assert.property(res.body, 'company')
+                assert.property(res.body.company, 'name')
+                assert.equal(res.body.company.name.name, tmpCompany.name)
+                assert.equal(res.body.company.email, tmpCompany.email)
+                assert.notProperty(res.body.company, 'salt')
+                assert.notProperty(res.body.company, 'hashedPassword')
+                done()
+            })
+        }
+
+        let checkLogin = () => {
+          it('.login company', done => {
+              request(url)
+                  .post(`/api/company-login`)
+                  .send(tmpCompany)
+                  .end((err, res) => {
+                      agent.saveCookies(res)
+                      assert.equal(res.status, 200)
+                      assert.property(res.body, 'company')
+                      assert.property(res.body.company, 'name')
+                      assert.equal(res.body.company.name.name, tmpCompany.name)
+                      assert.equal(res.body.company.email, tmpCompany.email)
+                      assert.notProperty(res.body.company, 'salt')
+                      assert.notProperty(res.body.company, 'hashedPassword')
+                      done()
+                  })
+          })
+
+          it('.get session login company', getSession)
+        }
+
         it('.get list', done => {
             request(url)
                 .get(path)
@@ -155,6 +202,89 @@ export default (url) => {
                     done()
                 })
         })
+
+        it('.get questions by companys name', done => {
+            const data = {companyName: 'Abweb'}
+            request(url)
+                .post(`/api/open-question-byCompanyName`)
+                .send(data)
+                .end((err, res) => {
+                    assert.equal(res.status, 200)
+                    assert.property(res.body, 'openQuestions')
+                    assert.isArray(res.body.openQuestions)
+                    done()
+                })
+        })
+
+        it('.get questions by companys id', done => {
+            const index = Math.floor(list.length * Math.random())
+            const searchId = list[index].owner._id
+            const searchedById  = []
+            list.forEach(el => el.owner && el.owner._id == searchId && searchedById.push(el))
+
+            request(url)
+                .get(`/api/open-question-byCompanyId/${searchId}`)
+                .end((err, res) => {
+                    assert.equal(res.status, 200)
+                    assert.property(res.body, 'openQuestions')
+                    assert.isArray(res.body.openQuestions)
+                    assert.deepEqual(res.body.openQuestions, searchedById)
+                    done()
+                })
+        })
+
+        it('.get my open questions', done => {
+            request(url)
+                .get(`/api/open-question-my`)
+                .end((err, res) => {
+                    assert.equal(res.status, 401)
+                    assert.property(res.body, 'message')
+                    assert.property(res.body, 'error')
+                    assert.isObject(res.body.error)
+                    assert.equal(res.body.message, 'Unauthorized.')
+                    done()
+                })
+        })
+
+      checkLogin()
+
+      it('.add questions for company', done => {
+        let req = request(url).post("/api/open-question-add")
+        agent.attachCookies(req)
+        req
+          .send(tmpData)
+          .end(((err, res) => {
+              tmpModel = res.body.openQuestion || {}
+              assert.equal(res.status, 200)
+              assert.property(res.body, 'openQuestion')
+              assert.deepEqual(res.body.openQuestion, tmpModel)
+            }))
+        done()
+    })
+
+    it('.get my open questions', done => {
+      let req = request(url).get(`/api/open-question-my`)
+      agent.attachCookies(req)
+
+      req.end((err, res) => {
+        assert.equal(res.status, 200)
+        assert.property(res.body, 'openQuestions')
+        assert.isArray(res.body.openQuestions)
+        assert.property(res.body.openQuestions[0], '_id')
+        assert.property(res.body.openQuestions[0], 'answer')
+        assert.property(res.body.openQuestions[0], 'free')
+        assert.property(res.body.openQuestions[0], 'owner')
+        assert.property(res.body.openQuestions[0], 'question')
+        assert.equal(res.body.openQuestions[0]._id, tmpModel._id)
+        assert.equal(res.body.openQuestions[0].answer, tmpModel.answer)
+        assert.equal(res.body.openQuestions[0].free, tmpModel.free)
+        assert.equal(res.body.openQuestions[0].owner._id, tmpModel.owner)
+        assert.equal(res.body.openQuestions[0].question, tmpModel.question)
+        done()
+      })
+    })
+
+      it('.delete added question', done => deleteItem(url, `/api/open-question/${tmpModel._id}`, done))
 
     })
 }
