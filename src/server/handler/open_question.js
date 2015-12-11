@@ -11,7 +11,8 @@ let handler = new Handler('openQuestion', OpenQuestion, false, false)
 
 handler.addCompanyQuestion = (req, res, next) => {
     let data = req.body
-    data.owner = req._company.id
+    data.owner = req._company._id
+    console.log(data)
     OpenQuestion.addItem(data, (err, item) => nextItem(err, item, res, next))
 }
 

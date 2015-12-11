@@ -31,6 +31,10 @@ let router = (handler) => {
             handler.getQuestionsByCompany,
             handler.sendItem
         )
+        .post(`/open-question-add`,
+            handler.addCompanyQuestion,
+            handler.sendItem
+        )
         .use(`/open-question`,
             rest(handler)
         )

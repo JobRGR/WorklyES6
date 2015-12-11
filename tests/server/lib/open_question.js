@@ -28,15 +28,15 @@ export default (url) => {
     let list = null
 
     describe('open question"s tests', function() {
-        before(function(done) {
-          request(url)
-            .post('/api/company')
-            .send(tmpCompany)
-            .end((err, res) => {
-              tmpCompanyModel = res.body.company || {}
-              done()
-            })
-         })
+      before(done => {
+         request(url)
+           .post('/api/company')
+           .send(tmpCompany)
+           .end((err, res) => {
+             tmpCompanyModel = res.body.company || {}
+             done()
+           })
+        })
 
       after(done => deleteItem(url, `/api/company/${tmpCompanyModel._id}`, done))
 
@@ -250,44 +250,47 @@ export default (url) => {
                 })
         })
 
-        checkLogin()
+      checkLogin()
 
-
-      it('.set item', done => {
-        const index = Math.floor(list.length * Math.random())
-        request(url)
-          .post(path)
+      it('.add questions for company', done => {
+        let req = request(url).post("/api/open-question-add")
+        agent.attachCookies(req)
+        req
           .send(tmpData)
           .end(((err, res) => {
-            tmpModel = res.body.openQuestion || {}
-            assert.equal(res.status, 200)
-            assert.property(res.body, 'openQuestion')
-            assert.property(res.body.openQuestion, 'question')
-            assert.property(res.body.openQuestion, 'answer')
-            assert.property(res.body.openQuestion, 'free')
-            assert.property(res.body.openQuestion, 'owner')
-            assert.equal(res.body.openQuestion.owner, tmpData.owner)
-            assert.equal(res.body.openQuestion.question, tmpData.question)
-            assert.equal(res.body.openQuestion.answer, tmpData.answer)
-            assert.equal(res.body.openQuestion.free, tmpData.free)
-            done()
-          }))
-      })
-
+              tmpModel = res.body.openQuestion || {}
+              assert.equal(res.status, 200)
+              assert.property(res.body, 'openQuestion')
+              assert.deepEqual(res.body.openQuestion, tmpModel)
+            }))
+        done()
+    })
 
         it('.get my open questions', done => {
           let req = request(url).get(`/api/open-question-my`)
           agent.attachCookies(req)
 
           req.end((err, res) => {
-            console.log(res.body)
             assert.equal(res.status, 200)
             assert.property(res.body, 'openQuestion')
             assert.isArray(res.body.openQuestion)
-            assert.deepEqual(res.body.openQuestion, searchedById)
+            assert.property(res.body.openQuestion[0], '_id')
+            assert.property(res.body.openQuestion[0], 'answer')
+            assert.property(res.body.openQuestion[0], 'free')
+            assert.property(res.body.openQuestion[0], 'owner')
+            assert.property(res.body.openQuestion[0], 'question')
+            assert.equal(res.body.openQuestion[0]._id, tmpModel._id)
+            assert.equal(res.body.openQuestion[0].answer, tmpModel.answer)
+            assert.equal(res.body.openQuestion[0].free, tmpModel.free)
+            assert.equal(res.body.openQuestion[0].owner._id, tmpModel.owner)
+            assert.equal(res.body.openQuestion[0].question, tmpModel.question)
             done()
           })
         })
+
+      it('.delete added question', done => {
+        deleteItem(url, `/api/open-question/${tmpModel._id}`, done)
+      })
 
     })
 }
