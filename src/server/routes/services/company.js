@@ -17,10 +17,31 @@ let router = (name, handler) =>
       handler.searchItems,
       handler.sendItems
     )
-    .put(`/${name}-password`, checkCompany, handler.changeMyPassword)
-    .put(`/${name}-password/:id`, handler.changePassword)
-    .put(`/${name}-email`, checkCompany, handler.changeMyEmail)
-    .put(`/${name}-email/:id`, handler.changeEmail)
+    .put(`/${name}-update`,
+      checkCompany,
+      handler.initUser,
+      Dictionaries['City'].addItem,
+      handler.updateItem,
+      handler.sendItem
+    )
+    .put(`/${name}-update/:id`,
+      handler.initUser,
+      Dictionaries['City'].addItem,
+      handler.updateItem,
+      handler.sendItem
+    )
+    .put(`/${name}-password`,
+      checkCompany,
+      handler.initUser,
+      handler.changePassword
+    )
+    .put(`/${name}-password/:id`, handler.initUser, handler.changePassword)
+    .put(`/${name}-email`,
+      checkCompany,
+      handler.initUser,
+      handler.changeEmail
+    )
+    .put(`/${name}-email/:id`, handler.initUser, handler.changeEmail)
     .use(`/${name}`, rest(handler))
 
 export default router('company', Company)

@@ -7,6 +7,7 @@ import Student from './services/student'
 import {Experience, Education} from './services/education_experience'
 import OpenQuestion from './services/open_question'
 import TestQuestion from './services/test_question'
+import Vacancy from './services/vacancy'
 
 export default () => {
   let app = express()
@@ -23,6 +24,7 @@ export default () => {
     .use(Student)
     .use(OpenQuestion)
     .use(TestQuestion)
+    .use(Vacancy)
   app
     .use('/api', api)
     .get('/', render)
