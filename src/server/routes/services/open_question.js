@@ -15,21 +15,17 @@ let router = (handler) => {
         )
         .get(`/open-question-byCompanyId/:id`,
             handler.getQuestionsById,
-            handler.sendItem
+            handler.sendItems
         )
         .get(`/open-question-my`,
             handler.getMyQuestions,
-            handler.sendItem
-        )
-        .get(`/question-my`,
-            handler.getAllMyQuestions,
-            handler.sendItem
+            handler.sendItems
         )
         .post(`/open-question-byCompanyName`,
             CompanyNameHandler.searchItems,
             CompanyHandler.searchItems,
             handler.getQuestionsByCompany,
-            handler.sendItem
+            handler.sendItems
         )
         .post(`/open-question-add`,
             handler.addCompanyQuestion,

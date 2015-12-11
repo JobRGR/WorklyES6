@@ -210,8 +210,8 @@ export default (url) => {
                 .send(data)
                 .end((err, res) => {
                     assert.equal(res.status, 200)
-                    assert.property(res.body, 'openQuestion')
-                    assert.isArray(res.body.openQuestion)
+                    assert.property(res.body, 'openQuestions')
+                    assert.isArray(res.body.openQuestions)
                     done()
                 })
         })
@@ -220,19 +220,15 @@ export default (url) => {
             const index = Math.floor(list.length * Math.random())
             const searchId = list[index].owner._id
             const searchedById  = []
-
-            list.map((el)=>{
-                if (el.owner._id == searchId)
-                    searchedById.push(el)
-            })
+            list.forEach(el => el.owner && el.owner._id == searchId && searchedById.push(el))
 
             request(url)
                 .get(`/api/open-question-byCompanyId/${searchId}`)
                 .end((err, res) => {
                     assert.equal(res.status, 200)
-                    assert.property(res.body, 'openQuestion')
-                    assert.isArray(res.body.openQuestion)
-                    assert.deepEqual(res.body.openQuestion, searchedById)
+                    assert.property(res.body, 'openQuestions')
+                    assert.isArray(res.body.openQuestions)
+                    assert.deepEqual(res.body.openQuestions, searchedById)
                     done()
                 })
         })
@@ -266,31 +262,29 @@ export default (url) => {
         done()
     })
 
-        it('.get my open questions', done => {
-          let req = request(url).get(`/api/open-question-my`)
-          agent.attachCookies(req)
+    it('.get my open questions', done => {
+      let req = request(url).get(`/api/open-question-my`)
+      agent.attachCookies(req)
 
-          req.end((err, res) => {
-            assert.equal(res.status, 200)
-            assert.property(res.body, 'openQuestion')
-            assert.isArray(res.body.openQuestion)
-            assert.property(res.body.openQuestion[0], '_id')
-            assert.property(res.body.openQuestion[0], 'answer')
-            assert.property(res.body.openQuestion[0], 'free')
-            assert.property(res.body.openQuestion[0], 'owner')
-            assert.property(res.body.openQuestion[0], 'question')
-            assert.equal(res.body.openQuestion[0]._id, tmpModel._id)
-            assert.equal(res.body.openQuestion[0].answer, tmpModel.answer)
-            assert.equal(res.body.openQuestion[0].free, tmpModel.free)
-            assert.equal(res.body.openQuestion[0].owner._id, tmpModel.owner)
-            assert.equal(res.body.openQuestion[0].question, tmpModel.question)
-            done()
-          })
-        })
-
-      it('.delete added question', done => {
-        deleteItem(url, `/api/open-question/${tmpModel._id}`, done)
+      req.end((err, res) => {
+        assert.equal(res.status, 200)
+        assert.property(res.body, 'openQuestions')
+        assert.isArray(res.body.openQuestions)
+        assert.property(res.body.openQuestions[0], '_id')
+        assert.property(res.body.openQuestions[0], 'answer')
+        assert.property(res.body.openQuestions[0], 'free')
+        assert.property(res.body.openQuestions[0], 'owner')
+        assert.property(res.body.openQuestions[0], 'question')
+        assert.equal(res.body.openQuestions[0]._id, tmpModel._id)
+        assert.equal(res.body.openQuestions[0].answer, tmpModel.answer)
+        assert.equal(res.body.openQuestions[0].free, tmpModel.free)
+        assert.equal(res.body.openQuestions[0].owner._id, tmpModel.owner)
+        assert.equal(res.body.openQuestions[0].question, tmpModel.question)
+        done()
       })
+    })
+
+      it('.delete added question', done => deleteItem(url, `/api/open-question/${tmpModel._id}`, done))
 
     })
 }
