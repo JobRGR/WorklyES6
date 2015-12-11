@@ -1,5 +1,5 @@
 import mongoose from '../index'
-import {removeItem, getCount, randomPopulate, getPopulate, searchPopulate, toJson} from '../../utils/model/helpers'
+import {removeItem, getCount, randomPopulate, getPopulate, searchPopulate} from '../../utils/model/helpers'
 
 let {Schema} = mongoose,
     ObjectId = mongoose.Schema.Types.ObjectId
@@ -55,7 +55,6 @@ schema.statics.searchItem = function(search, callback) {
   return searchPopulate.apply(this, [search, callback, foreignKeys])
 }
 
-schema.methods.toJSON = toJson
 schema.statics.getCount = getCount
 schema.statics.removeItem = removeItem
 
