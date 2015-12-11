@@ -6,20 +6,18 @@ let {Schema} = mongoose,
 
 let schema = new Schema({
   name: {type: String, required: true},
-  about: {type: String, required: true},
+  about: {type: String},
   companyName: {type: ObjectId, required: true, ref: 'CompanyName'},
-  city: {type: ObjectId, required: true, ref: 'City'},
-  skill: [{type: ObjectId, required: true, ref: 'Skill'}],
-  subscriber: [{type: ObjectId, ref: 'Student'}],
-  openQuestion: [{type: ObjectId, ref: 'OpenQuestion'}],
-  testQuestion: [{type: ObjectId, ref: 'TestQuestion'}]
+  city: {type: ObjectId, ref: 'City'},
+  skills: [{type: ObjectId, ref: 'Skill'}],
+  subscribers: [{type: ObjectId, ref: 'Student'}]
 }, { timestamps: true})
 
-const foreignKeys = ['city', 'skill', 'companyName', 'subscriber', 'openQuestion', 'testQuestion']
+const foreignKeys = ['city', 'skills', 'companyName', 'subscribers']
 
-schema.statics.addItem = function ({name, about, city, skill, companyName, openQuestion, testQuestion}, callback) {
+schema.statics.addItem = function ({name, about, city, skills, companyName}, callback) {
   let Vacancy = this
-  let vacancy = new Vacancy({name, about, city, skill, companyName, openQuestion, testQuestion})
+  let vacancy = new Vacancy({name, about, city, skills, companyName})
   vacancy.save(err => callback(err, vacancy))
 }
 
@@ -29,16 +27,14 @@ schema.statics.getItem = function (id, callback) {
 
 schema.statics.updateItem = function (id, update, callback) {
   for (let key in update)
-    if (/name|about|city|skill|openQuestion|testQuestion/.test(key) == false)
+    if (/name|about|city|skills/.test(key) == false)
       delete update[key]
   this.findById(id, (err, vacancy) => {
     for (let key in  update) {
       vacancy[key] =
-        /skill|openQuestion|testQuestion/.test(key) ?
-          update[key].map(value => mongoose.Types.ObjectId(value)) :
-          key == 'city' ?
-            mongoose.Types.ObjectId(update[key]) :
-            update[key]
+        key == 'city' ?
+          mongoose.Types.ObjectId(update[key]) :
+          update[key]
     }
     vacancy.save(err => callback(err, vacancy))
   })
@@ -46,7 +42,7 @@ schema.statics.updateItem = function (id, update, callback) {
 
 schema.statics.addSubscription = function(id, subscriber, callback) {
   this.findById(id, (err, vacancy) => {
-    vacancy.subscriber.push(subscriber)
+    vacancy.subscribers.push(subscriber)
     vacancy.save(err => callback(err, vacancy))
   })
 }
@@ -56,7 +52,7 @@ schema.statics.getRandom = function(callback) {
 }
 
 schema.statics.searchItem = function(search, callback) {
-  return searchPopulate(this, [search, callback, foreignKeys])
+  return searchPopulate.apply(this, [search, callback, foreignKeys])
 }
 
 schema.methods.toJSON = toJson

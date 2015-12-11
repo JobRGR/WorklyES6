@@ -233,6 +233,7 @@ export default (url) => {
       tmpCompany.city = list[index].city.name
       tmpCompany.about = list[index].about
       tmpCompany.site = list[index].site
+      console.log(list[index])
       let req = request(url).put(`${path}-update`)
       agent.attachCookies(req)
       req.send(tmpCompany)
