@@ -6,6 +6,7 @@ import student from './lib/student'
 import company from './lib/company'
 import openQuestion from './lib/open_question'
 import testQuestion from './lib/test_question'
+import vacancy from './lib/vacancy'
 import errorStudent from './error/student'
 import errorCompany from './error/company'
 
@@ -27,7 +28,9 @@ education(url)
 experience(url)
 student(url)
 company(url)
-openQuestion(url)
-testQuestion(url)
+vacancy(url)
 errorStudent(url)
 errorCompany(url)
+testQuestion(url)
+openQuestion(url)
+

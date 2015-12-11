@@ -1,5 +1,7 @@
 import mongoose from '../index'
-import {removeItem, getCount, randomPopulate, getPopulate, getItem, updateItem, getRandom} from '../../utils/model/helpers'
+import Company from '../company'
+import CompanyName from '../company_name'
+import {removeItem, getCount, randomPopulate, getPopulate, searchPopulate, getItem, updateItem, getRandom} from '../../utils/model/helpers'
 
 const foreignKeys = ['owner']
 
@@ -23,23 +25,33 @@ schema.statics.getItem = function (id, callback) {
 }
 
 schema.statics.updateItem = function (id, update, callback) {
-    this.findById(id, (err, question) => {
-        for (let key in  update)
-            question[key] = (key=="owner") ?
-                mongoose.Types.ObjectId(update[key]) :
-                update[key]
-        question.save(err => callback(err, question))
-    })
+    return updateItem.apply(this, [id, update, callback, foreignKeys])
 }
 
 schema.statics.getRandom = function(callback) {
     return randomPopulate.apply(this, [callback, foreignKeys])
 }
 
-schema.statics.searchItem = function(search, callback) {
+schema.statics.searchItems = function(search, callback) {
     return searchPopulate.apply(this, [search, callback, foreignKeys])
 }
 
+schema.statics.getQuestionsByName = function(name, callback) {
+
+    var query  = CompanyName.where({name: name})
+    query.findOne(function (err, kitten) {
+        if (err) return callback(err);
+        if (company) {
+
+        }
+    });
+
+    //CompanyName
+    //    .find({name: name})
+    //    .populate(foreignKeys)
+    //    .sort(sort)
+    //    .exec(callback)
+}
 
 schema.statics.getCount = getCount
 schema.statics.removeItem = removeItem
