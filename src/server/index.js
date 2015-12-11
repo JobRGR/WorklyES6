@@ -3,12 +3,15 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import morgan from 'morgan'
 import routes from './routes'
+import initProcess from './init/process'
 import session from './utils/session_store'
 import studentLoader from './middleware/student'
 import companyLoader from './middleware/company'
 
 const port = process.env.PORT || 3333
 let app = express()
+
+!process.env.test && initProcess() && require('newrelic')
 
 app
   .set('views', `${__dirname}/../../dist`)
@@ -21,10 +24,10 @@ app
   .use(studentLoader)
   .use(companyLoader)
   .use(routes())
-  .use((error, req, res, next) =>
+  .use((err, req, res, next) =>
     res
-      .status(error.status || 500)
-      .send({message: error.message, error}))
+      .status(err.status || 500)
+      .send({message: err.message, err}))
   .listen(port)
 
 console.log(`[server]:${port}`)

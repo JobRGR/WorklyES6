@@ -239,8 +239,8 @@ export default (url) => {
                 .end((err, res) => {
                     assert.equal(res.status, 401)
                     assert.property(res.body, 'message')
-                    assert.property(res.body, 'error')
-                    assert.isObject(res.body.error)
+                    assert.property(res.body, 'err')
+                    assert.isObject(res.body.err)
                     assert.equal(res.body.message, 'Unauthorized.')
                     done()
                 })

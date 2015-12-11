@@ -126,7 +126,7 @@ export default (url, name) => {
         .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, names)
-          assert.include(res.body[names][0].name, query)
+          res.body[names].length && assert.include(res.body[names][0].name, query)
           done()
         })
     })

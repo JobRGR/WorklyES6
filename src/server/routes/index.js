@@ -1,5 +1,6 @@
 import express from 'express'
 import render from '../handler/render'
+import logout from '../handler/logout'
 import Dictionary from './services/dictionary'
 import CompanyName from './services/company_name'
 import Company from './services/company'
@@ -25,8 +26,11 @@ export default () => {
     .use(OpenQuestion)
     .use(TestQuestion)
     .use(Vacancy)
+
   app
     .use('/api', api)
     .get('/', render)
+    .get('/logout', logout)
+
   return app
 }

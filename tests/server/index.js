@@ -15,7 +15,10 @@ const ip = '127.0.0.1'
 const url = `${ip}:${port}`
 
 portscanner.checkPortStatus(port, ip, (error, status) => {
-  (status == 'closed') && require('../../src/server')
+  if (status == 'closed') {
+    process.env.test = true
+    require('../../src/server')
+  }
 })
 
 const microServices = ['speciality', 'university', 'city', 'skill', 'position', 'company-name']
