@@ -48,34 +48,25 @@ schema.statics.searchItem = function(search, callback) {
   return searchPopulate.apply(this, [search, callback, foreignKeys])
 }
 
-schema.statics.addSubscription = function(id, subscriber, callback) {
-  this.checkSubscription(id, subscriber, (err, vacancy, haveSubscription) => {
-    if (haveSubscription) return callback(err, vacancy)
-    vacancy.subscribers.push(subscriber)
-    vacancy.save(err => callback(err, vacancy))
-  })
+schema.statics.addSubscription = function(vacancy, subscriber, callback) {
+  if (this.checkSubscription(vacancy, subscriber))
+    return callback(null, vacancy)
+  vacancy.subscribers.push(subscriber)
+  vacancy.save(err => callback(err, vacancy))
 }
 
-schema.statics.removeSubscription = function(id, subscriber, callback) {
-  this.checkSubscription(id, subscriber, (err, vacancy, haveSubscription) => {
-    if (!haveSubscription) return callback(err, vacancy)
-    vacancy.subscribers.id(subscriber).remove()
-    vacancy.save(err => callback(err, vacancy))
-  })
+schema.statics.removeSubscription = function(vacancy, subscriber, callback) {
+  if (!this.checkSubscription(vacancy, subscriber))
+    return callback(null, vacancy)
+  vacancy.subscribers.pull(subscriber)
+  vacancy.save(err => callback(err, vacancy))
 }
 
-schema.statics.checkSubscription = function(id, subscriber, callback) {
-  this.findById(id, (err, vacancy) => {
-    let haveSubscription = vacancy.subscribers.some(cur => cur.equals(subscriber))
-    callback(err, vacancy, haveSubscription)
-  })
+schema.statics.checkSubscription = function(vacancy, subscriber) {
+  return vacancy.subscribers.some(cur => cur.equals(subscriber))
 }
 
 schema.statics.getCount = getCount
 schema.statics.removeItem = removeItem
-schema.methods.toJSON = function() {
-  let item = this.toObject()
-  return item
-}
 
 export default mongoose.model('Vacancy', schema)

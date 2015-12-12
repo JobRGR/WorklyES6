@@ -45,15 +45,16 @@ handler.updateItem = (req, res, next) => {
 
 handler.addSubscription = (req, res, next) => {
   let id = req._student._id
-  Vacancy.addSubscription(req.params.id, id, (err, vacancy) => nextItem(err, vacancy, res, next))
+  Vacancy.addSubscription(res[name], id, (err, vacancy) => next(err))
 }
 
 handler.removeSubscription = (req, res, next) => {
   let id = req._student._id
-  Vacancy.removeSubscription(req.params.id, id, (err, vacancy) => nextItem(err, vacancy, res, next))
+  Vacancy.removeSubscription(res[name], id, (err, vacancy) => next(err))
 }
 
 handler.inspectItem = (req, res, next) => {
+  res[name] = res[name].toObject()
   if (req._company){
     let id = req._company.name._id
     if (!id.equals(res[name].companyName) && !id.equals(res[name].companyName._id))
@@ -62,17 +63,18 @@ handler.inspectItem = (req, res, next) => {
     let id = req._student._id
     res[name].haveSubscription = res[name].subscribers
       .some(subscriber => id.equals(subscriber) || id.equals(subscriber._id))
+    delete res[name].subscribers
   }
   next()
 }
 
 handler.inspectItems = (req, res, next) => {
+  res[names] = res[names].map(item => item.toObject())
   if (req._company){
     let id = req._company.name._id
-    res[names].forEach((item, index, arr) => {
+    res[names].forEach(item => {
       if (!id.equals(item.companyName) && !id.equals(item.companyName._id)) {
-        arr[index] = arr[index].toObject()
-        delete arr[index].subscribers
+        delete item.subscribers
       }
     })
   } else if (req._student) {
@@ -81,6 +83,7 @@ handler.inspectItems = (req, res, next) => {
       item.haveSubscription = item.subscribers
         .some(subscriber => id.equals(subscriber) || id.equals(subscriber._id))
     })
+    delete item.subscribers
   }
   next()
 }

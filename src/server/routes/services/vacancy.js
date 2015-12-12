@@ -2,13 +2,27 @@ import express from 'express'
 import Vacancy from '../../handler/vacancy'
 import Dictionaries from '../../handler/dictionary'
 import CompanyName from '../../handler/company_name'
-import checkVacancy from '../../middleware/check_vacancy'
+import checkStudent from '../../middleware/check_student'
 import checkCompany from '../../middleware/check_company'
 
 let router = (name, handler) =>
   express()
     .get(`/${name}-count`, handler.getCount)
     .get(`/${name}-random`, handler.getRandom, handler.sendItem)
+    .get(`/${name}-subscribe/:id`,
+      checkStudent,
+      handler.getItem,
+      handler.addSubscription,
+      handler.inspectItem,
+      handler.sendItem
+    )
+    .get(`/${name}-unsubscribe/:id`,
+      checkStudent,
+      handler.getItem,
+      handler.removeSubscription,
+      handler.inspectItem,
+      handler.sendItem
+    )
     .post(`/${name}-search`,
       Dictionaries['City'].searchItems,
       Dictionaries['Skill'].searchItems,
@@ -26,14 +40,21 @@ let router = (name, handler) =>
     )
     .put(`/${name}-update/:id`,
       checkCompany,
-      checkVacancy,
       Dictionaries['City'].addItem,
       Dictionaries['Skill'].addItems,
       handler.updateItem,
       handler.sendItem
     )
-    .get(`/${name}`, handler.getAll, handler.inspectItems, handler.sendItems)
-    .get(`/${name}/:id`, handler.getItem, handler.inspectItem, handler.sendItem)
+    .get(`/${name}`,
+      handler.getAll,
+      handler.inspectItems,
+      handler.sendItems
+    )
+    .get(`/${name}/:id`,
+      handler.getItem,
+      handler.inspectItem,
+      handler.sendItem
+    )
     .post(`/${name}`,    //admin permission
       Dictionaries['City'].addItem,
       Dictionaries['Skill'].addItems,
