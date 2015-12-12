@@ -26,9 +26,9 @@ handler.searchItems = (req, res, next) => {
   let search = {}
   if (req.body.name) search.name = req.body.name
   if (req.body.about) search.about = req.body.about
-  if (res.companyNames.length) search.companyName = {$in: toObjectArray(res.companyNames)}
-  if (res.cities.length) search.city = {$in: toObjectArray(res.cities)}
-  if (res.skills.length) search.skills = {$in: toObjectArray(res.skills)}
+  if (res.companyNames && res.companyNames.length) search.companyName = {$in: toObjectArray(res.companyNames)}
+  if (res.cities && res.cities.length) search.city = {$in: toObjectArray(res.cities)}
+  if (res.skills && res.skills.length) search.skills = {$in: toObjectArray(res.skills)}
   Vacancy.searchItem(search, (err, vacancies) => nextItems(err, vacancies, res, next))
 }
 
