@@ -1,3 +1,4 @@
+import pluralize from 'pluralize'
 import Next from '../utils/handler/helpers/next'
 import Handler from '../utils/handler'
 import getDate from '../utils/get_date'
@@ -5,8 +6,11 @@ import toObjectArray from '../utils/to_object_array'
 import HttpError from '../utils/error'
 import {Vacancy} from '../models/models'
 
-let {nextItem, nextItems} = new Next('vacancy')
-let handler = new Handler('vacancy', Vacancy)
+const name = 'vacancy'
+const names = pluralize(name, 2)
+
+let {nextItem, nextItems} = new Next(name)
+let handler = new Handler(name, Vacancy)
 
 handler.addItem = (req, res, next) => {
   let data = {}
@@ -37,6 +41,48 @@ handler.updateItem = (req, res, next) => {
   if (res.companyName) data.companyName = res.companyName._id
   if (res.skills) data.skills = toObjectArray(res.skills)
   Vacancy.updateItem(req.params.id, data, (err, vacancy) => nextItem(err, vacancy, res, next))
+}
+
+handler.addSubscription = (req, res, next) => {
+  let id = req._student._id
+  Vacancy.addSubscription(req.params.id, id, (err, vacancy) => nextItem(err, vacancy, res, next))
+}
+
+handler.removeSubscription = (req, res, next) => {
+  let id = req._student._id
+  Vacancy.removeSubscription(req.params.id, id, (err, vacancy) => nextItem(err, vacancy, res, next))
+}
+
+handler.inspectItem = (req, res, next) => {
+  if (req._company){
+    let id = req._company.name._id
+    if (!id.equals(res[name].companyName) && !id.equals(res[name].companyName._id))
+      delete res[name].subscribers
+  } else if (req._student) {
+    let id = req._student._id
+    res[name].haveSubscription = res[name].subscribers
+      .some(subscriber => id.equals(subscriber) || id.equals(subscriber._id))
+  }
+  next()
+}
+
+handler.inspectItems = (req, res, next) => {
+  if (req._company){
+    let id = req._company.name._id
+    res[names].forEach((item, index, arr) => {
+      if (!id.equals(item.companyName) && !id.equals(item.companyName._id)) {
+        arr[index] = arr[index].toObject()
+        delete arr[index].subscribers
+      }
+    })
+  } else if (req._student) {
+    let id = req._student._id
+    res[names].forEach(item => {
+      item.haveSubscription = item.subscribers
+        .some(subscriber => id.equals(subscriber) || id.equals(subscriber._id))
+    })
+  }
+  next()
 }
 
 export default handler

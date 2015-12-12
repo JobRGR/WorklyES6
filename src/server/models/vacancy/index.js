@@ -1,5 +1,5 @@
 import mongoose from '../index'
-import {removeItem, getCount, randomPopulate, getPopulate, searchPopulate, toJson} from '../../utils/model/helpers'
+import {removeItem, getCount, randomPopulate, getPopulate, searchPopulate} from '../../utils/model/helpers'
 
 let {Schema} = mongoose,
     ObjectId = mongoose.Schema.Types.ObjectId
@@ -40,13 +40,6 @@ schema.statics.updateItem = function (id, update, callback) {
   })
 }
 
-schema.statics.addSubscription = function(id, subscriber, callback) {
-  this.findById(id, (err, vacancy) => {
-    vacancy.subscribers.push(subscriber)
-    vacancy.save(err => callback(err, vacancy))
-  })
-}
-
 schema.statics.getRandom = function(callback) {
   return randomPopulate.apply(this, [callback, foreignKeys])
 }
@@ -55,8 +48,34 @@ schema.statics.searchItem = function(search, callback) {
   return searchPopulate.apply(this, [search, callback, foreignKeys])
 }
 
-schema.methods.toJSON = toJson
+schema.statics.addSubscription = function(id, subscriber, callback) {
+  this.checkSubscription(id, subscriber, (err, vacancy, haveSubscription) => {
+    if (haveSubscription) return callback(err, vacancy)
+    vacancy.subscribers.push(subscriber)
+    vacancy.save(err => callback(err, vacancy))
+  })
+}
+
+schema.statics.removeSubscription = function(id, subscriber, callback) {
+  this.checkSubscription(id, subscriber, (err, vacancy, haveSubscription) => {
+    if (!haveSubscription) return callback(err, vacancy)
+    vacancy.subscribers.id(subscriber).remove()
+    vacancy.save(err => callback(err, vacancy))
+  })
+}
+
+schema.statics.checkSubscription = function(id, subscriber, callback) {
+  this.findById(id, (err, vacancy) => {
+    let haveSubscription = vacancy.subscribers.some(cur => cur.equals(subscriber))
+    callback(err, vacancy, haveSubscription)
+  })
+}
+
 schema.statics.getCount = getCount
 schema.statics.removeItem = removeItem
+schema.methods.toJSON = function() {
+  let item = this.toObject()
+  return item
+}
 
 export default mongoose.model('Vacancy', schema)

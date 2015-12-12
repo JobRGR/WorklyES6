@@ -75,7 +75,6 @@ export default (url) => {
           assert.property(res.body.vacancy, 'companyName')
           assert.property(res.body.vacancy, 'city')
           assert.property(res.body.vacancy, 'skills')
-          assert.property(res.body.vacancy, 'subscribers')
           assert.equal(res.body.vacancy.name, list[index].name)
           assert.equal(res.body.vacancy.about, list[index].about)
           assert.equal(res.body.vacancy._id, list[index]._id)
@@ -128,7 +127,6 @@ export default (url) => {
           assert.property(res.body.vacancy, 'companyName')
           assert.property(res.body.vacancy, 'city')
           assert.property(res.body.vacancy, 'skills')
-          assert.property(res.body.vacancy, 'subscribers')
           assert.equal(res.body.vacancy._id, tmpModel._id)
           assert.equal(res.body.vacancy.name, tmpVacancy.name)
           assert.equal(res.body.vacancy.about, tmpVacancy.about)
@@ -138,6 +136,24 @@ export default (url) => {
           assert.equal(res.body.vacancy.companyName.name, tmpCompany.name)
           assert.equal(res.body.vacancy.city.name, tmpVacancy.city)
           res.body.vacancy.skills.forEach(({name}) => assert.include(tmpVacancy.skills, name))
+          done()
+        })
+    })
+
+    it('.get list(company permission)', done => {
+      let req = request(url).get(path)
+      agent.attachCookies(req)
+      req
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'vacancies')
+          assert.isAbove(res.body.vacancies.length, 0)
+          res.body.vacancies.forEach(vacancy => {
+            if (vacancy._id == tmpModel._id)
+              assert.property(vacancy, 'subscribers')
+            else
+              assert.notProperty(vacancy, 'subscribers')
+          })
           done()
         })
     })
@@ -162,7 +178,6 @@ export default (url) => {
           assert.property(res.body.vacancy, 'companyName')
           assert.property(res.body.vacancy, 'city')
           assert.property(res.body.vacancy, 'skills')
-          assert.property(res.body.vacancy, 'subscribers')
           assert.equal(res.body.vacancy._id, tmpModel._id)
           assert.equal(res.body.vacancy.name, tmpVacancy.name)
           assert.equal(res.body.vacancy.about, tmpVacancy.about)
@@ -186,7 +201,6 @@ export default (url) => {
           assert.property(res.body.vacancy, 'companyName')
           assert.property(res.body.vacancy, 'city')
           assert.property(res.body.vacancy, 'skills')
-          assert.property(res.body.vacancy, 'subscribers')
           assert.equal(res.body.vacancy._id, tmpModel._id)
           assert.equal(res.body.vacancy.name, tmpVacancy.name)
           assert.equal(res.body.vacancy.about, tmpVacancy.about)

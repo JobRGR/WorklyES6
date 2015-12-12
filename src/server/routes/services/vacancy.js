@@ -14,6 +14,7 @@ let router = (name, handler) =>
       Dictionaries['Skill'].searchItems,
       CompanyName.searchItems,
       handler.searchItems,
+      handler.inspectItems,
       handler.sendItems
     )
     .post(`/${name}-add`,
@@ -31,8 +32,8 @@ let router = (name, handler) =>
       handler.updateItem,
       handler.sendItem
     )
-    .get(`/${name}`, handler.getAll, handler.sendItems)
-    .get(`/${name}/:id`, handler.getItem, handler.sendItem)
+    .get(`/${name}`, handler.getAll, handler.inspectItems, handler.sendItems)
+    .get(`/${name}/:id`, handler.getItem, handler.inspectItem, handler.sendItem)
     .post(`/${name}`,    //admin permission
       Dictionaries['City'].addItem,
       Dictionaries['Skill'].addItems,
