@@ -19,7 +19,7 @@ for (let i = 0; i < 100; i++) {
   })
 }
 
-export default (cb) => async.waterfall([
+export default cb => async.waterfall([
   callback => async.each(data, (item, next) => City.getRandom((err, city) => {
     item.city = city._id
     next()

@@ -11,5 +11,21 @@ import Student from './student'
 import OpenQuestion from './open_question'
 import TestQuestion from './test_question'
 import Vacancy from './vacancy'
+import Admin from './admin'
 
-export default {City, Skill, Speciality, University, Education, Experience, Position, CompanyName, Student, Company, OpenQuestion, TestQuestion, Vacancy}
+export default {
+  City,
+  Admin,
+  Skill,
+  Speciality,
+  University,
+  Education,
+  Experience,
+  Position,
+  CompanyName,
+  Student,
+  Company,
+  OpenQuestion,
+  TestQuestion,
+  Vacancy
+}

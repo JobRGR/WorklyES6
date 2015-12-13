@@ -18,13 +18,12 @@ for (let i = 0; i<100; i++){
     data[i].free = Math.round(Math.random())
 }
 
-
 export default (cb) => {
     async.waterfall([
-            callback => async.each(data, (item, next) => Company.getRandom((err, company) => {
+        callback => async.each(data, (item, next) => Company.getRandom((err, company) => {
             item.owner = company._id
             next()
         }), err => callback()),
-            callback => addArray(TestQuestion, data, err => cb())
+        callback => addArray(TestQuestion, data, err => cb())
     ], err => addArray(TestQuestion, data, cb))
 }

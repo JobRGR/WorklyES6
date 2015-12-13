@@ -156,11 +156,9 @@ const answers =
 
 export default {
   generate: cb => {
-
     const data = questions.map((question, index) => {
       return {question, answer: answers[index%question.length], free: Math.round(Math.random())}
     })
-
     async.waterfall([
       callback => async.each(data, (item, next) => Company.getRandom((err, company) => {
         item.owner = company._id

@@ -6,12 +6,13 @@ import random from '../utils/random'
 
 let data = []
 
-for (let i = 0; i < 50; i++)
+for (let i = 0; i < 50; i++) {
   data.push({
     name: Charlatan.Lorem.sentence(5),
     about: Charlatan.Lorem.text(3, 20, '\n'),
     skills: []
   })
+}
 
 export default (cb) => async.waterfall([
   callback => async.each(data, (item, next) => City.getRandom((err, city) => {

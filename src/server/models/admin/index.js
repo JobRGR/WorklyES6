@@ -1,11 +1,11 @@
 import crypto from 'crypto'
 import mongoose from '../index'
 import HttpError from '../../utils/error'
-import {toJson} from '../../utils/model/helpers'
+import {toJson, removeItem} from '../../utils/model/helpers'
 
 let {Schema} = mongoose
 let schema = new Schema({
-  name: {type: String, required: true},
+  name: {type: String, required: true, unique: true},
   hashedPassword: {type: String, required: true},
   salt: {type: String, required: true}
 }, { timestamps: true})
@@ -45,6 +45,7 @@ schema.statics.addItem = function ({name, password}, callback) {
   admin.save(err => callback(err, admin))
 }
 
+schema.statics.removeItem = removeItem
 schema.methods.toJSON = toJson
 
 export default mongoose.model('Admin', schema)
