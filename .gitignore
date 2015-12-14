@@ -5,3 +5,5 @@ dist/
 .idea/
 newrelic_agent.log
 npm-debug.log
+express_server.log
+

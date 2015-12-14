@@ -29,7 +29,6 @@ handler.getMyQuestions = (req, res, next) => {
     if (!req._company) nextItem(new HttpError(401, "Unauthorized."), null, res, next);
     else{
         const search = {owner : req._company._id}
-        console.log(search)
         OpenQuestion.searchItems(search, (err, questions) => nextItems(err, questions, res, next))
     }
 }
