@@ -40,19 +40,30 @@ schema.statics.updateItem = function (id, update, callback) {
   })
 }
 
-schema.statics.addSubscription = function(id, subscriber, callback) {
-  this.findById(id, (err, vacancy) => {
-    vacancy.subscribers.push(subscriber)
-    vacancy.save(err => callback(err, vacancy))
-  })
-}
-
 schema.statics.getRandom = function(callback) {
   return randomPopulate.apply(this, [callback, foreignKeys])
 }
 
 schema.statics.searchItem = function(search, callback) {
   return searchPopulate.apply(this, [search, callback, foreignKeys])
+}
+
+schema.statics.addSubscription = function(vacancy, subscriber, callback) {
+  if (this.checkSubscription(vacancy, subscriber))
+    return callback(null, vacancy)
+  vacancy.subscribers.push(subscriber)
+  vacancy.save(err => callback(err, vacancy))
+}
+
+schema.statics.removeSubscription = function(vacancy, subscriber, callback) {
+  if (!this.checkSubscription(vacancy, subscriber))
+    return callback(null, vacancy)
+  vacancy.subscribers.pull(subscriber)
+  vacancy.save(err => callback(err, vacancy))
+}
+
+schema.statics.checkSubscription = function(vacancy, subscriber) {
+  return vacancy.subscribers.some(cur => cur.equals(subscriber))
 }
 
 schema.statics.getCount = getCount
