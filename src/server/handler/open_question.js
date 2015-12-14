@@ -12,7 +12,6 @@ let handler = new Handler('openQuestion', OpenQuestion, false, false)
 handler.addCompanyQuestion = (req, res, next) => {
     let data = req.body
     data.owner = req._company._id
-    console.log(data)
     OpenQuestion.addItem(data, (err, item) => nextItem(err, item, res, next))
 }
 
@@ -31,10 +30,7 @@ handler.getMyQuestions = (req, res, next) => {
     else{
         const search = {owner : req._company._id}
         console.log(search)
-        OpenQuestion.searchItems(search, (err, questions) => {
-            console.log('Q:', questions)
-            nextItems(err, questions, res, next)
-        })
+        OpenQuestion.searchItems(search, (err, questions) => nextItems(err, questions, res, next))
     }
 }
 
