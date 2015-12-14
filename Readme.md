@@ -1,6 +1,6 @@
 # GuidMe Blog
 
-It is study project which use React server/client rendaring and Babel-Node
+It is study project which use React server/client rendering and Babel-Node
 
 
 ## Installation
@@ -23,13 +23,4 @@ $ gulp
 ```
 $ npm run debug
 ```
-
-## Checklist
-
-1) Add Model:
-
-- add Schema
-- add Model Generation
-- add api for Model (router (service) and handler)
-- add test fro Api
 
