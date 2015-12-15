@@ -42,6 +42,8 @@ let router = (name, handler) =>
       handler.changeEmail
     )
     .put(`/${name}-email/:id`, handler.initUser, handler.changeEmail)
+    .get(`/${name}-aggregation/1`, handler.aggregation1)
+    .get(`/${name}-aggregation/2`, handler.aggregation2)
     .use(`/${name}`, rest(handler))
 
 export default router('company', Company)

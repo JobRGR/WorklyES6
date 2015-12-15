@@ -18,12 +18,10 @@ export default (cb) => async.waterfall([
     item.city = city._id
     next()
   }), err => callback()),
-  callback => Company.getItem(null, (err, company) => {
-    for (let i = 0; i < data.length; ++i) {
-      data[i].companyName = company[i].name._id
-    }
-    callback()
-  }),
+  callback => async.each(data, (item, next) => Company.getRandom((err, company) => {
+    item.companyName = company.name._id
+    next()
+  }), err => callback()),
   callback => Skill.getItem(null, (err, skills) => {
     for (let i = 0; i < data.length; ++i) {
       let count = Math.floor(Math.random() * 10)

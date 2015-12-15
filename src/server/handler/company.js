@@ -56,6 +56,35 @@ handler.updateItem = (req, res, next) => {
   Company.updateOne(req.company, data, (err, company) => nextItem(err, company, res, next))
 }
 
+handler.aggregation1 = (req, res, next) => {
+  Company
+    .aggregate([{$group:{_id:'$city', total:{$sum: 1}}}, {$sort:{total:-1}}])
+    .exec((err, results) => {
+      Company
+        .populate(results, {path:'_id', model:'City'},  (err, items) => {
+          res.send(items.map(item => ({
+            name: item._id.name,
+            total: item.total
+          })))
+        })
+    })
+}
+
+handler.aggregation2 = (req, res, next) => {
+  Company
+    .aggregate([
+      {$lookup: {from: 'vacancies', localField: 'name', foreignField: 'companyName', as: 'vacancies'}},
+      {$lookup: {from: 'companynames', localField: 'name', foreignField: '_id', as: 'name'}},
+      {$unwind: '$name'},
+      {$project: {name: 1, 'vacancies.skills': {$size: '$vacancies.skills'}}},
+      {$project: {companyName: '$name.name', numberOfVacancies: {$size: '$vacancies'}, skillsPerVacancy: {$sum: '$vacancies.skills'}}},
+      {$sort: {numberOfVacancies: -1}}
+    ])
+    .exec((err, results) => {
+      res.send(results)
+    })
+}
+
 handler.changePassword = (req, res, next) => Company.changePassword(req.company, req.body.password, err => res.send({ok: err || true}))
 handler.changeEmail = (req, res, next) => Company.changeEmail(req.company, req.body.email, err => res.send({ok: err || true}))
 
