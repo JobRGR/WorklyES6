@@ -3,6 +3,8 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import morgan from 'morgan'
 import routes from './routes'
+import winston from 'winston'
+import logger from 'express-logger'
 import initProcess from './init/process'
 import session from './utils/session_store'
 import studentLoader from './middleware/student'
@@ -16,6 +18,7 @@ let app = express()
 app
   .set('views', `${__dirname}/../../dist`)
   .use(express.static(`${__dirname}/../../dist`))
+  .use(logger({path: 'express_server.log'}))
   .use(bodyParser.urlencoded({limit: '50mb', extended: false}))
   .use(bodyParser.json({limit: '50mb'}))
   .use(cookieParser())
