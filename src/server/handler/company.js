@@ -76,8 +76,8 @@ handler.aggregation2 = (req, res, next) => {
       {$lookup: {from: 'vacancies', localField: 'name', foreignField: 'companyName', as: 'vacancies'}},
       {$lookup: {from: 'companynames', localField: 'name', foreignField: '_id', as: 'name'}},
       {$unwind: '$name'},
-      {$project: {name: 1, 'vacancies.skills': {$size: '$vacancies.skills'}}},
-      {$project: {companyName: '$name.name', numberOfVacancies: {$size: '$vacancies'}, skillsPerVacancy: {$sum: '$vacancies.skills'}}},
+      {$project: {name: 1, vacancies: {$map: {input: '$vacancies', as: 'vacancy', in: {$size: '$$vacancy.skills'}}}}},
+      {$project: {companyName: '$name.name', numberOfVacancies: {$size: '$vacancies'}, skillsPerVacancy: {$avg: '$vacancies'}}},
       {$sort: {numberOfVacancies: -1}}
     ])
     .exec((err, results) => {
