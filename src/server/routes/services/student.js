@@ -55,6 +55,7 @@ let router = (name, handler) =>
       handler.initUser,
       handler.changeEmail
     )
+    .get(`/${name}-aggregation`, handler.aggregation)
     .put(`/${name}-email/:id`, handler.initUser, handler.changeEmail)
     .use(`/${name}`, rest(handler))
 

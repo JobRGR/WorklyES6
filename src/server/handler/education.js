@@ -50,4 +50,20 @@ handler.updateStudent = (req, res, next) => {
     (err, educations) => err ? next(err) : Education.addArray(educations, (err, educations) => err ? next(err) : remove(educations)))
 }
 
+handler.aggregation = (req, res, next) => {
+  Education.aggregate([
+    {$match: {
+      start: {$gt: new Date(req.query.min || 0, 0, 0)},
+      end: {$lt: new Date((req.query.max || new Date().getFullYear()) + 1, 0, 0)}}
+    },
+    {$lookup: {from: 'universities', localField: 'university', foreignField: '_id', as: 'university'}},
+    {$group: {
+      _id: {university: "$university.name"},
+      count: {$sum: 1}
+    }},
+    {$sort: { count: -1}}
+  ]).exec((err, cities) =>
+    res.send(cities.map(({_id, count}) => ({university: _id.university[0], total: count}))))
+}
+
 export default handler

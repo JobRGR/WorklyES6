@@ -6,7 +6,7 @@ import CompanyName from '../../handler/company_name'
 import rest from '../../utils/router/helpers/rest'
 
 let router = (name, handler, [handlerFirst, handlerSecond]) => {
-  return express()
+  var api = express()
     .get(`/${name}-count`, handler.getCount)
     .get(`/${name}-random`, handler.getRandom, handler.sendItem)
     .post(`/${name}-search`,
@@ -28,6 +28,8 @@ let router = (name, handler, [handlerFirst, handlerSecond]) => {
       handler.sendItem
     )
     .use(`/${name}`, rest(handler))
+  name == 'education' && api.get('/education-aggregation', handler.aggregation)
+  return api
 }
 
 export default {

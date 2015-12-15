@@ -48,6 +48,18 @@ handler.searchItems = (req, res, next) => {
   Student.searchItem(search, (err, students) => nextItems(err, students, res, next))
 }
 
+handler.aggregation = (req, res, next) => {
+  Student.aggregate([
+    {$lookup: {from: 'cities', localField: 'city', foreignField: '_id', as: 'city'}},
+    {$group: {
+      _id: {city: "$city.name"},
+      count: {$sum: 1}
+    }},
+    {$sort: { count: -1}}
+  ]).exec((err, cities) =>
+    res.send(cities.map(({_id, count}) => ({city: _id.city[0], total: count}))))
+}
+
 handler.updateItem = (req, res, next) => {
   let data = ['dob', 'telephone', 'name', 'about'].reduce((memo, key) => {
     if (req.body[key]) memo[key] = req.body[key]
