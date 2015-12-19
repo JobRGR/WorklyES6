@@ -342,7 +342,7 @@ export default (url) => {
         .end((err, res) => {
           assert.equal(res.status, 200)
           assert.property(res.body, 'students')
-          assert.isAbove(res.body.students.length, 0);
+          assert.isAbove(res.body.students.length, 0)
           res.body.students.forEach((item) => assert.equal(item.city.name, city))
           done()
         })
