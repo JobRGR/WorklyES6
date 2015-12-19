@@ -206,7 +206,7 @@ export default (url) => {
         it('.get questions by companys name', done => {
             const data = {companyName: 'Abweb'}
             request(url)
-                .post(`/api/open-question-byCompanyName`)
+                .post(`/api/open-question-company`)
                 .send(data)
                 .end((err, res) => {
                     assert.equal(res.status, 200)
@@ -223,7 +223,7 @@ export default (url) => {
             list.forEach(el => el.owner && el.owner._id == searchId && searchedById.push(el))
 
             request(url)
-                .get(`/api/open-question-byCompanyId/${searchId}`)
+                .get(`/api/open-question-company/${searchId}`)
                 .end((err, res) => {
                     assert.equal(res.status, 200)
                     assert.property(res.body, 'openQuestions')
@@ -241,7 +241,7 @@ export default (url) => {
                     assert.property(res.body, 'message')
                     assert.property(res.body, 'err')
                     assert.isObject(res.body.err)
-                    assert.equal(res.body.message, 'Unauthorized.')
+                    assert.equal(res.body.message, 'Unauthorized')
                     done()
                 })
         })

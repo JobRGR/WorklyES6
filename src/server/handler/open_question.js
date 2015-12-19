@@ -10,27 +10,18 @@ let handler = new Handler('openQuestion', OpenQuestion, false, false)
 
 
 handler.addCompanyQuestion = (req, res, next) => {
-    let data = req.body
-    data.owner = req._company._id
-    OpenQuestion.addItem(data, (err, item) => nextItem(err, item, res, next))
+    req.body.owner = req._company._id
+    OpenQuestion.addItem(req.body, (err, item) => nextItem(err, item, res, next))
 }
 
-handler.getQuestionsByCompany = (req, res, next) => {
-    const search = {owner: {$in: toObjectArray(res.companies)}}
-    OpenQuestion.searchItems(search, (err, questions) => nextItems(err, questions, res, next))
-}
+handler.getQuestionsByCompany = (req, res, next) => OpenQuestion.searchItems({
+        owner: {$in: toObjectArray(res.companies)}
+    }, (err, questions) => nextItems(err, questions, res, next))
 
-handler.getQuestionsById = (req, res, next) => {
-    const search = {owner : req.params.id}
-    OpenQuestion.searchItems(search, (err, questions) => nextItems(err, questions, res, next))
-}
+handler.getQuestionsById = (req, res, next) => OpenQuestion.searchItems({owner : req.params.id},
+  (err, questions) => nextItems(err, questions, res, next))
 
-handler.getMyQuestions = (req, res, next) => {
-    if (!req._company) nextItem(new HttpError(401, "Unauthorized."), null, res, next);
-    else{
-        const search = {owner : req._company._id}
-        OpenQuestion.searchItems(search, (err, questions) => nextItems(err, questions, res, next))
-    }
-}
+handler.getMyQuestions = (req, res, next) => OpenQuestion.searchItems({owner : req._company._id},
+  (err, questions) => nextItems(err, questions, res, next))
 
 export default handler
