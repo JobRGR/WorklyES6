@@ -2,7 +2,7 @@ import express from 'express'
 import Company from '../../handler/company'
 import Dictionaries from '../../handler/dictionary'
 import CompanyName from '../../handler/company_name'
-import checkCompany from '../../middleware/check_company'
+import checkCompany from '../../middleware/check/company'
 import rest from '../../utils/router/helpers/rest'
 
 let router = (name, handler) =>

@@ -1,4 +1,4 @@
-import Company from '../models/company'
+import Company from '../../../models/company'
 
 export default (req, res, next) => {
   req._company = res.locals._company = null

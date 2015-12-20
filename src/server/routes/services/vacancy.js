@@ -2,8 +2,8 @@ import express from 'express'
 import Vacancy from '../../handler/vacancy'
 import Dictionaries from '../../handler/dictionary'
 import CompanyName from '../../handler/company_name'
-import checkStudent from '../../middleware/check_student'
-import checkCompany from '../../middleware/check_company'
+import checkStudent from '../../middleware/check/student'
+import checkCompany from '../../middleware/check/company'
 
 let router = (name, handler) =>
   express()

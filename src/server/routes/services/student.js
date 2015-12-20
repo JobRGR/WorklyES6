@@ -5,7 +5,7 @@ import CompanyName from '../../handler/company_name'
 import Education from '../../handler/education'
 import Experience from '../../handler/experience'
 import rest from '../../utils/router/helpers/rest'
-import checkStudent from '../../middleware/check_student'
+import checkStudent from '../../middleware/check/student'
 
 let router = (name, handler) =>
   express()
