@@ -14,7 +14,7 @@ for (let i = 0; i < 200; i++) {
   })
 }
 
-export default (cb) => async.waterfall([
+export default cb => async.waterfall([
   callback => async.each(data, (item, next) => Position.getRandom((err, position) => {
     item.position = position._id
     next()

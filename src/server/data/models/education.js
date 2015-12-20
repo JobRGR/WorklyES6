@@ -12,7 +12,7 @@ for (let i = 0; i < 200; i++) {
   })
 }
 
-export default (cb) => async.waterfall([
+export default cb => async.waterfall([
   callback => async.each(data, (item, next) => University.getRandom((err, university) => {
     item.university = university._id
     next()

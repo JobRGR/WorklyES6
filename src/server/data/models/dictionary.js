@@ -33,7 +33,7 @@ const companyName = {
 }
 
 export default {
-  generate: (cb) => {
+  generate: cb => {
     async.each([city, skill, university, speciality, position, companyName], ({name, data}, callback) => {
       addArray(Models[name], data, err => callback())
     }, err => cb(err))
