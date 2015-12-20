@@ -2,6 +2,7 @@ import express from 'express'
 import OpenQuestion from '../../handler/open_question'
 import CompanyNameHandler from '../../handler/company_name'
 import CompanyHandler from '../../handler/company'
+import checkCompany from '../../middleware/check_company'
 import rest from '../../utils/router/helpers/rest'
 
 let router = (handler) => {
@@ -13,15 +14,16 @@ let router = (handler) => {
             handler.getRandom,
             handler.sendItem
         )
-        .get(`/open-question-byCompanyId/:id`,
+        .get(`/open-question-company/:id`,
             handler.getQuestionsById,
             handler.sendItems
         )
         .get(`/open-question-my`,
+            checkCompany,
             handler.getMyQuestions,
             handler.sendItems
         )
-        .post(`/open-question-byCompanyName`,
+        .post(`/open-question-company`,
             CompanyNameHandler.searchItems,
             CompanyHandler.searchItems,
             handler.getQuestionsByCompany,

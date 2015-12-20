@@ -7,6 +7,7 @@ import company from './lib/company'
 import openQuestion from './lib/open_question'
 import testQuestion from './lib/test_question'
 import vacancy from './lib/vacancy'
+import statistic from './lib/statistic'
 import errorStudent from './error/student'
 import errorCompany from './error/company'
 
@@ -33,4 +34,4 @@ errorStudent(url)
 errorCompany(url)
 testQuestion(url)
 openQuestion(url)
-
+statistic(url)
