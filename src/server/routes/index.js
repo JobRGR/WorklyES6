@@ -10,10 +10,10 @@ import OpenQuestion from './services/open_question'
 import TestQuestion from './services/test_question'
 import Statistic from './services/statistics'
 import Vacancy from './services/vacancy'
+import Admin from './services/admin'
 
 
 export default () => {
-  let app = express()
   let api = express.Router()
   const services = ['City', 'Skill', 'University', 'Speciality', 'Position']
   services.forEach(item => api.use(Dictionary[item]))
@@ -25,11 +25,11 @@ export default () => {
     .use(Student)
     .use(OpenQuestion)
     .use(TestQuestion)
-    .use(Statistic())
+    .use(Statistic)
     .use(Vacancy)
-  app
+    .use(Admin)
+  return express()
     .use('/api', api)
     .get('/', render)
     .get('/logout', logout)
-  return app
 }
