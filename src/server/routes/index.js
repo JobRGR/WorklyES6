@@ -27,9 +27,8 @@ export default () => {
     .use(TestQuestion)
     .use(Statistic())
     .use(Vacancy)
-  app
+  return express()
     .use('/api', api)
     .get('/', render)
     .get('/logout', logout)
-  return app
 }

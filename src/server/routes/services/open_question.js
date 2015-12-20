@@ -5,37 +5,18 @@ import CompanyHandler from '../../handler/company'
 import checkCompany from '../../middleware/check/company'
 import rest from '../../utils/router/helpers/rest'
 
-let router = (handler) => {
-    return express()
-        .get(`/open-question-count`,
-            handler.getCount
-        )
-        .get(`/open-question-random`,
-            handler.getRandom,
-            handler.sendItem
-        )
-        .get(`/open-question-company/:id`,
-            handler.getQuestionsById,
-            handler.sendItems
-        )
-        .get(`/open-question-my`,
-            checkCompany,
-            handler.getMyQuestions,
-            handler.sendItems
-        )
-        .post(`/open-question-company`,
-            CompanyNameHandler.searchItems,
-            CompanyHandler.searchItems,
-            handler.getQuestionsByCompany,
-            handler.sendItems
-        )
-        .post(`/open-question-add`,
-            handler.addCompanyQuestion,
-            handler.sendItem
-        )
-        .use(`/open-question`,
-            rest(handler)
-        )
-}
 
-export default router(OpenQuestion)
+export default express()
+  .get('/open-question-count', OpenQuestion.getCount)
+  .get('/open-question-random', OpenQuestion.getRandom, OpenQuestion.sendItem)
+  .get('/open-question-company/:id', OpenQuestion.getQuestionsById, OpenQuestion.sendItems)
+  .get('/open-question-my', checkCompany, OpenQuestion.getMyQuestions, OpenQuestion.sendItems)
+  .post('/open-question-company',
+    CompanyNameHandler.searchItems,
+    CompanyHandler.searchItems,
+    OpenQuestion.getQuestionsByCompany,
+    OpenQuestion.sendItems
+  )
+  .post('/open-question-add', OpenQuestion.addCompanyQuestion, OpenQuestion.sendItem)
+  .use('/open-question', rest(OpenQuestion))
+

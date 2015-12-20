@@ -7,13 +7,12 @@ import Experience from '../../handler/experience'
 import rest from '../../utils/router/helpers/rest'
 import checkStudent from '../../middleware/check/student'
 
-let router = (name, handler) =>
-  express()
-    .get(`/${name}-count`, handler.getCount)
-    .get(`/${name}-random`, handler.getRandom, handler.sendItem)
-    .get(`/${name}-status`, handler.getStudent, handler.sendItem)
-    .post(`/${name}-login`, handler.login, handler.sendItem)
-    .post(`/${name}-search`,
+export default express()
+    .get('/student-count', Student.getCount)
+    .get('/student-random', Student.getRandom, Student.sendItem)
+    .get('/student-status', Student.getStudent, Student.sendItem)
+    .post('/student-login', Student.login, Student.sendItem)
+    .post('/student-search',
       Dictionaries['City'].searchItems,
       Dictionaries['Skill'].searchItems,
       Dictionaries['University'].searchItems,
@@ -22,40 +21,39 @@ let router = (name, handler) =>
       CompanyName.searchItems,
       Education.searchItems,
       Experience.searchItems,
-      handler.searchItems,
-      handler.sendItems
+      Student.searchItems,
+      Student.sendItems
     )
-    .put(`/${name}-update`,
+    .put('/student-update',
       checkStudent,
-      handler.initUser,
+      Student.initUser,
       Dictionaries['City'].addItem,
       Dictionaries['Skill'].addItems,
       Education.updateStudent,
       Experience.updateStudent,
       Student.updateItem,
-      handler.sendItem
+      Student.sendItem
     )
-    .put(`/${name}-update/:id`,
-      handler.initUser,
+    .put('/student-update/:id',
+      Student.initUser,
       Dictionaries['City'].addItem,
       Dictionaries['Skill'].addItems,
       Education.updateStudent,
       Experience.updateStudent,
       Student.updateItem,
-      handler.sendItem
+      Student.sendItem
     )
-    .put(`/${name}-password`,
+    .put('/student-password',
       checkStudent,
-      handler.initUser,
-      handler.changePassword
+      Student.initUser,
+      Student.changePassword
     )
-    .put(`/${name}-password/:id`, handler.initUser, handler.changePassword)
-    .put(`/${name}-email`,
+    .put('/student-password/:id', Student.initUser, Student.changePassword)
+    .put('/student-email',
       checkStudent,
-      handler.initUser,
-      handler.changeEmail
+      Student.initUser,
+      Student.changeEmail
     )
-    .put(`/${name}-email/:id`, handler.initUser, handler.changeEmail)
-    .use(`/${name}`, rest(handler))
+    .put('/student-email/:id', Student.initUser, Student.changeEmail)
+    .use('/student', rest(Student))
 
-export default router('student', Student)
