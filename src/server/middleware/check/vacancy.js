@@ -1,4 +1,4 @@
-import HttpError from '../utils/error'
+import HttpError from '../../utils/error'
 import Vacancy from '../models/vacancy'
 
 export default (req, res, next) =>{

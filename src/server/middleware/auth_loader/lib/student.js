@@ -1,4 +1,4 @@
-import Student from '../models/student'
+import Student from '../../../models/student'
 
 export default (req, res, next) => {
   req._student = res.locals._student = null

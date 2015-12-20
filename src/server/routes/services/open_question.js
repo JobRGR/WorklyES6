@@ -2,7 +2,7 @@ import express from 'express'
 import OpenQuestion from '../../handler/open_question'
 import CompanyNameHandler from '../../handler/company_name'
 import CompanyHandler from '../../handler/company'
-import checkCompany from '../../middleware/check_company'
+import checkCompany from '../../middleware/check/company'
 import rest from '../../utils/router/helpers/rest'
 
 let router = (handler) => {
