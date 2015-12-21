@@ -7,7 +7,7 @@ let schema = new Schema({
   end: {type: Date, required: true},
   speciality: {type: mongoose.Schema.Types.ObjectId, ref: 'Speciality', required: true},
   university: {type: mongoose.Schema.Types.ObjectId, ref: 'University', required: true}
-})
+}, {timestamps: true})
 
 const foreignKeys = ['university', 'speciality']
 

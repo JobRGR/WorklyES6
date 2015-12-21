@@ -5,43 +5,42 @@ import CompanyName from '../../handler/company_name'
 import checkCompany from '../../middleware/check/company'
 import rest from '../../utils/router/helpers/rest'
 
-let router = (name, handler) =>
-  express()
-    .get(`/${name}-count`, handler.getCount)
-    .get(`/${name}-random`, handler.getRandom, handler.sendItem)
-    .get(`/${name}-status`, handler.getCompany, handler.sendItem)
-    .post(`/${name}-login`, handler.login, handler.sendItem)
-    .post(`/${name}-search`,
-      Dictionaries['City'].searchItems,
-      CompanyName.searchItems,
-      handler.searchItems,
-      handler.sendItems
-    )
-    .put(`/${name}-update`,
-      checkCompany,
-      handler.initUser,
-      Dictionaries['City'].addItem,
-      handler.updateItem,
-      handler.sendItem
-    )
-    .put(`/${name}-update/:id`,
-      handler.initUser,
-      Dictionaries['City'].addItem,
-      handler.updateItem,
-      handler.sendItem
-    )
-    .put(`/${name}-password`,
-      checkCompany,
-      handler.initUser,
-      handler.changePassword
-    )
-    .put(`/${name}-password/:id`, handler.initUser, handler.changePassword)
-    .put(`/${name}-email`,
-      checkCompany,
-      handler.initUser,
-      handler.changeEmail
-    )
-    .put(`/${name}-email/:id`, handler.initUser, handler.changeEmail)
-    .use(`/${name}`, rest(handler))
 
-export default router('company', Company)
+export default express()
+  .get('/company-count', Company.getCount)
+  .get('/company-random', Company.getRandom, Company.sendItem)
+  .get('/company-status', Company.getCompany, Company.sendItem)
+  .post('/company-login', Company.login, Company.sendItem)
+  .post('/company-search',
+    Dictionaries['City'].searchItems,
+    CompanyName.searchItems,
+    Company.searchItems,
+    Company.sendItems
+  )
+  .put('/company-update',
+    checkCompany,
+    Company.initUser,
+    Dictionaries['City'].addItem,
+    Company.updateItem,
+    Company.sendItem
+  )
+  .put('/company-update/:id',
+    Company.initUser,
+    Dictionaries['City'].addItem,
+    Company.updateItem,
+    Company.sendItem
+  )
+  .put('/company-password',
+    checkCompany,
+    Company.initUser,
+    Company.changePassword
+  )
+  .put('/company-password/:id', Company.initUser, Company.changePassword)
+  .put('/company-email',
+    checkCompany,
+    Company.initUser,
+    Company.changeEmail
+  )
+  .put('/company-email/:id', Company.initUser, Company.changeEmail)
+  .use('/company', rest(Company))
+

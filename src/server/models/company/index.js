@@ -9,9 +9,7 @@ const foreignKeys = ['name', 'city']
 let {Schema} = mongoose
 let schema = new Schema({
   email: {
-    type: String,
-    required: true,
-    unique: true,
+    type: String, required: true, unique: true,
     match: /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-?[a-zA-Z0-9])*(\.[a-zA-Z](-?[a-zA-Z0-9])*)+$/
   },
   name: {type: mongoose.Schema.Types.ObjectId, required: true, unique: true, ref: 'CompanyName'},
@@ -20,7 +18,7 @@ let schema = new Schema({
   city: {type: mongoose.Schema.Types.ObjectId, ref: 'City'},
   hashedPassword: {type: String, required: true},
   salt: {type: String, required: true}
-}, { timestamps: { createdAt: ''}})
+}, {timestamps: { createdAt: ''}})
 
 schema.path('email').validate((value, callback) => {
   Student.find({email: value}, (err, student)=>{

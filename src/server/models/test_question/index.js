@@ -11,7 +11,7 @@ let schema = new Schema({
     answer: {type: [String], required: true},
     owner: {type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true},
     free: {type: Boolean, required: true}
-})
+}, {timestamps: true})
 
 schema.statics.addItem = function ({question, correct, answer, owner, free}, callback) {
     const TestQuestion = this
