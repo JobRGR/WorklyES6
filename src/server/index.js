@@ -6,6 +6,7 @@ import routes from './routes'
 import logger from 'express-logger'
 import initProcess from './init/process'
 import session from './utils/session_store'
+import errorHandler from './middleware/error_handler'
 import authLoader from './middleware/auth_loader'
 
 const port = process.env.PORT || 3333
@@ -23,11 +24,8 @@ app
   .use(morgan('dev'))
   .use(session)
   .use(authLoader)
-  .use(routes())
-  .use((err, req, res, next) =>
-    res
-      .status(err.status || 500)
-      .send({message: err.message, err}))
+  .use(routes)
+  .use(errorHandler)
   .listen(port)
 
 console.log(`[server]:${port}`)

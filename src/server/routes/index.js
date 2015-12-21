@@ -12,24 +12,23 @@ import Statistic from './services/statistics'
 import Vacancy from './services/vacancy'
 import Admin from './services/admin'
 
+const services = ['City', 'Skill', 'University', 'Speciality', 'Position']
+let api = express.Router()
+services.forEach(item => api.use(Dictionary[item]))
+api
+  .use(Education)
+  .use(Experience)
+  .use(CompanyName)
+  .use(Company)
+  .use(Student)
+  .use(OpenQuestion)
+  .use(TestQuestion)
+  .use(Statistic)
+  .use(Vacancy)
+  .use(Admin)
 
-export default () => {
-  let api = express.Router()
-  const services = ['City', 'Skill', 'University', 'Speciality', 'Position']
-  services.forEach(item => api.use(Dictionary[item]))
-  api
-    .use(Education)
-    .use(Experience)
-    .use(CompanyName)
-    .use(Company)
-    .use(Student)
-    .use(OpenQuestion)
-    .use(TestQuestion)
-    .use(Statistic)
-    .use(Vacancy)
-    .use(Admin)
-  return express()
-    .use('/api', api)
-    .get('/', render)
-    .get('/logout', logout)
-}
+export default express()
+  .use('/api', api)
+  .get('/', render)
+  .get('/logout', logout)
+
