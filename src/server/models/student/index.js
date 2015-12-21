@@ -23,7 +23,7 @@ let schema = new Schema({
   city: {type: mongoose.Schema.Types.ObjectId, ref: 'City'},
   hashedPassword: {type: String, required: true},
   salt: {type: String, required: true}
-}, { timestamps: true})
+}, {timestamps: true})
 
 const foreignKeys = ['educations.speciality', 'experiences.companyName', 'educations.university', 'experiences.position', 'city', 'skills']
 

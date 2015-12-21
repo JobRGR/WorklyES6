@@ -11,7 +11,7 @@ let schema = new Schema({
   city: {type: ObjectId, ref: 'City'},
   skills: [{type: ObjectId, ref: 'Skill'}],
   subscribers: [{type: ObjectId, ref: 'Student'}]
-}, { timestamps: true})
+}, {timestamps: true})
 
 const foreignKeys = ['city', 'skills', 'companyName', 'subscribers']
 
