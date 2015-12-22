@@ -3,7 +3,7 @@ var webpack = require('webpack')
 var buildDefinition = {
   entry: './src/client/index.js',
   output: {
-    path: './dist/js',
+    path: './dist/client/js',
     filename: 'bundle.js',
     devtoolModuleFilenameTemplate: '[resource-path]',
     publicPath: '/js/'
