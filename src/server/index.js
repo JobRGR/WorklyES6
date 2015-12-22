@@ -15,8 +15,8 @@ let app = express()
 !process.env.test && initProcess() && require('newrelic')
 
 app
-  .set('views', `${__dirname}/../../dist`)
-  .use(express.static(`${__dirname}/../../dist`))
+  .set('views', `${__dirname}/../../dist/client`)
+  .use(express.static(`${__dirname}/../../dist/client`))
   .use(logger({path: 'express_server.log'}))
   .use(bodyParser.urlencoded({limit: '50mb', extended: false}))
   .use(bodyParser.json({limit: '50mb'}))

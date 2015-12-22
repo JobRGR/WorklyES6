@@ -42,13 +42,13 @@ gulp.task('client', function (done) {
 gulp.task('img:client', function () {
   gulp.src(searchImgClient)
     .pipe(rename(function (path) { path.dirname = '' }))
-    .pipe(gulp.dest('./dist/img/'))
+    .pipe(gulp.dest('./dist/client/img/'))
 })
 
 gulp.task('html', function() {
   return gulp.src(html)
     .pipe(rename(function (path) { path.dirname = '' }))
-    .pipe(gulp.dest('./dist'))
+    .pipe(gulp.dest('./dist/client'))
 })
 
 
@@ -57,7 +57,7 @@ gulp.task('img:server', function () {
     .pipe(rename(function (path) {
       path.dirname = ''
     }))
-    .pipe(gulp.dest('./dist/img_server'))
+    .pipe(gulp.dest('./dist/client/img_server'))
 })
 
 gulp.task('img', ['img:client', 'img:server'])
@@ -68,7 +68,7 @@ gulp.task('style', function () {
     .pipe(autoprefixer(autoprefixerBrowsers))
     .pipe(minifyCSS())
     .pipe(concat('bundle.css'))
-    .pipe(gulp.dest('./dist/css/'))
+    .pipe(gulp.dest('./dist/client/css/'))
 })
 
 gulp.task('server', function (done) {
@@ -105,7 +105,7 @@ gulp.task('watch', function() {
 })
 
 gulp.task('clean', function(cb) {
-  del(['dist/'], cb)
+  del(['dist/client/'], cb)
 })
 
 gulp.task('build', ['clean'], function() {
