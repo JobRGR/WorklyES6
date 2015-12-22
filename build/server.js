@@ -5,9 +5,7 @@ var babelNode = './node_modules/.bin/babel-node '
 var inspector = './node_modules/.bin/node-inspector --web-port=8084'
 var server = './src/server '
 
-function next (done) {
-  done()
-}
+function next (done) { done() }
 
 gulp.task('server', function (done) {
   sh.exec(babelNode + server, next.bind(this, done))

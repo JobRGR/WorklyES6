@@ -21,14 +21,10 @@ var autoprefixerBrowsers = [
 
 var dist = './dist/client/'
 var src =  './src/client/'
-
 var img = src + '**/*.{png,jpg,woff,eof,svg,gif}'
 var style = src + '**/*.styl'
 var js = src + '**/*.js'
 var html = src + 'index.html'
-
-console.log(style, js, html)
-
 var rewrite = function (path) { path.dirname = '' }
 
 gulp.task('js', function (done) {
@@ -68,7 +64,6 @@ gulp.task('html', function() {
     .pipe(gulp.dest(dist))
 })
 
-
 gulp.task('style', function () {
   return gulp.src(style)
     .pipe(stylus())
@@ -89,4 +84,3 @@ gulp.task('watch', function() {
 })
 
 gulp.task('client', ['js', 'style', 'img', 'html', 'watch'])
-
