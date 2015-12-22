@@ -19,15 +19,15 @@ var autoprefixerBrowsers = [
   'bb >= 10'
 ]
 
-var dist = './dist/client/'
-var src =  './src/client/'
+var dist = './dist/admin/'
+var src =  './src/admin/'
 var img = src + '**/*.{png,jpg,woff,eof,svg,gif}'
 var style = src + '**/*.styl'
 var js = src + '**/*.js'
 var html = src + 'index.html'
 var rewrite = function (path) { path.dirname = '' }
 
-gulp.task('js', function (done) {
+gulp.task('admin:js', function (done) {
   var config = {
     entry: src + 'index.js',
     output: {
@@ -52,19 +52,19 @@ gulp.task('js', function (done) {
 })
 
 
-gulp.task('img', function () {
+gulp.task('admin:img', function () {
   return gulp.src(img)
     .pipe(rename(rewrite))
     .pipe(gulp.dest(dist + 'img'))
 })
 
-gulp.task('html', function() {
+gulp.task('admin:html', function() {
   return gulp.src(html)
-    .pipe(rename(rewrite))
+    .pipe(rename(rename(rewrite)))
     .pipe(gulp.dest(dist))
 })
 
-gulp.task('style', function () {
+gulp.task('admin:style', function () {
   return gulp.src(style)
     .pipe(stylus())
     .pipe(autoprefixer(autoprefixerBrowsers))
@@ -73,14 +73,14 @@ gulp.task('style', function () {
     .pipe(gulp.dest(dist + 'css'))
 })
 
-gulp.task('watch', function() {
+gulp.task('admin:watch', function() {
   function start(name) {
     gulp.start(name)
   }
-  watch(style, start.bind(this, 'style'))
-  watch(img, start.bind(this, 'img'))
-  watch(html, start.bind(this, 'html'))
-  watch(js, start.bind(this, 'js'))
+  watch(style, start.bind(this, 'admin:style'))
+  watch(img, start.bind(this, 'admin:img'))
+  watch(html, start.bind(this, 'admin:html'))
+  watch(js, start.bind(this, 'admin:js'))
 })
 
-gulp.task('client', ['js', 'style', 'img', 'html', 'watch'])
+gulp.task('admin', ['admin:js', 'admin:style', 'admin:img', 'admin:html', 'admin:watch'])

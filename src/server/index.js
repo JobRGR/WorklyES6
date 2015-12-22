@@ -2,8 +2,9 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import morgan from 'morgan'
-import routes from './routes'
 import logger from 'express-logger'
+import ejs from 'ejs'
+import routes from './routes'
 import initProcess from './init/process'
 import session from './utils/session_store'
 import errorHandler from './middleware/error_handler'
@@ -15,8 +16,9 @@ let app = express()
 !process.env.test && initProcess() && require('newrelic')
 
 app
-  .set('views', `${__dirname}/../../dist/client`)
-  .use(express.static(`${__dirname}/../../dist/client`))
+  .engine('html', ejs.renderFile)
+  .use(express.static(`${__dirname}/../../dist/`))
+  .use(express.static(`${__dirname}/node_modules/`))
   .use(logger({path: 'express_server.log'}))
   .use(bodyParser.urlencoded({limit: '50mb', extended: false}))
   .use(bodyParser.json({limit: '50mb'}))

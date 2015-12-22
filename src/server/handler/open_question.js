@@ -19,11 +19,11 @@ handler.getQuestionsByCompany = (req, res, next) =>
     (err, questions) => nextItems(err, questions, res, next))
 
 handler.getQuestionsById = (req, res, next) =>
-  OpenQuestion.searchItems({owner : req.params.id},
+  OpenQuestion.searchItems({owner: req.params.id},
     (err, questions) => nextItems(err, questions, res, next))
 
 handler.getMyQuestions = (req, res, next) =>
-  OpenQuestion.searchItems({owner : req._company._id},
+  OpenQuestion.searchItems({owner: req._company._id},
     (err, questions) => nextItems(err, questions, res, next))
 
 export default handler

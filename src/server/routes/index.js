@@ -29,6 +29,7 @@ api
 
 export default express()
   .use('/api', api)
-  .get('/', render)
+  .get('/', render.app)
+  .get('/admin', render.admin)
   .get('/logout', logout)
 
