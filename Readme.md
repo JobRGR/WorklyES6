@@ -11,11 +11,16 @@ Install all dependencies.
 $ npm install
 ```
 
+## Run app
+
+```
+$ npm run start
+```
 
 ## Development
 
 ```
-$ gulp
+$ npm run build
 ```
 
 ## Debug
