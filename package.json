@@ -61,8 +61,8 @@
     "test": "./node_modules/.bin/mocha --compilers js:babel/register ./tests/server",
     "db": "./node_modules/.bin/babel-node ./src/server/data",
     "postinstall": "./node_modules/.bin/gulp build",
-    "dev": "./node_modules/.bin/gulp",
-    "debug": "./node_modules/.bin/gulp debug",
+    "build": "./node_modules/.bin/gulp",
+    "debug": "./node_modules/.bin/gulp dev",
     "start": "./node_modules/.bin/babel-node ./src/server"
   }
 }
