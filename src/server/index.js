@@ -1,16 +1,18 @@
 import express from 'express'
 import bodyParser from 'body-parser'
+import config from './config'
 import cookieParser from 'cookie-parser'
 import morgan from 'morgan'
 import logger from 'express-logger'
 import ejs from 'ejs'
+import lusca from 'lusca'
 import routes from './routes'
 import initProcess from './init/process'
 import session from './utils/session_store'
 import errorHandler from './middleware/error_handler'
 import authLoader from './middleware/auth_loader'
 
-const port = process.env.PORT || 3333
+const port = process.env.PORT || config.port
 let app = express()
 
 !process.env.test && initProcess() && require('newrelic')
@@ -25,6 +27,7 @@ app
   .use(cookieParser())
   .use(morgan('dev'))
   .use(session)
+  .use(lusca(config.security))
   .use(authLoader)
   .use(routes)
   .use(errorHandler)

@@ -17,5 +17,14 @@ export default {
     logging: {
       level: 'trace'
     }
+  },
+  port: 3333,
+  security: {
+    hsts: {
+      maxAge: 31536000,
+      includeSubDomains: true,
+      preload: true
+    },
+    xssProtection: true
   }
 }
