@@ -12,6 +12,7 @@ class DictionaryService extends Events {
     this.api = api
     this.items = []
     this.loading = null
+    this.timer = null
   }
 
   loadAll() {
@@ -25,14 +26,21 @@ class DictionaryService extends Events {
       .catch(err => this.setError(err))
   }
 
-  editItem(id) {
-    console.log(this.items.filter(({_id}) => _id == id))
+  editItem(id, name) {
+    this.api.updateItem(id, {name})
   }
 
-  removeItem(id) {
-    this.api
-      .removeItem(id)
-      .then(({data = {}}) => data.ok && this.setItems(this.items.filter(({_id}) => _id != id)))
+  removeItem(id, duration) {
+    this.timer = setTimeout(() => this.api.removeItem(id), duration)
+    let {items} = this
+    let {item, index} = items.reduce((memo, item, index) => item._id == id ? {item, index} : memo, {})
+    items = items.filter(({_id}) => _id != id)
+    this.setItems(items)
+    return () => {
+      items.splice(index, 0, item)
+      this.setItems(items)
+      clearInterval(this.timer)
+    }
   }
 
   setError(err = {}) {

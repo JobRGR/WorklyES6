@@ -20,11 +20,10 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    if (this.state.admin) return null
     AdminService.onError(this.onError)
     AdminService.onLoading(this.onLoading)
     AdminService.onLoaded(this.onLoaded)
-    AdminService.load()
+    !this.state.admin && AdminService.load()
   },
 
   onError(error) {

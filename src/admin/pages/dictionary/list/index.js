@@ -11,7 +11,9 @@ import IconButton from 'material-ui/lib/icon-button'
 import FlatButton from 'material-ui/lib/flat-button'
 import ModeEdit from 'material-ui/lib/svg-icons/editor/mode-edit'
 import Delete from 'material-ui/lib/svg-icons/action/delete'
+import Snackbar from 'material-ui/lib/snackbar'
 import Loader from '../../../components/loader'
+import capitalize from '../../../tools/capitalize'
 
 
 export default React.createClass({
@@ -21,16 +23,17 @@ export default React.createClass({
       loading: false,
       error: null,
       count: 20,
-      search: ''
+      search: '',
+      open: false,
+      duration: 5000
     }
   },
 
   componentWillMount() {
-    if (this.state.items.length) return null
     this.props.Api.onLoaded(this.onLoaded)
     this.props.Api.onLoading(this.onLoading)
     this.props.Api.onError(this.onError)
-    this.props.Api.loadAll()
+    !this.state.items.length && this.props.Api.loadAll()
   },
 
 
@@ -59,11 +62,23 @@ export default React.createClass({
   },
 
   editItem(id) {
-    this.props.Api.editItem(id)
+
   },
 
   removeItem(id) {
-    this.props.Api.removeItem(id)
+    this.undo = this.props.Api.removeItem(id, this.state.duration)
+    this.setState({open: true})
+    setTimeout(this.handleRequestClose, this.state.duration)
+  },
+
+  handleRequestClose() {
+    delete this.undo
+    this.setState({open: false})
+  },
+
+  handleActionTouchTap() {
+    this.undo()
+    this.handleRequestClose()
   },
 
   list() {
@@ -114,6 +129,7 @@ export default React.createClass({
   },
 
   render() {
+    const name = capitalize(this.props.name.toLowerCase())
     return (
       <div>
         <div style={{height: 100}}>
@@ -127,7 +143,7 @@ export default React.createClass({
             {this.props.name}
           </span>
           <TextField
-            hintText={`Search ${this.props.name.toLowerCase()}`}
+            hintText={`Search ${name.toLowerCase()}`}
             floatingLabelText='Search'
             inputStyle={{marginLeft: 5}}
             hintStyle={{marginLeft: 5}}
@@ -138,6 +154,14 @@ export default React.createClass({
         </div>
         {this.state.loading && <Loader />}
         {!this.state.loading && this.state.items.length > 0 && this.list()}
+        <Snackbar
+          open={this.state.open}
+          message={`${name} was removed`}
+          action='undo'
+          autoHideDuration={this.state.duration}
+          onActionTouchTap={this.handleActionTouchTap}
+          onRequestClose={this.handleRequestClose}
+        />
       </div>
     )
   }
