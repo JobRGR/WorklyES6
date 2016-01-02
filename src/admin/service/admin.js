@@ -1,7 +1,7 @@
-import {EventEmitter} from 'events'
+import Events from './events'
 import AdminApi from '../../client_api/api/admin'
 
-class AdminService extends EventEmitter {
+class AdminService extends Events {
   constructor() {
     super()
     this.admin = null
@@ -41,30 +41,6 @@ class AdminService extends EventEmitter {
 
   get cachedAdmin() {
     return this.admin
-  }
-
-  onLoaded(cb) {
-    this.on('loaded', cb)
-  }
-
-  onError(cb) {
-    this.on('error', cb)
-  }
-
-  onLoading(cb) {
-    this.on('loading', cb)
-  }
-
-  removeLoadedListener(cb) {
-    this.removeListener('loaded', cb)
-  }
-
-  removeErrorListener(cb) {
-    this.removeListener('error', cb)
-  }
-
-  removeLoadingListener(cb) {
-    this.removeListener('loading', cb)
   }
 }
 

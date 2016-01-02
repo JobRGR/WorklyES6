@@ -1,5 +1,5 @@
 import React from 'react'
-import CircularProgress from 'material-ui/lib/circular-progress'
+import Loader from '../components/loader'
 import Header from '../components/header'
 import AdminService from '../service/admin'
 import SignIn from './signin'
@@ -45,19 +45,7 @@ export default React.createClass({
         <Header admin={this.state.admin} />
         {this.state.admin && !this.state.loading && this.props.children}
         {!this.state.admin && !this.state.loading && <SignIn />}
-        {
-          this.state.loading &&
-          <CircularProgress
-            mode='indeterminate'
-            size={1.5}
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)'
-            }}
-          />
-        }
+        {this.state.loading && <Loader absolute />}
       </div>
     )
   }
