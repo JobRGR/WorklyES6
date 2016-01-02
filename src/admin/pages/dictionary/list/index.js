@@ -1,5 +1,4 @@
 import React from 'react'
-import PureRenderMixin from 'react-addons-pure-render-mixin'
 import TextField from 'material-ui/lib/TextField/TextField'
 import Table from 'material-ui/lib/table/table'
 import TableBody from 'material-ui/lib/table/table-body'
@@ -8,13 +7,14 @@ import TableFooter from 'material-ui/lib/table/table-footer'
 import TableHeaderColumn from 'material-ui/lib/table/table-header-column'
 import TableRow from 'material-ui/lib/table/table-row'
 import TableRowColumn from 'material-ui/lib/table/table-row-column'
+import IconButton from 'material-ui/lib/icon-button'
 import FlatButton from 'material-ui/lib/flat-button'
+import ModeEdit from 'material-ui/lib/svg-icons/editor/mode-edit'
+import Delete from 'material-ui/lib/svg-icons/action/delete'
 import Loader from '../../../components/loader'
 
 
 export default React.createClass({
-  mixins: [PureRenderMixin],
-
   getInitialState() {
     return {
       items: this.props.Api.cachedItems,
@@ -58,11 +58,16 @@ export default React.createClass({
     this.setState({search: event.target.value, count: 20})
   },
 
-  getCount() {
-    return this.state.items.reduce((memo, {name}) => name.indexOf(this.state.search) > -1 ? ++memo : memo, 0)
+  editItem(id) {
+    this.props.Api.editItem(id)
+  },
+
+  removeItem(id) {
+    this.props.Api.removeItem(id)
   },
 
   list() {
+    const items = this.state.items.filter(({name}) => name.indexOf(this.state.search) > -1)
     return (
       <div>
         <Table>
@@ -71,25 +76,32 @@ export default React.createClass({
               <TableHeaderColumn tooltip='Number'>№</TableHeaderColumn>
               <TableHeaderColumn tooltip='Id'>Id</TableHeaderColumn>
               <TableHeaderColumn tooltip={this.props.name}>{this.props.name}</TableHeaderColumn>
+              <TableHeaderColumn tooltip='Edit'>Edit</TableHeaderColumn>
+              <TableHeaderColumn tooltip='Delete'>Delete</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody showRowHover={true} stripedRows={false} displayRowCheckbox={false}>
             {
-              this.state.items
-                .filter(({name}) => name.indexOf(this.state.search) > -1)
+              items
                 .slice(0, this.state.count)
                 .map(({_id, name}, index) => (
                   <TableRow key={index}>
                     <TableRowColumn>{index + 1}</TableRowColumn>
                     <TableRowColumn>{_id}</TableRowColumn>
                     <TableRowColumn>{name}</TableRowColumn>
+                    <TableRowColumn>
+                      <IconButton onTouchTap={() => this.editItem(_id)}><ModeEdit /></IconButton>
+                    </TableRowColumn>
+                    <TableRowColumn>
+                      <IconButton onTouchTap={() => this.removeItem(_id)}><Delete /></IconButton>
+                    </TableRowColumn>
                   </TableRow>
                 ))
             }
           </TableBody>
         </Table>
         {
-          this.state.count < this.getCount() &&
+          this.state.count < items.length &&
           <FlatButton
             label='More'
             secondary

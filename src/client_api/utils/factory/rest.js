@@ -2,7 +2,7 @@ import request from '../request'
 
 class Rest {
   constructor(name) {
-    this.path = `/api/${name}/`
+    this.path = `/api/${name}`
   }
 
   getAll() {
@@ -23,7 +23,7 @@ class Rest {
 
   updateItem(id, body) {
     return request({
-      url: `${this.path}${id}`,
+      url: `${this.path}/${id}`,
       method: 'put',
       body
     })
@@ -38,7 +38,7 @@ class Rest {
 
   removeItem(id) {
     return request({
-      url: `${this.path}${id}`,
+      url: `${this.path}/${id}`,
       method: 'delete'
     })
   }

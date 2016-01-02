@@ -25,6 +25,16 @@ class DictionaryService extends Events {
       .catch(err => this.setError(err))
   }
 
+  editItem(id) {
+    console.log(this.items.filter(({_id}) => _id == id))
+  }
+
+  removeItem(id) {
+    this.api
+      .removeItem(id)
+      .then(({data = {}}) => data.ok && this.setItems(this.items.filter(({_id}) => _id != id)))
+  }
+
   setError(err = {}) {
     console.log(err)
     this.items.length == 0 && this.setItems()

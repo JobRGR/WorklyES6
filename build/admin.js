@@ -11,6 +11,7 @@ var img = src + '**/*.{png,jpg,woff,eof,svg,gif}'
 var style = src + '**/*.styl'
 var js = src + '**/*.js'
 var html = src + 'index.html'
+var clientApi = './src/client_api'
 
 gulp.task('admin:js', scriptBuild.bind(this, src, dist))
 gulp.task('admin:img', imageBuild.bind(this, img, dist))
@@ -25,6 +26,7 @@ gulp.task('admin:watch', function() {
   watch(img, start.bind(this, 'admin:img'))
   watch(html, start.bind(this, 'admin:html'))
   watch(js, start.bind(this, 'admin:js'))
+  watch(clientApi, start.bind(this, 'admin:js'))
 })
 
 gulp.task('admin', ['admin:js', 'admin:style', 'admin:img', 'admin:html', 'admin:watch'])

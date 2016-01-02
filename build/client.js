@@ -11,6 +11,7 @@ var img = src + '**/*.{png,jpg,woff,eof,svg,gif}'
 var style = src + '**/*.styl'
 var js = src + '**/*.js'
 var html = src + 'index.html'
+var clientApi = './src/client_api'
 
 gulp.task('js', scriptBuild.bind(this, src, dist))
 gulp.task('img', imageBuild.bind(this, img, dist))
@@ -25,6 +26,7 @@ gulp.task('watch', function() {
   watch(img, start.bind(this, 'img'))
   watch(html, start.bind(this, 'html'))
   watch(js, start.bind(this, 'js'))
+  watch(clientApi, start.bind(this, 'js'))
 })
 
 gulp.task('client', ['js', 'style', 'img', 'html', 'watch'])
