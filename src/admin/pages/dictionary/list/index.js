@@ -77,7 +77,8 @@ export default React.createClass({
             {
               this.state.items
                 .filter(({name}) => name.indexOf(this.state.search) > -1)
-                .slice(0, this.state.count).map(({_id, name}, index) => (
+                .slice(0, this.state.count)
+                .map(({_id, name}, index) => (
                   <TableRow key={index}>
                     <TableRowColumn>{index + 1}</TableRowColumn>
                     <TableRowColumn>{_id}</TableRowColumn>
