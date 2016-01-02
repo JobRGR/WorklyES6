@@ -1,4 +1,5 @@
 import React from 'react'
+import CircularProgress from 'material-ui/lib/circular-progress'
 import Header from '../components/header'
 import AdminService from '../service/admin'
 import SignIn from './signin'
@@ -42,7 +43,21 @@ export default React.createClass({
     return (
       <div>
         <Header admin={this.state.admin} />
-        {this.state.admin ? this.props.children : <SignIn />}
+        {this.state.admin && !this.state.loading && this.props.children}
+        {!this.state.admin && !this.state.loading && <SignIn />}
+        {
+          this.state.loading &&
+          <CircularProgress
+            mode='indeterminate'
+            size={1.5}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)'
+            }}
+          />
+        }
       </div>
     )
   }

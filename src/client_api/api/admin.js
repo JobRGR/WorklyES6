@@ -16,6 +16,10 @@ class AdminApi {
       body
     })
   }
+
+  logout() {
+    return request({url: '/logout'})
+  }
 }
 
 export default new AdminApi()

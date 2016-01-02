@@ -14,12 +14,18 @@ class AdminService extends EventEmitter {
     this.emit('loading')
     AdminApi
       .status()
-      .then(res => this.setAdmin(res.admin))
+      .then(({data = {}}) => this.setAdmin(data.admin))
       .catch(err => this.setError(err))
   }
 
   login({name, password}) {
     return AdminApi.login({name, password})
+  }
+
+  logout() {
+    return AdminApi
+      .logout()
+      .then(({data}) => data.logout && this.setAdmin())
   }
 
   setError({data}) {

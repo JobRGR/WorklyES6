@@ -1,12 +1,61 @@
 import React from 'react'
 import AppBar from 'material-ui/lib/app-bar'
+import IconButton from 'material-ui/lib/icon-button'
+import FlatButton from 'material-ui/lib/flat-button'
+import Menu from 'material-ui/lib/svg-icons/navigation/menu'
+import LeftNav from 'material-ui/lib/left-nav'
+import MenuItem from 'material-ui/lib/menus/menu-item'
+import RaisedButton from 'material-ui/lib/raised-button'
+import AdminService from '../../service/admin'
 
 export default React.createClass({
+  getInitialState() {
+   return {open: false}
+  },
+
+  handleToggle() {
+    this.setState({open: !this.state.open})
+  },
+
+  handleClose() {
+    this.setState({open: false})
+  },
+
+  logout() {
+    AdminService.logout()
+  },
+
+  nav() {
+    return (
+      <div>
+        <IconButton
+          iconStyle={{
+            fill: '#fff',
+            color: '#fff'
+           }}
+          onTouchTap={this.handleToggle}
+        >
+          <Menu />
+        </IconButton>
+        <LeftNav
+          docked={false}
+          width={300}
+          open={this.state.open}
+          onRequestChange={open => this.setState({open})}
+        >
+          <MenuItem onTouchTap={this.handleClose}>Menu Item</MenuItem>
+          <MenuItem onTouchTap={this.handleClose}>Menu Item 2</MenuItem>
+        </LeftNav>
+      </div>
+    )
+  },
+
   render() {
     return (
       <AppBar
         title='Admin'
-        iconClassNameRight='muidocs-icon-navigation-expand-more'
+        iconElementLeft={this.props.admin && this.nav()}
+        iconElementRight={this.props.admin && <FlatButton label='Log Out' onClick={this.logout} />}
       />
     )
   }

@@ -2,15 +2,18 @@ import React from 'react'
 import Card from 'material-ui/lib/card/card'
 import CardHeader from 'material-ui/lib/card/card-header'
 import TextField from 'material-ui/lib/TextField/TextField'
+import RefreshIndicator from 'material-ui/lib/refresh-indicator'
 import FlatButton from 'material-ui/lib/flat-button'
 import AdminService from '../../service/admin'
+
 
 export default React.createClass({
   getInitialState() {
     return {
       name: '',
       password: '',
-      error: null
+      error: null,
+      loading: false
     }
   },
 
@@ -19,13 +22,15 @@ export default React.createClass({
   },
 
   handleClick() {
+    this.setState({loading: true})
     AdminService
       .login(this.state)
-      .then(({data}) => {
-        if (data.admin) AdminService.setAdmin(data.admin)
-        else this.setState({error: true})
-      })
-      .then(() => this.setState({error: true}))
+      .then(({data}) => data.admin ? AdminService.setAdmin(data.admin) : this.setError())
+      .then(() => this.setError())
+  },
+
+  setError() {
+    this.setState({error: true, loading: false})
   },
 
   render() {
@@ -35,6 +40,20 @@ export default React.createClass({
         width: 600,
         margin: '80px auto 0'
       }}>
+        {
+          this.state.loading &&
+          <RefreshIndicator
+            size={40}
+            style={{
+              float: 'right',
+              position: 'relative',
+              boxShadow: 'none'
+            }}
+            top={0}
+            left={0}
+            status='loading'
+          />
+        }
         <CardHeader
           title='Sign In'
           titleStyle={{fontSize: '30px'}}
