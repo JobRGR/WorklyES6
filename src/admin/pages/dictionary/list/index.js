@@ -73,11 +73,11 @@ export default React.createClass({
         <Table>
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
-              <TableHeaderColumn tooltip='Number'>№</TableHeaderColumn>
+              <TableHeaderColumn tooltip='Number' style={{width: '10%'}}>№</TableHeaderColumn>
               <TableHeaderColumn tooltip='Id'>Id</TableHeaderColumn>
               <TableHeaderColumn tooltip={this.props.name}>{this.props.name}</TableHeaderColumn>
-              <TableHeaderColumn tooltip='Edit'>Edit</TableHeaderColumn>
-              <TableHeaderColumn tooltip='Delete'>Delete</TableHeaderColumn>
+              <TableHeaderColumn tooltip='Edit' style={{width: '15%'}}>Edit</TableHeaderColumn>
+              <TableHeaderColumn tooltip='Delete' style={{width: '15%'}}>Delete</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody showRowHover={true} stripedRows={false} displayRowCheckbox={false}>
@@ -86,13 +86,13 @@ export default React.createClass({
                 .slice(0, this.state.count)
                 .map(({_id, name}, index) => (
                   <TableRow key={index}>
-                    <TableRowColumn>{index + 1}</TableRowColumn>
+                    <TableRowColumn style={{width: '10%'}}>{index + 1}</TableRowColumn>
                     <TableRowColumn>{_id}</TableRowColumn>
                     <TableRowColumn>{name}</TableRowColumn>
-                    <TableRowColumn>
+                    <TableRowColumn style={{width: '15%'}}>
                       <IconButton onTouchTap={() => this.editItem(_id)}><ModeEdit /></IconButton>
                     </TableRowColumn>
-                    <TableRowColumn>
+                    <TableRowColumn style={{width: '15%'}}>
                       <IconButton onTouchTap={() => this.removeItem(_id)}><Delete /></IconButton>
                     </TableRowColumn>
                   </TableRow>
@@ -116,24 +116,26 @@ export default React.createClass({
   render() {
     return (
       <div>
-        <span style={{
-          fontSize: 24,
-          paddingTop: 16,
-          marginBottom: 12,
-          marginLeft: 16,
-          fontWeight: 400
-        }}>
-          {this.props.name}
-        </span>
-        <TextField
-          hintText={`Search ${this.props.name.toLowerCase()}`}
-          floatingLabelText='Search'
-          inputStyle={{marginLeft: 5}}
-          hintStyle={{marginLeft: 5}}
-          style={{width: 400, marginLeft: 50}}
-          floatingLabelStyle={{marginLeft: 5}}
-          onChange={this.handleSearch}
-        />
+        <div style={{height: 100}}>
+          <span style={{
+            fontSize: 24,
+            paddingTop: 16,
+            marginBottom: 12,
+            marginLeft: 16,
+            fontWeight: 400
+          }}>
+            {this.props.name}
+          </span>
+          <TextField
+            hintText={`Search ${this.props.name.toLowerCase()}`}
+            floatingLabelText='Search'
+            inputStyle={{marginLeft: 5}}
+            hintStyle={{marginLeft: 5}}
+            style={{width: 400, marginLeft: 50}}
+            floatingLabelStyle={{marginLeft: 5}}
+            onChange={this.handleSearch}
+          />
+        </div>
         {this.state.loading && <Loader />}
         {!this.state.loading && this.state.items.length > 0 && this.list()}
       </div>
