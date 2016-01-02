@@ -8,7 +8,7 @@ export default React.createClass({
   render() {
     return (
       <div>
-        Server Info
+        Dictionary
       </div>
     )
   }

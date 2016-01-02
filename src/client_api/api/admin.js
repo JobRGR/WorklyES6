@@ -18,7 +18,7 @@ class AdminApi {
   }
 
   logout() {
-    return request({url: '/logout'})
+    return request({url: '/api/logout'})
   }
 }
 

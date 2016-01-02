@@ -16,6 +16,7 @@ const services = ['City', 'Skill', 'University', 'Speciality', 'Position']
 let api = express.Router()
 services.forEach(item => api.use(Dictionary[item]))
 api
+  .get('/logout', logout)
   .use(Education)
   .use(Experience)
   .use(CompanyName)
@@ -29,7 +30,7 @@ api
 
 export default express()
   .use('/api', api)
-  .get('/', render.app)
-  .get('/admin', render.admin)
-  .get('/logout', logout)
+  .get('/admin/*', render.admin)
+  .get('/*', render.app)
+
 

@@ -51,7 +51,7 @@
     "react-addons-update": "^0.14.0",
     "react-dom": "^0.14.0",
     "react-hot-loader": "^1.2.2",
-    "react-router": "^1.0.0-rc3",
+    "react-router": "^2.0.0-rc4",
     "react-tap-event-plugin": "^0.2.1",
     "session-mongoose": "^0.5.2",
     "shelljs": "^0.5.0",
