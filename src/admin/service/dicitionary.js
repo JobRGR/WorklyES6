@@ -27,7 +27,11 @@ class DictionaryService extends Events {
   }
 
   editItem(id, name) {
-    this.api.updateItem(id, {name})
+    const {itemName, items} = this
+    this.api
+      .updateItem(id, {name})
+      .then(({data}) => data[itemName] &&
+      this.setItems(items.map(item => item._id == data[itemName]._id ? data[itemName]: item)))
   }
 
   removeItem(id, duration) {

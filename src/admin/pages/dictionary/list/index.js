@@ -12,6 +12,7 @@ import FlatButton from 'material-ui/lib/flat-button'
 import ModeEdit from 'material-ui/lib/svg-icons/editor/mode-edit'
 import Delete from 'material-ui/lib/svg-icons/action/delete'
 import Snackbar from 'material-ui/lib/snackbar'
+import Dialog from 'material-ui/lib/dialog'
 import Loader from '../../../components/loader'
 import capitalize from '../../../tools/capitalize'
 
@@ -25,7 +26,8 @@ export default React.createClass({
       count: 20,
       search: '',
       open: false,
-      duration: 5000
+      duration: 5000,
+      edit: null
     }
   },
 
@@ -61,8 +63,19 @@ export default React.createClass({
     this.setState({search: event.target.value, count: 20})
   },
 
-  editItem(id) {
+  handleEdit(edit = null) {
+    this.setState({edit})
+  },
 
+  handleEditItem(event) {
+    event.preventDefault()
+    event.stopPropagation()
+    this.setState(({edit}) => ({edit: {_id: edit._id, name: event.target.value}}))
+  },
+
+  saveEdit() {
+    this.props.Api.editItem(this.state.edit._id, this.state.edit.name)
+    this.handleEdit()
   },
 
   removeItem(id) {
@@ -97,21 +110,19 @@ export default React.createClass({
           </TableHeader>
           <TableBody showRowHover={true} stripedRows={false} displayRowCheckbox={false}>
             {
-              items
-                .slice(0, this.state.count)
-                .map(({_id, name}, index) => (
-                  <TableRow key={index}>
-                    <TableRowColumn style={{width: '10%'}}>{index + 1}</TableRowColumn>
-                    <TableRowColumn>{_id}</TableRowColumn>
-                    <TableRowColumn>{name}</TableRowColumn>
-                    <TableRowColumn style={{width: '15%'}}>
-                      <IconButton onTouchTap={() => this.editItem(_id)}><ModeEdit /></IconButton>
-                    </TableRowColumn>
-                    <TableRowColumn style={{width: '15%'}}>
-                      <IconButton onTouchTap={() => this.removeItem(_id)}><Delete /></IconButton>
-                    </TableRowColumn>
-                  </TableRow>
-                ))
+              items.slice(0, this.state.count).map((item, index) => (
+                <TableRow key={index}>
+                  <TableRowColumn style={{width: '10%'}}>{index + 1}</TableRowColumn>
+                  <TableRowColumn>{item._id}</TableRowColumn>
+                  <TableRowColumn>{item.name}</TableRowColumn>
+                  <TableRowColumn style={{width: '15%'}}>
+                    <IconButton onTouchTap={() => this.handleEdit(item)}><ModeEdit /></IconButton>
+                  </TableRowColumn>
+                  <TableRowColumn style={{width: '15%'}}>
+                    <IconButton onTouchTap={() => this.removeItem(item._id)}><Delete /></IconButton>
+                  </TableRowColumn>
+                </TableRow>
+              ))
             }
           </TableBody>
         </Table>
@@ -143,8 +154,8 @@ export default React.createClass({
             {this.props.name}
           </span>
           <TextField
-            hintText={`Search ${name.toLowerCase()}`}
-            floatingLabelText='Search'
+            hintText={`Add ${name.toLowerCase()}`}
+            floatingLabelText={`Search ${name.toLowerCase()}`}
             inputStyle={{marginLeft: 5}}
             hintStyle={{marginLeft: 5}}
             style={{width: 400, marginLeft: 50}}
@@ -162,6 +173,33 @@ export default React.createClass({
           onActionTouchTap={this.handleActionTouchTap}
           onRequestClose={this.handleRequestClose}
         />
+        <Dialog
+          title={`Edit ${name}`}
+          actions={[
+            <FlatButton
+              label='Cancel'
+              secondary={true}
+              onTouchTap={() => this.handleEdit()} />,
+            <FlatButton
+              label='Update'
+              primary={true}
+              keyboardFocused={true}
+              onTouchTap={this.saveEdit} />
+          ]}
+          modal={false}
+          open={this.state.edit ? true : false}
+          onRequestClose={this.handleEdit}>
+          <TextField
+            hintText={`Edit ${name}`}
+            floatingLabelText='Edit'
+            inputStyle={{marginLeft: 5}}
+            hintStyle={{marginLeft: 5}}
+            floatingLabelStyle={{marginLeft: 5}}
+            fullWidth
+            value={this.state.edit ? this.state.edit.name : ''}
+            onChange={this.handleEditItem}
+          />
+        </Dialog>
       </div>
     )
   }
