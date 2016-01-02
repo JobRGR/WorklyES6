@@ -5,7 +5,7 @@ import CardTitle from 'material-ui/lib/card/card-title'
 import Tabs from 'material-ui/lib/tabs/tabs'
 import Tab from 'material-ui/lib/tabs/tab'
 import DictionaryService from '../../service/dicitionary'
-import List from './list'
+import Item from './item'
 
 export default React.createClass({
   mixins: [PureRenderMixin],
@@ -21,7 +21,7 @@ export default React.createClass({
   tab(name, Api, index) {
     return (
       <Tab label={name} value={index} key={index} >
-        {index == this.state.value && <List name={name} Api={Api} />}
+        {index == this.state.value && <Item name={name} Api={Api} />}
       </Tab>
     )
   },

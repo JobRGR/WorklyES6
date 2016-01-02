@@ -1,16 +1,7 @@
 import React from 'react'
 import TextField from 'material-ui/lib/TextField/TextField'
-import Table from 'material-ui/lib/table/table'
-import TableBody from 'material-ui/lib/table/table-body'
-import TableHeader from 'material-ui/lib/table/table-header'
-import TableFooter from 'material-ui/lib/table/table-footer'
-import TableHeaderColumn from 'material-ui/lib/table/table-header-column'
-import TableRow from 'material-ui/lib/table/table-row'
-import TableRowColumn from 'material-ui/lib/table/table-row-column'
-import IconButton from 'material-ui/lib/icon-button'
+import Table from '../table'
 import FlatButton from 'material-ui/lib/flat-button'
-import ModeEdit from 'material-ui/lib/svg-icons/editor/mode-edit'
-import Delete from 'material-ui/lib/svg-icons/action/delete'
 import Snackbar from 'material-ui/lib/snackbar'
 import Dialog from 'material-ui/lib/dialog'
 import Loader from '../../../components/loader'
@@ -78,7 +69,7 @@ export default React.createClass({
     this.handleEdit()
   },
 
-  removeItem(id) {
+  handleRemove(id) {
     this.undo = this.props.Api.removeItem(id, this.state.duration)
     this.setState({open: true})
     setTimeout(this.handleRequestClose, this.state.duration)
@@ -92,51 +83,6 @@ export default React.createClass({
   handleActionTouchTap() {
     this.undo()
     this.handleRequestClose()
-  },
-
-  list() {
-    const items = this.state.items.filter(({name}) => name.indexOf(this.state.search) > -1)
-    return (
-      <div>
-        <Table>
-          <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-            <TableRow>
-              <TableHeaderColumn tooltip='Number' style={{width: '10%'}}>№</TableHeaderColumn>
-              <TableHeaderColumn tooltip='Id'>Id</TableHeaderColumn>
-              <TableHeaderColumn tooltip={this.props.name}>{this.props.name}</TableHeaderColumn>
-              <TableHeaderColumn tooltip='Edit' style={{width: '15%'}}>Edit</TableHeaderColumn>
-              <TableHeaderColumn tooltip='Delete' style={{width: '15%'}}>Delete</TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody showRowHover={true} stripedRows={false} displayRowCheckbox={false}>
-            {
-              items.slice(0, this.state.count).map((item, index) => (
-                <TableRow key={index}>
-                  <TableRowColumn style={{width: '10%'}}>{index + 1}</TableRowColumn>
-                  <TableRowColumn>{item._id}</TableRowColumn>
-                  <TableRowColumn>{item.name}</TableRowColumn>
-                  <TableRowColumn style={{width: '15%'}}>
-                    <IconButton onTouchTap={() => this.handleEdit(item)}><ModeEdit /></IconButton>
-                  </TableRowColumn>
-                  <TableRowColumn style={{width: '15%'}}>
-                    <IconButton onTouchTap={() => this.removeItem(item._id)}><Delete /></IconButton>
-                  </TableRowColumn>
-                </TableRow>
-              ))
-            }
-          </TableBody>
-        </Table>
-        {
-          this.state.count < items.length &&
-          <FlatButton
-            label='More'
-            secondary
-            style={{width: '100%'}}
-            onClick={() => this.setState(({count}) => ({count: count + 20}))}
-          />
-        }
-      </div>
-    )
   },
 
   render() {
@@ -164,7 +110,18 @@ export default React.createClass({
           />
         </div>
         {this.state.loading && <Loader />}
-        {!this.state.loading && this.state.items.length > 0 && this.list()}
+        {
+          !this.state.loading && this.state.items.length > 0 &&
+          <Table
+            name={this.props.name}
+            search={this.state.search}
+            items={this.state.items}
+            count={this.state.count}
+            handleEdit={this.handleEdit}
+            handleRemove={this.handleRemove}
+            handleMore={() => this.setState(({count}) => ({count: count + 20}))}
+          />
+        }
         <Snackbar
           open={this.state.open}
           message={`${name} was removed`}
