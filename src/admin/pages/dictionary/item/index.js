@@ -2,10 +2,9 @@ import React from 'react'
 import TextField from 'material-ui/lib/TextField/TextField'
 import Table from '../table'
 import FlatButton from 'material-ui/lib/flat-button'
-import Snackbar from 'material-ui/lib/snackbar'
+import Remove from '../remove'
 import Edit from '../edit'
 import Loader from '../../../components/loader'
-import capitalize from '../../../tools/capitalize'
 
 
 export default React.createClass({
@@ -15,7 +14,6 @@ export default React.createClass({
       count: 20,
       search: '',
       open: false, duration: 5000,
-      edit: null
     }
   },
 
@@ -51,39 +49,15 @@ export default React.createClass({
     this.setState({search: event.target.value, count: 20})
   },
 
-  handleEdit(edit = null) {
-    this.setState({edit})
-  },
-
-  handleEditItem(event) {
-    event.preventDefault()
-    event.stopPropagation()
-    this.setState(({edit}) => ({edit: {_id: edit._id, name: event.target.value}}))
-  },
-
-  saveEdit() {
-    this.props.Api.editItem(this.state.edit._id, this.state.edit.name)
-    this.handleEdit()
+  handleEdit(edit) {
+   this.refs.edit.handleEdit(edit)
   },
 
   handleRemove(id) {
-    this.undo = this.props.Api.removeItem(id, this.state.duration)
-    this.setState({open: true})
-    setTimeout(this.handleRequestClose, this.state.duration)
-  },
-
-  handleRequestClose() {
-    delete this.undo
-    this.setState({open: false})
-  },
-
-  handleActionTouchTap() {
-    this.undo()
-    this.handleRequestClose()
+    this.refs.remove.handleRemove(id)
   },
 
   render() {
-    const name = capitalize(this.props.name.toLowerCase())
     return (
       <div>
         <div style={{height: 100}}>
@@ -91,8 +65,8 @@ export default React.createClass({
             {this.props.name}
           </span>
           <TextField
-            hintText={`Add ${name.toLowerCase()}`}
-            floatingLabelText={`Search ${name.toLowerCase()}`}
+            hintText={`Add ${this.props.name.toLowerCase()}`}
+            floatingLabelText={`Search ${this.props.name.toLowerCase()}`}
             inputStyle={{marginLeft: 5}}
             hintStyle={{marginLeft: 5}}
             style={{width: 400, marginLeft: 50}}
@@ -113,22 +87,8 @@ export default React.createClass({
             handleMore={() => this.setState(({count}) => ({count: count + 20}))}
           />
         }
-        <Snackbar
-          open={this.state.open}
-          message={`${name} was removed`}
-          action='undo'
-          autoHideDuration={this.state.duration}
-          onActionTouchTap={this.handleActionTouchTap}
-          onRequestClose={this.handleRequestClose}
-        />
-        <Edit
-          edit={this.state.edit}
-          name={this.props.name}
-          handleEdit={this.handleEdit}
-          handleEditItem={this.handleEditItem}
-          handleEdit={this.handleEdit}
-          saveEdit={this.saveEdit}
-        />
+        <Remove name={this.props.name} Api={this.props.Api} ref='remove' />
+        <Edit name={this.props.name} Api={this.props.Api} ref='edit' />
       </div>
     )
   }

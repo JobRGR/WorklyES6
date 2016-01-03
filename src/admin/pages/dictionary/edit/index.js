@@ -7,6 +7,25 @@ import capitalize from '../../../tools/capitalize'
 
 export default React.createClass({
 
+  getInitialState() {
+    return {edit: null}
+  },
+
+  handleEdit(edit = null) {
+    this.setState({edit})
+  },
+
+  handleEditItem(event) {
+    event.preventDefault()
+    event.stopPropagation()
+    this.setState(({edit}) => ({edit: {_id: edit._id, name: event.target.value}}))
+  },
+
+  saveEdit() {
+    this.props.Api.editItem(this.state.edit._id, this.state.edit.name)
+    this.handleEdit()
+  },
+
   render() {
     const name = capitalize(this.props.name.toLowerCase())
     return (
@@ -16,16 +35,16 @@ export default React.createClass({
           <FlatButton
             label='Cancel'
             secondary={true}
-            onTouchTap={() => this.props.handleEdit()} />,
+            onTouchTap={() => this.handleEdit()} />,
           <FlatButton
             label='Update'
             primary={true}
             keyboardFocused={true}
-            onTouchTap={this.props.saveEdit} />
+            onTouchTap={this.saveEdit} />
         ]}
         modal={false}
-        open={this.props.edit ? true : false}
-        onRequestClose={() => this.props.handleEdit}
+        open={this.state.edit ? true : false}
+        onRequestClose={() => this.handleEdit}
       >
         <TextField
           hintText={`Edit ${name}`}
@@ -34,8 +53,8 @@ export default React.createClass({
           hintStyle={{marginLeft: 5}}
           floatingLabelStyle={{marginLeft: 5}}
           fullWidth
-          value={this.props.edit ? this.props.edit.name : ''}
-          onChange={this.props.handleEditItem}
+          value={this.state.edit ? this.state.edit.name : ''}
+          onChange={this.handleEditItem}
         />
       </Dialog>
     )
