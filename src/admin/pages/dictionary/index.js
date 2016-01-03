@@ -28,8 +28,7 @@ export default React.createClass({
 
   render() {
     return (
-      <Card style={{width: '80%', margin: '40px auto'}}>
-        <CardTitle title='Dictionary dashboard' />
+      <Card style={{width: '80%', margin: '40px auto', minWidth: 740}}>
         <Tabs
           onChange={this.handleChange}
           value={this.state.value}

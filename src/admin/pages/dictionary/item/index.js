@@ -1,9 +1,10 @@
 import React from 'react'
 import TextField from 'material-ui/lib/TextField/TextField'
-import Table from '../table'
 import FlatButton from 'material-ui/lib/flat-button'
-import Remove from '../remove'
-import Edit from '../edit'
+import Table from './table'
+import Add from './add'
+import Remove from './remove'
+import Edit from './edit'
 import Loader from '../../../components/loader'
 
 
@@ -11,9 +12,7 @@ export default React.createClass({
   getInitialState() {
     return {
       items: this.props.Api.cachedItems, loading: false, error: null,
-      count: 20,
-      search: '',
-      open: false, duration: 5000,
+      count: 20, search: ''
     }
   },
 
@@ -57,6 +56,10 @@ export default React.createClass({
     this.refs.remove.handleRemove(id)
   },
 
+  handleAdd() {
+    this.refs.add.handleAdd(true)
+  },
+
   render() {
     return (
       <div>
@@ -69,10 +72,14 @@ export default React.createClass({
             floatingLabelText={`Search ${this.props.name.toLowerCase()}`}
             inputStyle={{marginLeft: 5}}
             hintStyle={{marginLeft: 5}}
-            style={{width: 400, marginLeft: 50}}
+            style={{width: 300, marginLeft: 30}}
             floatingLabelStyle={{marginLeft: 5}}
-            onChange={this.handleSearch}
-          />
+            onChange={this.handleSearch} />
+          <FlatButton
+            style={{marginLeft: 30}}
+            label={`Add ${this.props.name.toLowerCase()}`}
+            primary={true}
+            onTouchTap={this.handleAdd} />
         </div>
         {this.state.loading && <Loader />}
         {
@@ -84,9 +91,9 @@ export default React.createClass({
             count={this.state.count}
             handleEdit={this.handleEdit}
             handleRemove={this.handleRemove}
-            handleMore={() => this.setState(({count}) => ({count: count + 20}))}
-          />
+            handleMore={() => this.setState(({count}) => ({count: count + 20}))} />
         }
+        <Add name={this.props.name} Api={this.props.Api} ref='add' />
         <Remove name={this.props.name} Api={this.props.Api} ref='remove' />
         <Edit name={this.props.name} Api={this.props.Api} ref='edit' />
       </div>

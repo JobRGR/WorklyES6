@@ -1,6 +1,6 @@
 import React from 'react'
 import Snackbar from 'material-ui/lib/snackbar'
-import capitalize from '../../../tools/capitalize'
+import capitalize from '../../../../tools/capitalize'
 
 
 export default React.createClass({
@@ -34,8 +34,7 @@ export default React.createClass({
         action='undo'
         autoHideDuration={this.state.duration}
         onActionTouchTap={this.handleActionTouchTap}
-        onRequestClose={this.handleRequestClose}
-      />
+        onRequestClose={this.handleRequestClose} />
     )
   }
 })

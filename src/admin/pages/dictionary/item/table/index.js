@@ -51,8 +51,7 @@ export default React.createClass({
             label='More'
             secondary
             style={{width: '100%'}}
-            onClick={this.props.handleMore}
-          />
+            onClick={this.props.handleMore} />
         }
       </div>
     )

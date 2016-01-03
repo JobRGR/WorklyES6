@@ -44,7 +44,7 @@ export default React.createClass({
           onRequestChange={open => this.setState({open})}
         >
           <MenuItem onTouchTap={() => this.navigate('/admin/')}>Server Info</MenuItem>
-          <MenuItem onTouchTap={() => this.navigate('/admin/dictionary')}>Dictionary</MenuItem>
+          <MenuItem onTouchTap={() => this.navigate('/admin/dictionary')}>Dictionary Dashboard</MenuItem>
         </LeftNav>
       </div>
     )

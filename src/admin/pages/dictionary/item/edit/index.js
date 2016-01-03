@@ -2,7 +2,7 @@ import React from 'react'
 import TextField from 'material-ui/lib/TextField/TextField'
 import FlatButton from 'material-ui/lib/flat-button'
 import Dialog from 'material-ui/lib/dialog'
-import capitalize from '../../../tools/capitalize'
+import capitalize from '../../../../tools/capitalize'
 
 
 export default React.createClass({
@@ -44,8 +44,7 @@ export default React.createClass({
         ]}
         modal={false}
         open={this.state.edit ? true : false}
-        onRequestClose={() => this.handleEdit}
-      >
+        onRequestClose={() => this.handleEdit} >
         <TextField
           hintText={`Edit ${name}`}
           floatingLabelText='Edit'
@@ -54,8 +53,7 @@ export default React.createClass({
           floatingLabelStyle={{marginLeft: 5}}
           fullWidth
           value={this.state.edit ? this.state.edit.name : ''}
-          onChange={this.handleEditItem}
-        />
+          onChange={this.handleEditItem} />
       </Dialog>
     )
   }
