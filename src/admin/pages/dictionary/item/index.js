@@ -3,7 +3,7 @@ import TextField from 'material-ui/lib/TextField/TextField'
 import Table from '../table'
 import FlatButton from 'material-ui/lib/flat-button'
 import Snackbar from 'material-ui/lib/snackbar'
-import Dialog from 'material-ui/lib/dialog'
+import Edit from '../edit'
 import Loader from '../../../components/loader'
 import capitalize from '../../../tools/capitalize'
 
@@ -11,13 +11,10 @@ import capitalize from '../../../tools/capitalize'
 export default React.createClass({
   getInitialState() {
     return {
-      items: this.props.Api.cachedItems,
-      loading: false,
-      error: null,
+      items: this.props.Api.cachedItems, loading: false, error: null,
       count: 20,
       search: '',
-      open: false,
-      duration: 5000,
+      open: false, duration: 5000,
       edit: null
     }
   },
@@ -90,13 +87,7 @@ export default React.createClass({
     return (
       <div>
         <div style={{height: 100}}>
-          <span style={{
-            fontSize: 24,
-            paddingTop: 16,
-            marginBottom: 12,
-            marginLeft: 16,
-            fontWeight: 400
-          }}>
+          <span style={{fontSize: 24, paddingTop: 16, marginBottom: 12,  marginLeft: 16,  fontWeight: 400}}>
             {this.props.name}
           </span>
           <TextField
@@ -130,33 +121,14 @@ export default React.createClass({
           onActionTouchTap={this.handleActionTouchTap}
           onRequestClose={this.handleRequestClose}
         />
-        <Dialog
-          title={`Edit ${name}`}
-          actions={[
-            <FlatButton
-              label='Cancel'
-              secondary={true}
-              onTouchTap={() => this.handleEdit()} />,
-            <FlatButton
-              label='Update'
-              primary={true}
-              keyboardFocused={true}
-              onTouchTap={this.saveEdit} />
-          ]}
-          modal={false}
-          open={this.state.edit ? true : false}
-          onRequestClose={this.handleEdit}>
-          <TextField
-            hintText={`Edit ${name}`}
-            floatingLabelText='Edit'
-            inputStyle={{marginLeft: 5}}
-            hintStyle={{marginLeft: 5}}
-            floatingLabelStyle={{marginLeft: 5}}
-            fullWidth
-            value={this.state.edit ? this.state.edit.name : ''}
-            onChange={this.handleEditItem}
-          />
-        </Dialog>
+        <Edit
+          edit={this.state.edit}
+          name={this.props.name}
+          handleEdit={this.handleEdit}
+          handleEditItem={this.handleEditItem}
+          handleEdit={this.handleEdit}
+          saveEdit={this.saveEdit}
+        />
       </div>
     )
   }
