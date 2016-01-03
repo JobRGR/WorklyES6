@@ -13,16 +13,34 @@ import FlatButton from 'material-ui/lib/flat-button'
 
 
 export default React.createClass({
+  getInitialState() {
+    return {type: '_id', order: 1}
+  },
+
+  handleSort(newType) {
+    this.setState(({type, order}) => ({type: newType, order: newType == type ? order * -1 : 1}))
+  },
+
   render () {
-    const items = this.props.items.filter(({name}) => name.indexOf(this.props.search) > -1)
+    const items = this.props.items
+      .filter(({name}) => name.indexOf(this.props.search) > -1)
+      .sort((a, b) => a[this.state.type] > b[this.state.type] ? this.state.order : this.state.order * -1)
     return (
       <div>
         <Table>
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
               <TableHeaderColumn tooltip='Number' style={{width: '10%'}}>№</TableHeaderColumn>
-              <TableHeaderColumn tooltip='Id'>Id</TableHeaderColumn>
-              <TableHeaderColumn tooltip={this.props.name}>{this.props.name}</TableHeaderColumn>
+              <TableHeaderColumn tooltip='Id'>
+                <span style={{cursor: 'pointer'}} onClick={() => this.handleSort('_id')} >
+                  Id {this.state.type == '_id' && (this.state.order == -1 ? <span>&#x25B4;</span> : <span>&#x25BE;</span>)}
+                </span>
+              </TableHeaderColumn>
+              <TableHeaderColumn tooltip={this.props.name}>
+                <span style={{cursor: 'pointer'}} onClick={() => this.handleSort('name')}>
+                  {this.props.name} {this.state.type == 'name' && (this.state.order == -1 ? <span>&#x25B4;</span> : <span>&#x25BE;</span>)}
+                </span>
+              </TableHeaderColumn>
               <TableHeaderColumn tooltip='Edit' style={{width: '15%'}}>Edit</TableHeaderColumn>
               <TableHeaderColumn tooltip='Delete' style={{width: '15%'}}>Delete</TableHeaderColumn>
             </TableRow>
