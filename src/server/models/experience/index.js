@@ -8,7 +8,7 @@ let schema = new Schema({
   position: {type: mongoose.Schema.Types.ObjectId, ref: 'Position', required: true},
   companyName: {type: mongoose.Schema.Types.ObjectId, ref: 'CompanyName', required: true},
   about: {type: String}
-})
+}, {timestamps: true})
 
 const foreignKeys = ['position', 'companyName']
 

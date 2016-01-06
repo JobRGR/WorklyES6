@@ -1,5 +1,5 @@
 export default {
-  uri: 'mongodb://localhost/worklyES6',
+  uri: process.env.prod ? 'mongodb://workly:workly@ds031763.mongolab.com:31763/workly' : 'mongodb://localhost/worklyES6',
   session: {
     secret: 'someSecret',
     key: 'sid',
@@ -17,5 +17,14 @@ export default {
     logging: {
       level: 'trace'
     }
+  },
+  port: 3333,
+  security: {
+    hsts: {
+      maxAge: 31536000,
+      includeSubDomains: true,
+      preload: true
+    },
+    xssProtection: true
   }
 }

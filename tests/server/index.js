@@ -1,4 +1,5 @@
 import portscanner from 'portscanner'
+import config from '../../src/server/config'
 import dictionary from './lib/dictionary'
 import education from './lib/education'
 import experience from './lib/experience'
@@ -12,7 +13,7 @@ import statistic from './lib/statistic'
 import errorStudent from './error/student'
 import errorCompany from './error/company'
 
-const port = 3333
+const {port} = config
 const ip = '127.0.0.1'
 const url = `${ip}:${port}`
 
