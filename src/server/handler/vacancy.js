@@ -4,7 +4,7 @@ import Handler from '../utils/handler'
 import getDate from '../utils/get_date'
 import toObjectArray from '../utils/to_object_array'
 import HttpError from '../utils/error'
-import {Vacancy} from '../models/models'
+import {Vacancy, Company} from '../models/models'
 
 const name = 'vacancy'
 const names = pluralize(name, 2)
@@ -16,7 +16,7 @@ handler.addItem = (req, res, next) => {
   let data = {}
   data.name = req.body.name
   data.about = req.body.about
-  data.companyName  = req._company ? req._company.name: res.companyName ? res.companyName._id : null
+  data.company  = req._company ? req._company._id: req.body.company
   if (res.city) data.city = res.city._id
   if (res.skills) data.skills = toObjectArray(res.skills)
   Vacancy.addItem(data, (err, vacancy) => nextItem(err, vacancy, res, next))
@@ -26,10 +26,16 @@ handler.searchItems = (req, res, next) => {
   let search = {}
   if (req.body.name) search.name = req.body.name
   if (req.body.about) search.about = req.body.about
-  if (res.companyNames && res.companyNames.length) search.companyName = {$in: toObjectArray(res.companyNames)}
   if (res.cities && res.cities.length) search.city = {$in: toObjectArray(res.cities)}
   if (res.skills && res.skills.length) search.skills = {$in: toObjectArray(res.skills)}
-  Vacancy.searchItem(search, (err, vacancies) => nextItems(err, vacancies, res, next))
+  if (res.companyNames && res.companyNames.length){
+    Company.searchItem({name: {$in: toObjectArray(res.companyNames)}}, (err, companies) => {
+      search.company = {$in: toObjectArray(companies)}
+      Vacancy.searchItem(search, (err, vacancies) => nextItems(err, vacancies, res, next))
+    })
+  }else {
+    Vacancy.searchItem(search, (err, vacancies) => nextItems(err, vacancies, res, next))
+  }
 }
 
 handler.updateItem = (req, res, next) => {
@@ -38,7 +44,6 @@ handler.updateItem = (req, res, next) => {
     return memo
   }, {})
   if (res.city) data.city = res.city._id
-  if (res.companyName) data.companyName = res.companyName._id
   if (res.skills) data.skills = toObjectArray(res.skills)
   Vacancy.updateItem(req.params.id, data, (err, vacancy) => nextItem(err, vacancy, res, next))
 }
@@ -56,8 +61,8 @@ handler.removeSubscription = (req, res, next) => {
 handler.inspectItem = (req, res, next) => {
   res[name] = res[name].toObject()
   if (req._company){
-    let id = req._company.name._id
-    if (!id.equals(res[name].companyName) && !id.equals(res[name].companyName._id))
+    let id = req._company._id
+    if (!id.equals(res[name].company) && !id.equals(res[name].company._id))
       delete res[name].subscribers
   } else if (req._student) {
     let id = req._student._id
@@ -71,9 +76,9 @@ handler.inspectItem = (req, res, next) => {
 handler.inspectItems = (req, res, next) => {
   res[names] = res[names].map(item => item.toObject())
   if (req._company){
-    let id = req._company.name._id
+    let id = req._company._id
     res[names].forEach(item => {
-      if (!id.equals(item.companyName) && !id.equals(item.companyName._id)) {
+      if (!id.equals(item.company) && !id.equals(item.company._id)) {
         delete item.subscribers
       }
     })
