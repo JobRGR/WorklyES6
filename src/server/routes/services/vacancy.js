@@ -2,6 +2,7 @@ import express from 'express'
 import Vacancy from '../../handler/vacancy'
 import Dictionaries from '../../handler/dictionary'
 import CompanyName from '../../handler/company_name'
+import Company from '../../handler/company'
 import checkStudent from '../../middleware/check/student'
 import checkCompany from '../../middleware/check/company'
 

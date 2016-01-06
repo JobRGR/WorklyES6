@@ -21,7 +21,7 @@ export default (cb) => async.waterfall([
   }), err => callback()),
   callback => Company.getItem(null, (err, company) => {
     for (let i = 0; i < data.length; ++i) {
-      data[i].companyName = company[i].name._id
+      data[i].company = company[i]._id
     }
     callback()
   }),
