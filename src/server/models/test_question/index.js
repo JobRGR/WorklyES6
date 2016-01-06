@@ -1,5 +1,5 @@
 import mongoose from '../index'
-import {removeItem, getCount, randomPopulate, getPopulate, getItem, updateItem, getRandom} from '../../utils/model/helpers'
+import {removeItem, getCount, randomPopulate, getPopulate, searchPopulate, getItem, updateItem, getRandom} from '../../utils/model/helpers'
 
 const foreignKeys = ['owner']
 
@@ -31,7 +31,7 @@ schema.statics.getRandom = function(callback) {
     return randomPopulate.apply(this, [callback, foreignKeys])
 }
 
-schema.statics.searchItem = function(search, callback) {
+schema.statics.searchItems = function(search, callback) {
     return searchPopulate.apply(this, [search, callback, foreignKeys])
 }
 

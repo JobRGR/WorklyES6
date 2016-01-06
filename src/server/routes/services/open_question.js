@@ -1,5 +1,6 @@
 import express from 'express'
 import OpenQuestion from '../../handler/open_question'
+import TestQuestion from '../../handler/test_question'
 import CompanyNameHandler from '../../handler/company_name'
 import CompanyHandler from '../../handler/company'
 import checkCompany from '../../middleware/check/company'
@@ -11,6 +12,7 @@ export default express()
   .get('/open-question-random', OpenQuestion.getRandom, OpenQuestion.sendItem)
   .get('/open-question-company/:id', OpenQuestion.getQuestionsById, OpenQuestion.sendItems)
   .get('/open-question-my', checkCompany, OpenQuestion.getMyQuestions, OpenQuestion.sendItems)
+  .get('/all-question-my', checkCompany, OpenQuestion.getMyQuestions, TestQuestion.getMyQuestions, OpenQuestion.sendItems)
   .post('/open-question-company',
     CompanyNameHandler.searchItems,
     CompanyHandler.searchItems,

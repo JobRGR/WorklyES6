@@ -203,7 +203,7 @@ export default (url) => {
                 })
         })
 
-        it('.get questions by companys name', done => {
+        it('.get questions by companys name', done => { //todo free = false
             const data = {companyName: 'Abweb'}
             request(url)
                 .post(`/api/open-question-company`)
@@ -216,7 +216,7 @@ export default (url) => {
                 })
         })
 
-        it('.get questions by companys id', done => {
+        it('.get questions by companys id', done => { //todo free = false
             const index = Math.floor(list.length * Math.random())
             const searchId = list[index].owner._id
             const searchedById  = []
