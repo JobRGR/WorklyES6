@@ -1,6 +1,6 @@
 import Events from './events'
 import pluralize from 'pluralize'
-import DictionaryApi from '../../client_api/api/dictianory'
+import DictionaryApi from '../../client_api/api/dictionary'
 
 const {CityApi, SkillApi, CompanyNameApi, PositionApi, SpecialityApi, UniversityApi} = DictionaryApi
 
