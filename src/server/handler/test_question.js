@@ -3,7 +3,6 @@ import Next from '../utils/handler/helpers/next'
 import Handler from '../utils/handler'
 import {TestQuestion} from '../models/models'
 import toObjectArray from '../utils/to_object_array'
-import HttpError from '../utils/error'
 
 let {nextItem, nextItems} = new Next('testQuestion')
 let handler = new Handler('testQuestion', TestQuestion, false, false)

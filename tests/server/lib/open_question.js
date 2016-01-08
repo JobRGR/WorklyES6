@@ -289,22 +289,6 @@ export default (url) => {
       })
     })
 
-      it('.get all my questions', done => {
-        let req = request(url).get("/api/all-question-my")
-        agent.attachCookies(req)
-        req
-          .end(((err, res) => {
-            tmpModel = res.body.openQuestion || {}
-            assert.equal(res.status, 200)
-            assert.property(res.body, 'openQuestions')
-            assert.property(res.body, 'testQuestions')
-            res.body.openQuestions.forEach(({owner}) => assert.equal(owner._id, companyId))
-            res.body.testQuestions.forEach(({owner}) => assert.equal(owner._id, companyId))
-            done()
-          }))
-
-      })
-
 
       it('.delete added question', done => deleteItem(url, `/api/open-question/${tmpModel._id}`, done))
 

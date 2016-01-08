@@ -9,6 +9,7 @@ let agent = superagent.agent()
 
 export default (url) => {
   let tmpCompany = {name: 'InsSolutions', password: '1111', email: 'ins_solutins@somnia.com'}
+  let tmpStudent = {name: 'Alex Loud', password: '1111', email: 'alexabcd@gmail.com'}
   let tmpModel = null
   let companyId = null
   let tmpCompanyModel = null
@@ -21,13 +22,19 @@ export default (url) => {
         .send(tmpCompany)
         .end((err, res) => {
           tmpCompanyModel = res.body.company || {}
+        })
+
+      request(url)
+        .post('/api/student')
+        .send(tmpStudent)
+        .end(() => {
           done()
         })
     })
 
     after(done => deleteItem(url, `/api/company/${tmpCompanyModel._id}`, done))
 
-    let getSession = done => {
+    let getSessionStudentCompany = done => {
       let req = request(url)
         .get(`/api/company-status`)
       agent.attachCookies(req)
@@ -44,7 +51,7 @@ export default (url) => {
       })
     }
 
-    let checkLogin = () => {
+    let checkLoginCompany = () => {
       it('.login company', done => {
         request(url)
           .post(`/api/company-login`)
@@ -63,10 +70,59 @@ export default (url) => {
           })
       })
 
-      it('.get session login company', getSession)
+      it('.get session login company', getSessionStudentCompany)
     }
 
-    checkLogin()
+    let getSessionStudent = done => {
+      let req = request(url)
+        .get(`/api/student-status`)
+      agent.attachCookies(req)
+
+      req.end((err, res) => {
+        assert.equal(res.status, 200)
+        assert.property(res.body, 'student')
+        assert.equal(res.body.student.name, tmpStudent.name)
+        assert.equal(res.body.student.email, tmpStudent.email)
+        assert.notProperty(res.body.student, 'salt')
+        assert.notProperty(res.body.student, 'hashedPassword')
+        done()
+      })
+    }
+
+    let checkLoginStudent = () => {
+      it('.login student', done => {
+        request(url)
+          .post(`/api/student-login`)
+          .send(tmpStudent)
+          .end((err, res) => {
+            agent.saveCookies(res)
+            assert.equal(res.status, 200)
+            assert.property(res.body, 'student')
+            assert.equal(res.body.student.name, tmpStudent.name)
+            assert.equal(res.body.student.email, tmpStudent.email)
+            assert.notProperty(res.body.student, 'salt')
+            assert.notProperty(res.body.student, 'hashedPassword')
+            done()
+          })
+      })
+
+      it('.get session login student', getSessionStudent)
+    }
+
+    checkLoginStudent()
+
+    it('.get all my questions as student', done => {
+      let req = request(url).get("/api/all-questions")
+      agent.attachCookies(req)
+      req
+        .end(((err, res) => {
+          assert.equal(res.status, 403)
+          done()
+        }))
+
+    })
+
+    checkLoginCompany()
 
     it('.add first open questions for company', done => {
       let req = request(url).post("/api/open-question-add")
@@ -158,7 +214,7 @@ export default (url) => {
     })
 
     it('.get all my questions', done => {
-      let req = request(url).get("/api/all-question-my")
+      let req = request(url).get("/api/all-questions")
       agent.attachCookies(req)
       req
         .end(((err, res) => {
@@ -173,7 +229,7 @@ export default (url) => {
     })
 
     it('.get all questions by company id', done => {
-      let req = request(url).get("/api/all-question/" + companyId)
+      let req = request(url).get("/api/all-questions/" + companyId)
       agent.attachCookies(req)
       req
         .end(((err, res) => {
