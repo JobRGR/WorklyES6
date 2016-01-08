@@ -41,10 +41,7 @@ schema.statics.updateItem = function (id, update, callback) {
       delete update[key]
   this.findById(id, (err, vacancy) => {
     for (let key in  update) {
-      vacancy[key] =
-        key == 'city' ?
-          mongoose.Types.ObjectId(update[key]) :
-          update[key]
+      vacancy[key] = key == 'city' ? mongoose.Types.ObjectId(update[key]) : update[key]
     }
     vacancy.save(err => callback(err, vacancy))
   })
@@ -72,22 +69,18 @@ schema.statics.searchItem = function(search, callback) {
 }
 
 schema.statics.addSubscription = function(vacancy, subscriber, callback) {
-  if (this.checkSubscription(vacancy, subscriber))
-    return callback(null, vacancy)
+  if (this.checkSubscription(vacancy, subscriber)) return callback(null, vacancy)
   vacancy.subscribers.push(subscriber)
   vacancy.save(err => callback(err, vacancy))
 }
 
 schema.statics.removeSubscription = function(vacancy, subscriber, callback) {
-  if (!this.checkSubscription(vacancy, subscriber))
-    return callback(null, vacancy)
+  if (!this.checkSubscription(vacancy, subscriber)) return callback(null, vacancy)
   vacancy.subscribers.pull(subscriber)
   vacancy.save(err => callback(err, vacancy))
 }
 
-schema.statics.checkSubscription = function(vacancy, subscriber) {
-  return vacancy.subscribers.some(cur => cur.equals(subscriber))
-}
+schema.statics.checkSubscription = (vacancy, subscriber) => vacancy.subscribers.some(cur => cur.equals(subscriber))
 
 schema.statics.getCount = getCount
 schema.statics.removeItem = removeItem
