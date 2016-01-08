@@ -12,7 +12,6 @@ export default express()
   .get('/open-question-random', OpenQuestion.getRandom, OpenQuestion.sendItem)
   .get('/open-question-company/:id', OpenQuestion.getQuestionsById, OpenQuestion.sendItems)
   .get('/open-question-my', checkCompany, OpenQuestion.getMyQuestions, OpenQuestion.sendItems)
-  .get('/all-question-my', checkCompany, OpenQuestion.getMyQuestions, TestQuestion.getMyQuestions, OpenQuestion.sendItems)
   .post('/open-question-company',
     CompanyNameHandler.searchItems,
     CompanyHandler.searchItems,

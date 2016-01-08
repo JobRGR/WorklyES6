@@ -15,10 +15,10 @@ handler.addCompanyQuestion = (req, res, next) => {
 }
 
 handler.getQuestionsByCompany = (req, res, next) => TestQuestion.searchItems({
-  owner: {$in: toObjectArray(res.companies)}
+  owner: {$in: toObjectArray(res.companies)}, free:true
 }, (err, questions) => nextItems(err, questions, res, next))
 
-handler.getQuestionsById = (req, res, next) => TestQuestion.searchItems({owner : req.params.id},
+handler.getQuestionsById = (req, res, next) => TestQuestion.searchItems({owner : req.params.id, free : true},
   (err, questions) => nextItems(err, questions, res, next))
 
 handler.getMyQuestions = (req, res, next) => TestQuestion.searchItems({owner : req._company._id},

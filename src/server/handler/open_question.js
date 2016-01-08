@@ -1,7 +1,7 @@
 import async from 'async'
 import Next from '../utils/handler/helpers/next'
 import Handler from '../utils/handler'
-import {OpenQuestion} from '../models/models'
+import {OpenQuestion, TestQuestion} from '../models/models'
 import toObjectArray from '../utils/to_object_array'
 import HttpError from '../utils/error'
 
@@ -15,11 +15,11 @@ handler.addCompanyQuestion = (req, res, next) => {
 }
 
 handler.getQuestionsByCompany = (req, res, next) =>
-  OpenQuestion.searchItems({owner: {$in: toObjectArray(res.companies)}},
+  OpenQuestion.searchItems({owner: {$in: toObjectArray(res.companies)}, free:true},
     (err, questions) => nextItems(err, questions, res, next))
 
 handler.getQuestionsById = (req, res, next) =>
-  OpenQuestion.searchItems({owner: req.params.id},
+  OpenQuestion.searchItems({owner: req.params.id, free:true},
     (err, questions) => nextItems(err, questions, res, next))
 
 handler.getMyQuestions = (req, res, next) =>

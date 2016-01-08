@@ -211,7 +211,7 @@ export default (url) => {
               })
         })
 
-        it('.get questions by companys name', done => { //todo free = false
+        it('.get questions by companys name', done => {
             const data = {companyName: 'Abweb'}
             request(url)
               .post(`/api/test-question-company`)
@@ -220,15 +220,17 @@ export default (url) => {
                   assert.equal(res.status, 200)
                   assert.property(res.body, 'testQuestions')
                   assert.isArray(res.body.testQuestions)
+                  for (var i = 0; i<res.body.testQuestions; ++i)
+                      assert.equal(res.body.testQuestions[i].free, true)
                   done()
               })
         })
 
-        it('.get questions by companys id', done => { //todo free = false
+        it('.get questions by companys id', done => {
             const index = Math.floor(list.length * Math.random())
             const searchId = list[index].owner._id
             const searchedById = []
-            list.forEach(el => el.owner && el.owner._id == searchId && searchedById.push(el))
+            list.forEach(el => el.owner && el.owner._id == searchId && el.free && searchedById.push(el))
 
             request(url)
               .get(`/api/test-question-company/${searchId}`)
