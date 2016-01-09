@@ -27,7 +27,7 @@ export default React.createClass({
   render() {
     return (
       <Paper className='control-paper' style={{top: this.state.top}}>
-        Edit\Add\Delete
+        Edit + Add Panel
       </Paper>
     )
   }

@@ -1,10 +1,11 @@
 import React from 'react'
-import TextField from 'material-ui/lib/TextField/TextField'
+ import TextField from 'material-ui/lib/TextField/TextField'
 import FlatButton from 'material-ui/lib/flat-button'
 import Loader from '../../../components/loader'
 import Paper from 'material-ui/lib/paper'
 import Table from './table'
 import ControlPaper from './control-paper'
+import Remove from '../../dictionary/item/remove'
 
 export default React.createClass({
   getInitialState() {
@@ -48,10 +49,14 @@ export default React.createClass({
     this.setState({search: event.target.value, count: 20})
   },
 
+  handleRemove(id) {
+    this.refs.remove.handleRemove(id)
+  },
+
   render() {
     return (
       <div style={{position: 'relative'}}>
-        <Paper style={{display: 'inline-block', boxSizing: 'border-box', width: '30%'}}>
+        <Paper style={{display: 'inline-block', boxSizing: 'border-box', width: '35%'}}>
           <div style={{height: 100}}>
             <TextField
               hintText={`${this.props.name.toLowerCase()} by name`}
@@ -70,8 +75,10 @@ export default React.createClass({
                   search={this.state.search}
                   items={this.state.items}
                   count={this.state.count}
+                  handleRemove={this.handleRemove}
                   handleMore={() => this.setState(({count}) => ({count: count + 20}))} />
           }
+          <Remove name={this.props.name} Api={this.props.Api} ref='remove' />
         </Paper>
         <ControlPaper initTop={this.props.initTop}/>
       </div>

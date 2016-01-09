@@ -54,7 +54,7 @@ export default React.createClass({
   render() {
     return (
       <AppBar
-        title='Admin'
+        title='Control Panel'
         iconElementLeft={this.props.admin && this.nav()}
         iconElementRight={this.props.admin && <FlatButton label='Log Out' onClick={this.logout} />}
       />

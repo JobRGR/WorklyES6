@@ -36,6 +36,7 @@ export default React.createClass({
                   {this.props.name} {this.state.type == 'name' && (this.state.order == -1 ? <span>&#x25B4;</span> : <span>&#x25BE;</span>)}
                 </span>
               </TableHeaderColumn>
+              <TableHeaderColumn tooltip='Delete' style={{width: '40px'}}>Delete</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody showRowHover={true} stripedRows={false} displayRowCheckbox={false}>
@@ -44,6 +45,9 @@ export default React.createClass({
                 <TableRow key={index}>
                   <TableRowColumn style={{width: '20px'}}>{index + 1}</TableRowColumn>
                   <TableRowColumn>{item.name}</TableRowColumn>
+                  <TableRowColumn style={{width: '40px'}}>
+                    <IconButton onTouchTap={() => this.props.handleRemove(item._id)}><Delete /></IconButton>
+                  </TableRowColumn>
                 </TableRow>
               ))
             }

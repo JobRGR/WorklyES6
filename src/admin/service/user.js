@@ -72,6 +72,7 @@ class UserService extends Events {
         if (typeof item.name == 'object')
           item.name = item.name.name
       })
+    this.items = items
     this.emit('loaded', items)
   }
 
