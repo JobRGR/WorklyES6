@@ -1,10 +1,10 @@
 import Events from './events'
 import pluralize from 'pluralize'
-import DictionaryApi from '../../client_api/api/dictionary'
+import UserApi from '../../client_api/api/user'
 
-const {CityApi, SkillApi, CompanyNameApi, PositionApi, SpecialityApi, UniversityApi} = DictionaryApi
+const {CompanyApi, StudentApi} = UserApi
 
-class DictionaryService extends Events {
+class UserService extends Events {
   constructor(api, name) {
     super()
     this.itemName = name
@@ -26,10 +26,10 @@ class DictionaryService extends Events {
       .catch(err => this.setError(err))
   }
 
-  editItem(id, name) {
+  editItem(id, item) {
     const {itemName, items} = this
     this.api
-      .updateItem(id, {name})
+      .updateItem(id, item)
       .then(({data}) => data[itemName] &&
       this.setItems(items.map(item => item._id == data[itemName]._id ? data[itemName]: item)))
   }
@@ -37,7 +37,7 @@ class DictionaryService extends Events {
   addItem(name) {
     const {itemName, items} = this
     this.api
-      .addItem({name})
+      .addItem(item)
       .then(({data}) => {
         if(!data[itemName]) return null
         if(items.some(({_id}) => data[itemName]._id == _id)) return null
@@ -67,7 +67,11 @@ class DictionaryService extends Events {
 
   setItems(items = []) {
     this.loading = null
-    this.items = items
+    if (items.length)
+      items.forEach(item => {
+        if (typeof item.name == 'object')
+          item.name = item.name.name
+      })
     this.emit('loaded', items)
   }
 
@@ -77,12 +81,8 @@ class DictionaryService extends Events {
 }
 
 export default {
-  CityService: new DictionaryService(CityApi, 'city'),
-  SkillService: new DictionaryService(SkillApi, 'skill'),
-  CompanyNameService: new DictionaryService(CompanyNameApi, 'companyName'),
-  PositionService: new DictionaryService(PositionApi, 'position'),
-  SpecialityService: new DictionaryService(SpecialityApi, 'speciality'),
-  UniversityService: new DictionaryService(UniversityApi, 'university')
+  CompanyService: new UserService(CompanyApi, 'company'),
+  StudentService: new UserService(StudentApi, 'student')
 }
 
 

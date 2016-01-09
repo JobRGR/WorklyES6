@@ -45,6 +45,7 @@ export default React.createClass({
         >
           <MenuItem onTouchTap={() => this.navigate('/admin/')}>Server Info</MenuItem>
           <MenuItem onTouchTap={() => this.navigate('/admin/dictionary')}>Dictionary Dashboard</MenuItem>
+          <MenuItem onTouchTap={() => this.navigate('/admin/company')}>Company Dashboard</MenuItem>
         </LeftNav>
       </div>
     )

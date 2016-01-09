@@ -1,7 +1,7 @@
 {
   "name": "Workly",
   "version": "1.0.0",
-  "main": "./src/srever/index.js",
+  "main": "./src/server/index.js",
   "authors": [
     "Gregory Shehet",
     "Ignat Blazhko",
