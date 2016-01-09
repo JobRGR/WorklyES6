@@ -21,13 +21,19 @@ export default {
 
   getPie(req, res, next) {
     let statistic = new Statistic()
-    let {name, date} = req.body
-    res.send({pie: statistic.pie(name, date)})
+    let {name, date, error} = req.body
+    res.send({pie: statistic.getPie(name, date, error)})
   },
 
   getGraph(req, res, next) {
     let statistic = new Statistic()
-    let {name, type} = req.body
-    res.send({graph: statistic.graph(name, type)})
+    let {name, type, error} = req.body
+    res.send({graph: statistic.getGraph(name, type, error)})
+  },
+
+  getMultiGraph(req, res, next) {
+    let statistic = new Statistic()
+    let {names, type, error} = req.body
+    res.send({graph: statistic.getMultiGraph(names, type, error)})
   }
 }
