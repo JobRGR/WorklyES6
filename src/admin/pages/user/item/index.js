@@ -13,8 +13,7 @@ export default React.createClass({
       loading: false,
       error: null,
       count: 20,
-      search: '',
-      initTop: 0
+      search: ''
     }
   },
 
@@ -23,10 +22,6 @@ export default React.createClass({
     this.props.Api.onLoading(this.onLoading)
     this.props.Api.onError(this.onError)
     !this.state.items.length && this.props.Api.loadAll()
-  },
-
-  componentDidMount() {
-    this.setState({initTop: React.findDOMNode(this).offsetTop})
   },
 
   componentWillUnmount() {
@@ -78,7 +73,7 @@ export default React.createClass({
                   handleMore={() => this.setState(({count}) => ({count: count + 20}))} />
           }
         </Paper>
-        <ControlPaper initTop={this.state.initTop}/>
+        <ControlPaper initTop={this.props.initTop}/>
       </div>
     )
   }
