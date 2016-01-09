@@ -23,7 +23,7 @@ class AdminService extends Events {
   }
 
   logout() {
-    return AdminApi
+    AdminApi
       .logout()
       .then(({data}) => data.logout && this.setAdmin())
   }
