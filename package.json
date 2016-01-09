@@ -50,6 +50,7 @@
     "react-addons-pure-render-mixin": "^0.14.0",
     "react-addons-transition-group": "^0.14.0",
     "react-addons-update": "^0.14.0",
+    "react-chartist": "^0.10.1",
     "react-dom": "^0.14.0",
     "react-hot-loader": "^1.2.2",
     "react-router": "^2.0.0-rc4",

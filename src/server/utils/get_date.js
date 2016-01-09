@@ -4,9 +4,7 @@ let getDate = (val) => {
   return date
 }
 
-export default (start, end) => {
-  return {
-    $gte: start ? getDate(start) : new Date(0, 0, 0),
-    $lt: end ? getDate(end) : new Date()
-  }
-}
+export default (start, end) => ({
+  $gte: start ? getDate(start) : new Date(0, 0, 0),
+  $lt: end ? getDate(end) : new Date()
+})

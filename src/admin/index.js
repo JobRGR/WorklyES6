@@ -16,4 +16,4 @@ const router = (
   </Router>
 )
 
-render(router, document.body)
+render(router, document.getElementById('app'))

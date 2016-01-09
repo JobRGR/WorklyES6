@@ -55,7 +55,7 @@ export default (url) => {
 
     it('.get percent of some api request to all', done => {
       request(url)
-        .post(`${path}-count`)
+        .post(`${path}/count`)
         .send({name: 'student', type: 'put', status: 200})
         .expect(200)
         .end((err, res) => {
@@ -67,7 +67,7 @@ export default (url) => {
 
     it('.get percent of some api request to all api request', done => {
       request(url)
-        .post(`${path}-count-type`)
+        .post(`${path}/count/type`)
         .send({name: 'student', type: 'put', status: 200})
         .expect(200)
         .end((err, res) => {
