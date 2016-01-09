@@ -24,7 +24,7 @@ api
   .use(Student)
   .use(OpenQuestion)
   .use(TestQuestion)
-  .use(Statistic)
+  .use('/statistics', Statistic)
   .use(Vacancy)
   .use(Admin)
 

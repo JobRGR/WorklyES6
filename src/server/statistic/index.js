@@ -60,9 +60,9 @@ class Statistic {
       else if (type == 'month') label = `${min.getDate()} ${monthList[min.getMonth()]}`
       else if (type == 'day') label = `${min.getDate()} / ${min.getHours() > 10 ? min.getHours() : `0${min.getHours()}`}:00`
       memo.labels.push(label)
-      memo.series.push(val)
+      memo.series[0].push(val)
       return memo
-    }, {labels: [], series: []})
+    }, {labels: [], series: [[]]})
   }
 
   getPie(name = this.apiList, date, error = false) {

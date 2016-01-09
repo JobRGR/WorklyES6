@@ -6,7 +6,7 @@ import superagent from 'superagent'
 
 
 export default (url) => {
-  const path = '/api/statistic'
+  const path = '/api/statistics'
 
   let allCount = 0
   let apiCount = 0

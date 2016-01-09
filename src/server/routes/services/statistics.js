@@ -2,9 +2,9 @@ import express from 'express'
 import Statistic from '../../handler/statistic'
 
 export default express.Router()
-  .post('/statistic', Statistic.getItem)
-  .post('/statistic/count', Statistic.getCount)
-  .post('/statistic/count/type', Statistic.getCountType)
-  .post('/statistic/pie', Statistic.getPie)
-  .post('/statistic/graph', Statistic.getGraph)
-  .post('/statistic/multi-graph', Statistic.getMultiGraph)
+  .post('/', Statistic.getItem)
+  .post('/count', Statistic.getCount)
+  .post('/count/type', Statistic.getCountType)
+  .post('/pie', Statistic.getPie)
+  .post('/graph', Statistic.getGraph)
+  .post('/multi-graph', Statistic.getMultiGraph)

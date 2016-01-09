@@ -25,6 +25,29 @@ class Statistics {
     })
   }
 
+  getPie(body) {
+    return request({
+      url: `${this.path}/pie`,
+      method: 'post',
+      body
+    })
+  }
+
+  getGraph(body) {
+    return request({
+      url: `${this.path}/graph`,
+      method: 'post',
+      body
+    })
+  }
+
+  getMultiGraph(body) {
+    return request({
+      url: `${this.path}/multi-graph`,
+      method: 'post',
+      body
+    })
+  }
 }
 
 export default new Statistics()
