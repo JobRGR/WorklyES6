@@ -1,5 +1,5 @@
 export default {
-  uri: process.env.prod ? 'mongodb://workly:workly@ds031763.mongolab.com:31763/workly' : 'mongodb://localhost/worklyES6',
+  uri: (process.env.prod || process.env.test) ? 'mongodb://workly:workly@ds031763.mongolab.com:31763/workly' : 'mongodb://localhost/worklyES6',
   session: {
     secret: 'someSecret',
     key: 'sid',
