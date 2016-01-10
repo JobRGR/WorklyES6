@@ -6,7 +6,11 @@ import StatisticsApi from '../../client_api/api/statistic'
 class StatisticsService extends Events {
   constructor() {
     super()
-    this.dashboard = null
+    this.dashboard = {
+      day: null,
+      month: null,
+      year: null
+    }
     this.loading = null
     this.type = 'month'
   }
@@ -18,14 +22,20 @@ class StatisticsService extends Events {
     }, (err, {percent, statistic}) => cb(percent, statistic))
   }
 
-  load() {
+  load(important = false) {
     let {type} = this
-    if (this.loading) return
+    let max = new Date()
+    let min = new Date()
+    if (this.loading && !important) return
     this.loading = {}
+    type == 'day' && min.setDate(min.getDate() - 1)
+    type == 'month' && min.setMonth(min.getMonth() - 1)
+    type == 'year' && min.setFullYear(min.getFullYear() - 1)
     async.parallel({
-      pie: cb => StatisticsApi.getPie().then(({data = {}}) => cb(null, data.pie)),
+      pie: cb => StatisticsApi.getPie({date: {min, max}}).then(({data = {}}) => cb(null, data.pie)),
       graph: cb => StatisticsApi.getGraph({type}).then(({data = {}}) => cb(null, data.graph)),
-      multiGraph: cb => StatisticsApi.getMultiGraph({type}).then(({data = {}}) => cb(null, data.graph))
+      multiGraph: cb => StatisticsApi.getMultiGraph({type}).then(({data = {}}) => cb(null, data.graph)),
+      errorPie: cb => StatisticsApi.getPie({date: {min, max}, error: true}).then(({data = {}}) => cb(null, data.pie))
     }, (err, dashboard) => this.setDashboard(dashboard))
   }
 
@@ -37,12 +47,17 @@ class StatisticsService extends Events {
 
   setDashboard(dashboard = null) {
     this.loading = null
-    this.dashboard = dashboard
+    this.dashboard[this.type] = dashboard
     this.emit('loaded', dashboard)
   }
 
+  setType(type) {
+    this.type = type
+    return this.dashboard[type] ? this.setDashboard(this.dashboard[type]) : this.load()
+  }
+
   get cachedDashboard() {
-    return this.dashboard
+    return this.dashboard[this.type]
   }
 }
 

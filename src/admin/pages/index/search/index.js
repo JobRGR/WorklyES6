@@ -25,19 +25,11 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      loading: false,
-      count: 20,
-      percent: null,
-      statistic: null,
-      name: '',
-      url: '',
-      status: '',
-      type: '',
-      ip: '',
-      minDate: null,
-      maxDate: null,
-      minTime: '',
-      maxTime: ''
+      loading: false, count: 20,
+      percent: null, statistic: null,
+      name: '', url: '', status: '', type: '', ip: '',
+      minDate: null, maxDate: null,
+      minTime: '', maxTime: ''
     }
   },
 
@@ -104,35 +96,32 @@ export default React.createClass({
 
   render() {
     return (
-      <div style={{padding: 20}}>
+      <div>
         {
           this.state.loading &&
           <RefreshIndicator
             size={40}
-            style={{
-              float: 'right',
-              position: 'relative',
-              boxShadow: 'none'
-            }}
+            style={{float: 'right', position: 'relative', boxShadow: 'none'}}
             top={0}
             left={0}
             status='loading'
           />
         }
-        <CardTitle title='Search Logs Data' titleStyle={{fontSize: 30}} />
+        <CardTitle title='Search Logs Data' titleStyle={{fontSize: 30, marginLeft: 13}}  />
         <div style={{float: 'right'}}>
-          <CardTitle title='Time of request' />
+          <CardTitle title='Time of request' titleStyle={{marginLeft: 13}} />
           {this.textField('Add min time (ms)', 'Min time', 'minTime')}
           {this.textField('Add max time (ms)', 'Max time', 'maxTime')}
         </div>
         <div style={{float: 'right'}}>
-          <CardTitle title='Date' />
+          <CardTitle title='Date' titleStyle={{marginLeft: 13}} />
           {this.date('Add min date', 'minDate')}
           {this.date('Add max date', 'maxDate')}
+          {this.state.percent && <span style={this.percentStyle()}>{this.state.percent.toFixed(2)}% requests</span>}
         </div>
         {types.map(type => this.textField(`Add ${capitalize(type)}`, `${capitalize(type)}`, type))}
         <FlatButton
-          style={{display: 'block', marginLeft: 30, marginTop: 20, width: 300}}
+          style={{display: 'block', marginLeft: 30, marginTop: 20, marginBottom: 20, width: 300}}
           label='Search'
           primary={true}
           onTouchTap={this.handleSearch} />
@@ -145,5 +134,14 @@ export default React.createClass({
         }
       </div>
     )
+  },
+
+  percentStyle() {
+    return {
+      fontSize: 30,
+      color: 'rgba(0, 0, 0, 0.54)',
+      display: 'block',
+      margin: '50px 30px'
+    }
   }
 })

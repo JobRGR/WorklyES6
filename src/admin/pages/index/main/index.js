@@ -3,9 +3,12 @@ import PureRenderMixin from 'react-addons-pure-render-mixin'
 import ChartistGraph from 'react-chartist'
 import StatisticService from '../../../service/statistic'
 import CardHeader from 'material-ui/lib/card/card-header'
-import CardText from 'material-ui/lib/card/card-text'
 import CardTitle from 'material-ui/lib/card/card-title'
+import FlatButton from 'material-ui/lib/flat-button'
+import CardActions from 'material-ui/lib/card/card-actions'
 import Loader from '../../../components/loader'
+import capitalize from '../../../tools/capitalize'
+
 
 const size = {
   width: '100%',
@@ -26,7 +29,8 @@ export default React.createClass({
     return {
       dashboard: StatisticService.cachedDashboard,
       loading: null,
-      error: null
+      error: null,
+      type: StatisticService.type
     }
   },
 
@@ -56,6 +60,11 @@ export default React.createClass({
     this.setState({loading: true})
   },
 
+  handleType(type) {
+    this.setState({type, dashboard: null})
+    StatisticService.setType(type)
+  },
+
   loader(style) {
     return (
       <div style={style}>
@@ -70,14 +79,12 @@ export default React.createClass({
         <CardHeader
           title={title}
           titleStyle={subStyle} />
-        <CardText>
-          {graph ? <ChartistGraph data={graph} options={options} type='Line' /> : this.loader(size)}
-        </CardText>
+        {graph ? <ChartistGraph data={graph} options={options} type='Line' /> : this.loader(size)}
       </div>
     )
   },
 
-  pie(pie) {
+  pie(title, pie) {
     let data = {labels: [], series: [[]]}
     if (pie) {
       for (let key in pie) {
@@ -88,24 +95,35 @@ export default React.createClass({
     return (
       <div>
         <CardHeader
-          title='Apis usage'
+          title={title}
           titleStyle={subStyle}/>
-        <CardText>
-          {pie ? <ChartistGraph data={data} type='Bar' option={size} /> : this.loader({width: '100%', height: 150})}
-        </CardText>
+        {pie ? <ChartistGraph data={data} type='Bar' option={size} /> : this.loader({width: '100%', height: 150})}
       </div>
     )
   },
 
   render() {
+    const types = ['day', 'month', 'year']
     let dashboard = this.state.dashboard || {}
     let options = {low: 0, showArea: true, width: size.width, height: size.height}
     return (
-      <div style={{padding: 20}}>
+      <div>
         <CardTitle title='Server Dashboard' titleStyle={{fontSize: 30}} />
+        <CardActions>
+          {
+            types.map(type => <FlatButton
+              key={type}
+              label={capitalize(type)}
+              disabled={type == this.state.type}
+              primary
+              onTouchTap={() => type != this.state.type && this.handleType(type)}
+            />)
+          }
+        </CardActions>
         {this.graph('Server info graph', dashboard.graph, options)}
         {this.graph('Apis info graph', dashboard.multiGraph, size)}
-        {this.pie(dashboard.pie)}
+        {this.pie('Apis usage', dashboard.pie)}
+        {this.pie('Error in apis', dashboard.errorPie)}
       </div>
     )
   }
