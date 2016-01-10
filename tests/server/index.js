@@ -9,7 +9,7 @@ import openQuestion from './lib/open_question'
 import testQuestion from './lib/test_question'
 import vacancy from './lib/vacancy'
 import admin from './lib/admin'
-import statistic from './lib/statistics'
+import statistic from './lib/statistic'
 import errorStudent from './error/student'
 import errorCompany from './error/company'
 

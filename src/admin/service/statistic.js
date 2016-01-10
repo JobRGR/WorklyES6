@@ -1,6 +1,6 @@
 import async from 'async'
 import Events from './events'
-import StatisticsApi from '../../client_api/api/statistics'
+import StatisticsApi from '../../client_api/api/statistic'
 
 
 class StatisticsService extends Events {
@@ -9,6 +9,13 @@ class StatisticsService extends Events {
     this.dashboard = null
     this.loading = null
     this.type = 'month'
+  }
+
+  search(body, cb) {
+    async.parallel({
+      percent: cb => StatisticsApi.count(body).then(({data = {}}) => cb(null, data.value)),
+      statistic: cb => StatisticsApi.search(body).then(({data = {}}) => cb(null, data.statistic))
+    }, (err, {percent, statistic}) => cb(percent, statistic))
   }
 
   load() {

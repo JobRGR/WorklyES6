@@ -2,7 +2,7 @@ import request from '../utils/request'
 
 class Statistics {
   constructor() {
-    this.path = '/api/statistics'
+    this.path = '/api/statistic'
   }
 
   search(body) {

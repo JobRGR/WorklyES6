@@ -6,13 +6,13 @@ import superagent from 'superagent'
 
 
 export default (url) => {
-  const path = '/api/statistics'
+  const path = '/api/statistic'
 
   let allCount = 0
   let apiCount = 0
   let apiPartCount = 0
 
-  describe('statistics tests', () => {
+  describe('statistic tests', () => {
 
     it('.get all', done => {
       request(url)
@@ -121,7 +121,7 @@ export default (url) => {
           assert.hasOwnProperty(graph, 'series')
           assert.isArray(graph.labels)
           assert.isArray(graph.series)
-          assert.equal(graph.series.length, graph.labels.length)
+          assert.equal(graph.series[0].length, graph.labels.length)
           done()
         })
     }

@@ -1,7 +1,7 @@
 import React from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import ChartistGraph from 'react-chartist'
-import StatisticsService from '../../../service/statistics'
+import StatisticService from '../../../service/statistic'
 import CardHeader from 'material-ui/lib/card/card-header'
 import CardText from 'material-ui/lib/card/card-text'
 import CardTitle from 'material-ui/lib/card/card-title'
@@ -24,23 +24,23 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      dashboard: StatisticsService.cachedDashboard,
+      dashboard: StatisticService.cachedDashboard,
       loading: null,
       error: null
     }
   },
 
   componentWillUnmount() {
-    StatisticsService.removeErrorListener(this.onError)
-    StatisticsService.removeLoadingListener(this.onLoading)
-    StatisticsService.removeLoadedListener(this.onLoaded)
+    StatisticService.removeErrorListener(this.onError)
+    StatisticService.removeLoadingListener(this.onLoading)
+    StatisticService.removeLoadedListener(this.onLoaded)
   },
 
   componentWillMount() {
-    StatisticsService.onError(this.onError)
-    StatisticsService.onLoading(this.onLoading)
-    StatisticsService.onLoaded(this.onLoaded)
-    !this.state.dashboard && StatisticsService.load()
+    StatisticService.onError(this.onError)
+    StatisticService.onLoading(this.onLoading)
+    StatisticService.onLoaded(this.onLoaded)
+    !this.state.dashboard && StatisticService.load()
   },
 
   onError(error) {

@@ -8,7 +8,7 @@ import Student from './services/student'
 import {Experience, Education} from './services/education_experience'
 import OpenQuestion from './services/open_question'
 import TestQuestion from './services/test_question'
-import Statistic from './services/statistics'
+import Statistic from './services/statistic'
 import Vacancy from './services/vacancy'
 import Admin from './services/admin'
 
@@ -24,7 +24,7 @@ api
   .use(Student)
   .use(OpenQuestion)
   .use(TestQuestion)
-  .use('/statistics', Statistic)
+  .use('/statistic', Statistic)
   .use(Vacancy)
   .use(Admin)
 
