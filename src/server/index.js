@@ -25,7 +25,7 @@ app
   .use(bodyParser.urlencoded({limit: '50mb', extended: false}))
   .use(bodyParser.json({limit: '50mb'}))
   .use(cookieParser())
-  .use(morgan('dev'))
+  .use(morgan(process.env.prod ? 'prod' : 'dev'))
   .use(session)
   .use(lusca(config.security))
   .use(authLoader)
