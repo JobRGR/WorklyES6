@@ -241,7 +241,6 @@ export default (url) => {
       studentUser
         .get(`${url + path}/${tmpModel._id}`)
         .end((err, res) => {
-          console.log(res.body.vacancy)
           assert.equal(res.status, 200)
           assert.property(res.body, 'vacancy')
           assert.property(res.body.vacancy, 'name')
