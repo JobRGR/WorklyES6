@@ -45,6 +45,7 @@ export default React.createClass({
         >
           <MenuItem onTouchTap={() => this.navigate('/admin/')}>Server Info</MenuItem>
           <MenuItem onTouchTap={() => this.navigate('/admin/dictionary')}>Dictionary Dashboard</MenuItem>
+          <MenuItem onTouchTap={() => this.navigate('/admin/user')}>User Dashboard</MenuItem>
         </LeftNav>
       </div>
     )
@@ -53,7 +54,7 @@ export default React.createClass({
   render() {
     return (
       <AppBar
-        title='Admin'
+        title='Control Panel'
         iconElementLeft={this.props.admin && this.nav()}
         iconElementRight={this.props.admin && <FlatButton label='Log Out' onClick={this.logout} />}
       />

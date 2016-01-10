@@ -3,6 +3,7 @@ import {render} from 'react-dom'
 import {browserHistory, Router, Route, IndexRoute} from 'react-router'
 import Index from './pages/index'
 import Dictionary from './pages/dictionary'
+import User from './pages/user'
 import App from './pages/app'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
@@ -12,6 +13,7 @@ const router = (
     <Route path='/admin' component={App}>
       <IndexRoute component={Index} />
       <Route path='dictionary' component={Dictionary} />
+      <Route path='user' component={User} />
     </Route>
   </Router>
 )
