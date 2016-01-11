@@ -3,8 +3,6 @@ node_js:
   - "4"
 services:
   - mongodb
-before_script:
-  - curl -X PUT mongodb://localhost/worklyES6
 script:
   - npm run db
 env:
