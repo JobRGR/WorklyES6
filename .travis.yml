@@ -4,7 +4,7 @@ node_js:
 before_script:
   - mongo mydb_test --eval 'db.addUser("travis", "test");'
   - curl -X PUT mongodb://localhost/worklyES6
-before_script:
+script:
   - npm run db
 env:
   - CXX=g++-4.8
