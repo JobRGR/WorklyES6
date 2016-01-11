@@ -4,6 +4,8 @@ var styleBuild = require('./utils/style')
 var scriptBuild = require('./utils/script')
 var imageBuild = require('./utils/image')
 var htmlBuild = require('./utils/html')
+var rename = require('gulp-rename')
+var rewrite = require('./utils/rewrite')
 
 var dist = './dist/client/'
 var src =  './src/client/'
@@ -18,6 +20,12 @@ gulp.task('img', imageBuild.bind(this, img, dist))
 gulp.task('html', htmlBuild.bind(this, html, dist))
 gulp.task('style', styleBuild.bind(this, style, dist))
 
+gulp.task('newrilic', function() {
+  return gulp.src('./src/lib/**/*.js')
+    .pipe(rename(rewrite))
+    .pipe(gulp.dest(dist + 'js'))
+})
+
 gulp.task('watch', function() {
   function start(name) {
     gulp.start(name)
@@ -29,4 +37,4 @@ gulp.task('watch', function() {
   watch(clientApi, start.bind(this, 'js'))
 })
 
-gulp.task('client', ['js', 'style', 'img', 'html'])
+gulp.task('client', ['js', 'style', 'img', 'html', 'newrilic'])
