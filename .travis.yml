@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - "4"
 before_script:
-  - mongo mydb_test --eval 'db.addUser("travis", "test");'
+  - mongo worklyES6
   - curl -X PUT mongodb://localhost/worklyES6
 script:
   - npm run db
