@@ -69,6 +69,7 @@
     "postinstall": "./node_modules/.bin/gulp build",
     "build": "./node_modules/.bin/gulp",
     "debug": "./node_modules/.bin/gulp dev",
-    "start": "./node_modules/.bin/babel-node ./src/server"
+    "dev": "./node_modules/.bin/babel-node ./src/server",
+    "start": "./node_modules/.bin/babel-node ./src/server/prod.js"
   }
 }

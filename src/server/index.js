@@ -15,7 +15,7 @@ import authLoader from './middleware/auth_loader'
 const port = process.env.PORT || config.port
 let app = express()
 
-!process.env.test && initProcess() && require('newrelic')
+!process.env.test && !process.env.prod && initProcess() && require('newrelic')
 
 app
   .engine('html', ejs.renderFile)
@@ -25,7 +25,7 @@ app
   .use(bodyParser.urlencoded({limit: '50mb', extended: false}))
   .use(bodyParser.json({limit: '50mb'}))
   .use(cookieParser())
-  .use(morgan(process.env.prod ? 'prod' : 'dev'))
+  .use(morgan('dev'))
   .use(session)
   .use(lusca(config.security))
   .use(authLoader)
