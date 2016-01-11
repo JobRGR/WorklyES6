@@ -16,14 +16,16 @@ import errorCompany from './error/company'
 
 const {port} = config
 const ip = '127.0.0.1'
-const url = `${ip}:${port}`
+const url = process.env.url || `${ip}:${port}`
 
-portscanner.checkPortStatus(port, ip, (error, status) => {
-  if (status == 'closed') {
-    process.env.test = true
-    require('../../src/server')
-  }
-})
+if (!process.env.url) {
+  portscanner.checkPortStatus(port, ip, (error, status) => {
+    if (status == 'closed') {
+      process.env.test = true
+      require('../../src/server')
+    }
+  })
+}
 
 const microServices = ['speciality', 'university', 'city', 'skill', 'position', 'company-name']
 microServices.forEach(name => dictionary(url, name))

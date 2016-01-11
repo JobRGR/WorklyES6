@@ -119,7 +119,10 @@ export default (url) => {
         it('.get count', done => count(url, path, list.length, done))
 
         it('.set item', done => {
-            const index = Math.floor(list.length * Math.random())
+            let index = null
+            do {
+              index = Math.floor(list.length * Math.random())
+            } while (!list[index].owner)
             tmpData.owner = list[index].owner._id
             request(url)
                 .post(path)
@@ -143,7 +146,11 @@ export default (url) => {
         it('.check set', done => count(url, path, list.length + 1, done))
 
         it('.put item', done => {
-            const index = Math.floor(list.length * Math.random())
+            let index = null
+            do {
+              index = Math.floor(list.length * Math.random())
+              console.log(list[index].owner)
+            } while (!list[index].owner)
             newTmpData.owner = list[index].owner._id
             request(url)
                 .put(`${path}/${tmpModel._id}`)
@@ -221,7 +228,10 @@ export default (url) => {
         })
 
         it('.get questions by companys id', done => {
-            const index = Math.floor(list.length * Math.random())
+            let index = null
+            do {
+              index = Math.floor(list.length * Math.random())
+            } while (!list[index].owner)
             const searchId = list[index].owner._id
             const searchedById  = []
             list.forEach(el => el.owner && el.owner._id == searchId && el.free && searchedById.push(el))
