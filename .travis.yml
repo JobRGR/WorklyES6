@@ -8,7 +8,7 @@ script:
   - npm run test
 deploy:
   provider: heroku
-  api_key: 40952476-72da-4dfe-9309-86749989faa7
+  api_key: "40952476-72da-4dfe-9309-86749989faa7"
   app: workly
   on:
     	branch: master
