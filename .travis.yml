@@ -1,8 +1,9 @@
 language: node_js
 node_js:
   - "4"
+services:
+  - mongodb
 before_script:
-  - mongo worklyES6
   - curl -X PUT mongodb://localhost/worklyES6
 script:
   - npm run db
