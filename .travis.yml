@@ -5,7 +5,6 @@ services:
   - mongodb
 script:
   - npm run db
-  - npm run start
   - npm run test
 env:
   - CXX=g++-4.8
