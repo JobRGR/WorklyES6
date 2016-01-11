@@ -7,7 +7,7 @@ var del = require('del')
 
 gulp.task('clean', function(cb) { del(['dist/'], cb) })
 gulp.task('build', ['clean'], function () {
-  gulp.start(['js', 'style', 'img', 'html', 'admin:js', 'admin:style', 'admin:img', 'admin:html'])
+  gulp.start(['client', 'admin'])
 })
 gulp.task('dev', ['build', 'debug', 'inspector'])
-gulp.task('default', ['build', 'server'])
+gulp.task('default', ['build', 'server', 'admin:watch', 'watch'])

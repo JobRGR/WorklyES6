@@ -29,4 +29,4 @@ gulp.task('watch', function() {
   watch(clientApi, start.bind(this, 'js'))
 })
 
-gulp.task('client', ['js', 'style', 'img', 'html', 'watch'])
+gulp.task('client', ['js', 'style', 'img', 'html'])
