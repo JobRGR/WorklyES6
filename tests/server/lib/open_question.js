@@ -149,7 +149,6 @@ export default (url) => {
             let index = null
             do {
               index = Math.floor(list.length * Math.random())
-              console.log(list[index].owner)
             } while (!list[index].owner)
             newTmpData.owner = list[index].owner._id
             request(url)
@@ -265,6 +264,7 @@ export default (url) => {
       it('.add questions for company', done => {
         let req = request(url).post("/api/open-question-add")
         agent.attachCookies(req)
+        tmpModel = {}
         req
           .send(tmpData)
           .end(((err, res) => {
@@ -275,7 +275,7 @@ export default (url) => {
               done()
             }))
 
-    })
+      })
 
     it('.get my open questions', done => {
       let req = request(url).get(`/api/open-question-my`)
