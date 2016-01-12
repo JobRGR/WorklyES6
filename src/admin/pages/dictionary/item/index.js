@@ -81,7 +81,7 @@ export default React.createClass({
             primary={true}
             onTouchTap={this.handleAdd} />
         </div>
-        {this.state.loading && <Loader />}
+        {this.state.loading && <div style={{height: 300}}><Loader /></div>}
         {
           !this.state.loading && this.state.items.length > 0 &&
           <Table
