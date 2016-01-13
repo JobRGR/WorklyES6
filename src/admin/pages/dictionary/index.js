@@ -4,7 +4,7 @@ import Card from 'material-ui/lib/card/card'
 import CardTitle from 'material-ui/lib/card/card-title'
 import Tabs from 'material-ui/lib/tabs/tabs'
 import Tab from 'material-ui/lib/tabs/tab'
-import DictionaryService from '../../service/dicitionary'
+import DictionaryService from '../../service/dictionary'
 import Item from './item'
 
 export default React.createClass({

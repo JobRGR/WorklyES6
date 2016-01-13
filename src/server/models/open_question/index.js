@@ -45,12 +45,6 @@ schema.statics.getQuestionsByName = function(name, callback) {
 
         }
     });
-
-    //CompanyName
-    //    .find({name: name})
-    //    .populate(foreignKeys)
-    //    .sort(sort)
-    //    .exec(callback)
 }
 
 schema.statics.getCount = getCount

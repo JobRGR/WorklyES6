@@ -1,5 +1,6 @@
 import express from 'express'
 import OpenQuestion from '../../handler/open_question'
+import TestQuestion from '../../handler/test_question'
 import CompanyNameHandler from '../../handler/company_name'
 import CompanyHandler from '../../handler/company'
 import checkCompany from '../../middleware/check/company'

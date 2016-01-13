@@ -10,7 +10,6 @@ import OpenQuestion from './models/open_question'
 import TestQuestion from './models/test_question'
 import Admin from './models/admin'
 
-
 async.waterfall([
   callback => drop(callback),
   callback => Dictionary.generate(err => callback(err)),

@@ -1,11 +1,13 @@
 import React from 'react'
 import {render} from 'react-dom'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import {browserHistory, Router, Route, IndexRoute} from 'react-router'
 import Index from './pages/index'
 import Dictionary from './pages/dictionary'
 import User from './pages/user'
 import App from './pages/app'
-import injectTapEventPlugin from 'react-tap-event-plugin'
+import NotFound from '../client/pages/not_found'
+
 injectTapEventPlugin()
 
 const router = (
@@ -14,8 +16,9 @@ const router = (
       <IndexRoute component={Index} />
       <Route path='dictionary' component={Dictionary} />
       <Route path='user' component={User} />
+      <Route path="*" component={NotFound}/>
     </Route>
   </Router>
 )
 
-render(router, document.body)
+render(router, document.getElementById('app'))

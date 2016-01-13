@@ -11,7 +11,13 @@ Install all dependencies.
 $ npm install
 ```
 
-## Run app
+## Run development app (local db)
+
+```
+$ npm run dev
+```
+
+## Run production app (prod db)
 
 ```
 $ npm run start

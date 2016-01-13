@@ -8,7 +8,7 @@ var htmlBuild = require('./utils/html')
 var dist = './dist/admin/'
 var src =  './src/admin/'
 var img = src + '**/*.{png,jpg,woff,eof,svg,gif}'
-var style = src + '**/*.styl'
+var style = src + '**/*.{styl,css}'
 var js = src + '**/*.js'
 var html = src + 'index.html'
 var clientApi = './src/client_api'
@@ -29,4 +29,4 @@ gulp.task('admin:watch', function() {
   watch(clientApi, start.bind(this, 'admin:js'))
 })
 
-gulp.task('admin', ['admin:js', 'admin:style', 'admin:img', 'admin:html', 'admin:watch'])
+gulp.task('admin', ['admin:js', 'admin:style', 'admin:img', 'admin:html'])

@@ -4,11 +4,13 @@ var styleBuild = require('./utils/style')
 var scriptBuild = require('./utils/script')
 var imageBuild = require('./utils/image')
 var htmlBuild = require('./utils/html')
+var rename = require('gulp-rename')
+var rewrite = require('./utils/rewrite')
 
 var dist = './dist/client/'
 var src =  './src/client/'
 var img = src + '**/*.{png,jpg,woff,eof,svg,gif}'
-var style = src + '**/*.styl'
+var style = src + '**/*.{styl,css}'
 var js = src + '**/*.js'
 var html = src + 'index.html'
 var clientApi = './src/client_api'
@@ -17,6 +19,12 @@ gulp.task('js', scriptBuild.bind(this, src, dist))
 gulp.task('img', imageBuild.bind(this, img, dist))
 gulp.task('html', htmlBuild.bind(this, html, dist))
 gulp.task('style', styleBuild.bind(this, style, dist))
+
+gulp.task('newrilic', function() {
+  return gulp.src('./src/lib/**/*.js')
+    .pipe(rename(rewrite))
+    .pipe(gulp.dest(dist + 'js'))
+})
 
 gulp.task('watch', function() {
   function start(name) {
@@ -29,4 +37,4 @@ gulp.task('watch', function() {
   watch(clientApi, start.bind(this, 'js'))
 })
 
-gulp.task('client', ['js', 'style', 'img', 'html', 'watch'])
+gulp.task('client', ['js', 'style', 'img', 'html', 'newrilic'])

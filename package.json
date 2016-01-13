@@ -16,6 +16,7 @@
     "body-parser": "^1.13.3",
     "chai": "^3.4.1",
     "charlatan": "^1.0.0",
+    "chartist": "^0.9.5",
     "connect": "^2.30.2",
     "cookie-parser": "^1.4.0",
     "crypto": "0.0.3",
@@ -50,6 +51,7 @@
     "react-addons-pure-render-mixin": "^0.14.0",
     "react-addons-transition-group": "^0.14.0",
     "react-addons-update": "^0.14.0",
+    "react-chartist": "^0.10.1",
     "react-dom": "^0.14.0",
     "react-hot-loader": "^1.2.2",
     "react-router": "^2.0.0-rc4",
@@ -62,11 +64,13 @@
     "webpack": "^1.9.10"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha --compilers js:babel/register ./tests/server",
+    "test": "./node_modules/.bin/mocha --compilers js:babel/register ./tests/server --timeout 10000",
+    "test_prod": "./node_modules/.bin/mocha --compilers js:babel/register ./tests/prod.js --timeout 120000",
     "db": "./node_modules/.bin/babel-node ./src/server/data",
     "postinstall": "./node_modules/.bin/gulp build",
     "build": "./node_modules/.bin/gulp",
     "debug": "./node_modules/.bin/gulp dev",
-    "start": "./node_modules/.bin/babel-node ./src/server"
+    "dev": "./node_modules/.bin/babel-node ./src/server",
+    "start": "./node_modules/.bin/babel-node ./src/server/prod.js"
   }
 }
