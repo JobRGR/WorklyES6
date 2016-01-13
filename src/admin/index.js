@@ -5,7 +5,7 @@ import {browserHistory, Router, Route, IndexRoute} from 'react-router'
 import Index from './pages/index'
 import Dictionary from './pages/dictionary'
 import App from './pages/app'
-import NotFound from './pages/not_found'
+import NotFound from '../client/pages/not_found'
 
 injectTapEventPlugin()
 

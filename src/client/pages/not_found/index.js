@@ -1,14 +1,15 @@
 import React from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import {Link, browserHistory} from 'react-router'
-import RaisedButton from 'material-ui/lib/raised-button';
+import RaisedButton from 'material-ui/lib/raised-button'
 
 
 export default React.createClass({
   mixins: [PureRenderMixin],
 
   navigate() {
-    browserHistory.push('/')
+    let path = document.location.pathname.indexOf('admin') > -1 ? '/admin' : '/'
+    browserHistory.push(path)
   },
 
   render() {
