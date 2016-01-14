@@ -36,6 +36,9 @@ handler.initUser = (req, res, next) => {
 handler.login = (req, res, next) => Student.authorize(req.body, (err, student) => saveSession(err, student, req, res, next))
 handler.getStudent = (req, res, next) => nextItem(null, req._student, res, next)
 
+handler.autoLogin = (req, res, next) =>
+  Student.getItem(req.params.id, (err, student) => saveSession(err, student, req, res, next))
+
 handler.searchItems = (req, res, next) => {
   let search = {}
   if (req.body.age) search.dob = getDate(req.body.age.min, req.body.age.max)
