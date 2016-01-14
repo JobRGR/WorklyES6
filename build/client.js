@@ -19,6 +19,7 @@ gulp.task('js', scriptBuild.bind(this, src, dist))
 gulp.task('img', imageBuild.bind(this, img, dist))
 gulp.task('html', htmlBuild.bind(this, html, dist))
 gulp.task('style', styleBuild.bind(this, style, dist))
+gulp.task('style', styleBuild.bind(this, style, dist))
 
 gulp.task('newrilic', function() {
   return gulp.src('./src/lib/**/*.js')
