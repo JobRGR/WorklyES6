@@ -21,7 +21,7 @@ gulp.task('html', htmlBuild.bind(this, html, dist))
 gulp.task('style', styleBuild.bind(this, style, dist))
 gulp.task('style', styleBuild.bind(this, style, dist))
 
-gulp.task('newrilic', function() {
+gulp.task('lib', function() {
   return gulp.src('./src/lib/**/*.js')
     .pipe(rename(rewrite))
     .pipe(gulp.dest(dist + 'js'))
@@ -38,4 +38,4 @@ gulp.task('watch', function() {
   watch(clientApi, start.bind(this, 'js'))
 })
 
-gulp.task('client', ['js', 'style', 'img', 'html', 'newrilic'])
+gulp.task('client', ['js', 'style', 'img', 'html', 'lib'])
