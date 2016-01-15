@@ -89,8 +89,9 @@ class UserService extends Events {
     this.loading = null
     if (items.length)
       items.forEach(item => {
-        if (typeof item.name == 'object')
-          item.name = item.name.name
+        for (let key in item)
+          if (typeof item[key] == 'object')
+            item[key] = item[key].name
       })
     this.items = items
     this.emit('loaded', items)

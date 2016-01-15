@@ -128,7 +128,7 @@ export default React.createClass({
                           Api={this.props.Api}
                           item={this.state.currentItem}
                           initTop={this.props.initTop} /> :
-            <div style={{display: 'inline-block', boxSizing: 'border-box', height: '200px', width: '55%'}}>
+            <div style={{display: 'inline-block', boxSizing: 'border-box', height: '200px', width: '50%'}}>
               <Loader />
             </div>
         }
