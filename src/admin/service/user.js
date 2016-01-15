@@ -30,17 +30,37 @@ class UserService extends Events {
     const {itemName, items} = this
     this.api
       .updateItem(id, item)
-      .then(({data}) => data[itemName] &&
-      this.setItems(items.map(item => item._id == data[itemName]._id ? data[itemName]: item)))
+      .then(({data}) => {
+        data[itemName] && (data[itemName].city = {name: item.city}) &&
+        this.setItems(items.map(item => item._id == data[itemName]._id ? data[itemName] : item))
+      })
   }
 
-  addItem(name) {
+  editMail(id, email){
+    const {itemName, items} = this
+    this.api
+      .changeEmailItem(id, {email})
+      .then(({data}) => {
+        items.forEach(item => {
+          if (item._id == id) item.email = email
+        })
+        this.setItems(items)
+      })
+  }
+
+  editPass(id, password){
+    this.api
+      .changePasswordItem(id, {password})
+      .then(({data}) => data.ok)
+  }
+
+  addItem(item) {
     const {itemName, items} = this
     this.api
       .addItem(item)
       .then(({data}) => {
         if(!data[itemName]) return null
-        if(items.some(({_id}) => data[itemName]._id == _id)) return null
+        data[itemName].name = item.name
         items.push(data[itemName])
         this.setItems(items)
       })

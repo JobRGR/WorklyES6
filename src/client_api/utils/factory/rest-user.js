@@ -26,7 +26,7 @@ class RestUser {
   }
 
   getItem(id) {
-    return request({url: `${this.path}${id}`})
+    return request({url: `${this.path}/${id}`})
   }
 
   getCount() {
