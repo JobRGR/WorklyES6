@@ -5,6 +5,7 @@ import CompanyName from '../../handler/company_name'
 import Company from '../../handler/company'
 import checkStudent from '../../middleware/check/student'
 import checkCompany from '../../middleware/check/company'
+import checkVacancy from '../../middleware/check/vacancy'
 
 let router = (name, handler) =>
   express()
@@ -41,6 +42,7 @@ let router = (name, handler) =>
     )
     .put(`/${name}-update/:id`,
       checkCompany,
+      checkVacancy,
       Dictionaries['City'].addItem,
       Dictionaries['Skill'].addItems,
       handler.updateItem,

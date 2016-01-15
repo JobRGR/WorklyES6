@@ -1,7 +1,7 @@
 {
   "name": "Workly",
   "version": "1.0.0",
-  "main": "./src/srever/index.js",
+  "main": "./src/server/index.js",
   "authors": [
     "Gregory Shehet",
     "Ignat Blazhko",
@@ -21,6 +21,7 @@
     "cookie-parser": "^1.4.0",
     "crypto": "0.0.3",
     "del": "^1.1.1",
+    "dateformat": "^1.0.12",
     "ejs": "^2.3.4",
     "events": "^1.1.0",
     "express": "^4.12.4",

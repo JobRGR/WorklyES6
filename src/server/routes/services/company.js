@@ -6,7 +6,6 @@ import checkAdmin from '../../middleware/check/admin'
 import checkCompany from '../../middleware/check/company'
 import rest from '../../utils/router/helpers/rest'
 
-
 export default express()
   .get('/company-count', Company.getCount)
   .get('/company-random', Company.getRandom, Company.sendItem)
