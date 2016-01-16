@@ -24,9 +24,7 @@ export default React.createClass({
     let top = document.body.scrollTop - this.props.initTop
     let maxHeight = document.documentElement.clientHeight
     if (top > 0) {
-      this.state.maxHeight == maxHeight ?
-        this.setState({top}) :
-        this.setState({top, maxHeight})
+      this.state.maxHeight == maxHeight ? this.setState({top}) : this.setState({top, maxHeight})
     }
     else {
       maxHeight += top

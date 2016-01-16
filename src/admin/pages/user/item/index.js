@@ -18,7 +18,7 @@ export default React.createClass({
       currentItem: null,
       loading: false,
       error: null,
-      count: 20,
+      count: 10,
       search: ''
     }
   },
@@ -60,7 +60,7 @@ export default React.createClass({
   handleSearch(event) {
     event.preventDefault()
     event.stopPropagation()
-    this.setState({search: event.target.value, count: 20})
+    this.setState({search: event.target.value, count: 10})
   },
 
   handleRemove(id) {
@@ -116,7 +116,7 @@ export default React.createClass({
                   handleRemove={this.handleRemove}
                   handleEditMail={this.handleEditMail}
                   handleEditPass={this.handleEditPass}
-                  handleMore={() => this.setState(({count}) => ({count: count + 20}))} />
+                  handleMore={() => this.setState(({count}) => ({count: count + 10}))} />
           }
           <Remove name={this.props.name} Api={this.props.Api} ref='remove' />
           <EditMail name={this.props.name} Api={this.props.Api} ref='editMail' />
