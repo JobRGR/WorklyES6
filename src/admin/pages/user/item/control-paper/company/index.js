@@ -2,13 +2,13 @@ import React from 'react'
 import TextField from 'material-ui/lib/text-field'
 import FlatButton from 'material-ui/lib/flat-button'
 import Snackbar from 'material-ui/lib/snackbar'
+import Avatar from '../avatar'
 import capitalize from '../../../../../tools/capitalize'
 import dateFormat from 'dateformat'
 
 export default React.createClass({
 
   getInitialState() {
-    let item = this.props.item
     return {
       item: this.props.item,
       open: false,
@@ -51,6 +51,7 @@ export default React.createClass({
     const textFieldStyle = {width: '98%', marginLeft: '1%', marginRight: '1%'}
     return (
       <div>
+        {this.props.item.avatar && <Avatar src={this.props.item.avatar} email={this.props.item.email} />}
         <TextField
           disabled
           hintText={`enter ${alias} name`}

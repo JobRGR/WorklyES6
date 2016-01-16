@@ -18,7 +18,7 @@ export default React.createClass({
       currentItem: null,
       loading: false,
       error: null,
-      count: 20,
+      count: 15,
       search: ''
     }
   },
@@ -60,7 +60,7 @@ export default React.createClass({
   handleSearch(event) {
     event.preventDefault()
     event.stopPropagation()
-    this.setState({search: event.target.value, count: 20})
+    this.setState({search: event.target.value, count: 15})
   },
 
   handleRemove(id) {
@@ -106,17 +106,17 @@ export default React.createClass({
           }
           {
             !this.state.loading && this.state.items.length > 0 &&
-                <Table
-                  ref='table'
-                  name={this.props.name}
-                  search={this.state.search}
-                  items={this.state.items}
-                  count={this.state.count}
-                  handleRowSelection={this.handleRowSelection}
-                  handleRemove={this.handleRemove}
-                  handleEditMail={this.handleEditMail}
-                  handleEditPass={this.handleEditPass}
-                  handleMore={() => this.setState(({count}) => ({count: count + 20}))} />
+              <Table
+                ref='table'
+                name={this.props.name}
+                search={this.state.search}
+                items={this.state.items}
+                count={this.state.count}
+                handleRowSelection={this.handleRowSelection}
+                handleRemove={this.handleRemove}
+                handleEditMail={this.handleEditMail}
+                handleEditPass={this.handleEditPass}
+                handleMore={() => this.setState(({count}) => ({count: count + 15}))} />
           }
           <Remove name={this.props.name} Api={this.props.Api} ref='remove' />
           <EditMail name={this.props.name} Api={this.props.Api} ref='editMail' />

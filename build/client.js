@@ -1,5 +1,6 @@
 var gulp = require('gulp')
 var watch = require('gulp-watch')
+var concat = require('gulp-concat')
 var styleBuild = require('./utils/style')
 var scriptBuild = require('./utils/script')
 var imageBuild = require('./utils/image')
@@ -23,7 +24,7 @@ gulp.task('style', styleBuild.bind(this, style, dist))
 
 gulp.task('lib', function() {
   return gulp.src('./src/lib/**/*.js')
-    .pipe(rename(rewrite))
+    .pipe(concat('lib.js'))
     .pipe(gulp.dest(dist + 'js'))
 })
 

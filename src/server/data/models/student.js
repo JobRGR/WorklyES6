@@ -1,5 +1,6 @@
 import Charlatan from 'charlatan'
 import async from 'async'
+import faker from 'faker'
 import {Education, Experience, Skill, City, Student} from '../../models/models'
 import addArray from '../utils/add_array'
 import random from '../utils/random'
@@ -15,7 +16,8 @@ for (let i = 0; i < 100; i++) {
     about: Charlatan.Lorem.text(3, 20, '\n'),
     dob: Charlatan.Date.birthday(18, 25),
     skills: [], city: '', password: '1111',
-    educations: [], experiences: []
+    educations: [], experiences: [],
+    avatar: faker.image.avatar(200, 200)
   })
 }
 
