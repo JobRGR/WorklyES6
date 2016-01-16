@@ -51,7 +51,7 @@ export default React.createClass({
     const textFieldStyle = {width: '98%', marginLeft: '1%', marginRight: '1%'}
     return (
       <div>
-        <Avatar src={this.props.item.avatar} email={this.props.item.email} />
+        {this.props.item.avatar && <Avatar src={this.props.item.avatar} email={this.props.item.email} />}
         <TextField
           disabled
           hintText={`enter ${alias} name`}
