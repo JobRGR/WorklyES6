@@ -12,6 +12,7 @@ let schema = new Schema({
     type: String, required: true, unique: true,
     match: /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-?[a-zA-Z0-9])*(\.[a-zA-Z](-?[a-zA-Z0-9])*)+$/
   },
+  avatar: {type: String},
   name: {type: mongoose.Schema.Types.ObjectId, required: true, unique: true, ref: 'CompanyName'},
   site: {type: String},
   about: {type: String},
@@ -57,9 +58,9 @@ schema.statics.authorize = function ({email, password}, callback) {
     })
 }
 
-schema.statics.addItem = function ({name, email, site, about, city, password}, callback) {
+schema.statics.addItem = function ({name, email, site, about, city, password, avatar}, callback) {
   let Company = this
-  let company = new Company({name, email, site, about, city, password})
+  let company = new Company({name, email, site, about, city, password, avatar})
   company.save(err => callback(err, company))
 }
 
