@@ -8,7 +8,7 @@ export default {
     cookie: {
       path: '/',
       httpOnly: true,
-      maxAge: 1000000
+      maxAge: 10000000000
     }
   },
   newrelic: {

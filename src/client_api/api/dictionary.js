@@ -32,11 +32,9 @@ class DictionaryApi extends Rest {
   }
 }
 
-export default {
-  CityApi: new DictionaryApi('city'),
-  SkillApi: new DictionaryApi('skill'),
-  CompanyNameApi: new DictionaryApi('company-name'),
-  PositionApi: new DictionaryApi('position'),
-  SpecialityApi: new DictionaryApi('speciality'),
-  UniversityApi: new DictionaryApi('university')
-}
+export let CityApi = new DictionaryApi('city')
+export let SkillApi = new DictionaryApi('skill')
+export let CompanyNameApi = new DictionaryApi('company-name')
+export let PositionApi = new DictionaryApi('position')
+export let SpecialityApi = new DictionaryApi('speciality')
+export let UniversityApi = new DictionaryApi('university')
