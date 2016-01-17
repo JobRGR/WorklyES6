@@ -6,7 +6,7 @@ import {checkDate, getRanges, monthList} from '../utils/date'
 
 class Statistic {
   constructor() {
-    this.data = fs
+    let data = fs
       .readFileSync(path.resolve(__dirname, '../../../express_server.log'), 'utf8')
       .split('\n')
       .filter(item => item.length)
@@ -19,6 +19,7 @@ class Statistic {
         version = version.substring(0, version.length - 1)
         return {ip, date, req: {type, url, version, status, time}}
       })
+    this.data = data.reverse()
     this.apiList = ['student', 'company', 'city', 'skill', 'vacancy', 'admin', 'speciality', 'university', 'company-name', 'open-question', 'test-question', 'position', 'statistic']
   }
 

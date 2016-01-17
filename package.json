@@ -20,12 +20,14 @@
     "connect": "^2.30.2",
     "cookie-parser": "^1.4.0",
     "crypto": "0.0.3",
+    "dateformat": "^1.0.12",
     "del": "^1.1.1",
     "ejs": "^2.3.4",
     "events": "^1.1.0",
     "express": "^4.12.4",
     "express-logger": "0.0.3",
     "express-session": "^1.12.1",
+    "faker": "^3.0.1",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.0.1",
     "gulp-concat": "^2.6.0",
@@ -64,11 +66,13 @@
     "webpack": "^1.9.10"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha --compilers js:babel/register ./tests/server",
+    "test": "./node_modules/.bin/mocha --compilers js:babel/register ./tests/server --timeout 10000",
+    "test_prod": "./node_modules/.bin/mocha --compilers js:babel/register ./tests/prod.js --timeout 120000",
     "db": "./node_modules/.bin/babel-node ./src/server/data",
     "postinstall": "./node_modules/.bin/gulp build",
     "build": "./node_modules/.bin/gulp",
     "debug": "./node_modules/.bin/gulp dev",
-    "start": "./node_modules/.bin/babel-node ./src/server"
+    "dev": "./node_modules/.bin/babel-node ./src/server",
+    "start": "./node_modules/.bin/babel-node ./src/server/prod.js"
   }
 }

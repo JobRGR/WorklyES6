@@ -14,6 +14,7 @@ let schema = new Schema({
     match: /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-?[a-zA-Z0-9])*(\.[a-zA-Z](-?[a-zA-Z0-9])*)+$/
   },
   name: {type: String, required: true},
+  avatar: {type: String},
   dob: {type: Date},
   telephone: {type: String},
   about: {type: String},
@@ -64,9 +65,9 @@ schema.statics.authorize = function ({email, password}, callback) {
     })
 }
 
-schema.statics.addItem = function ({name, email, dob, telephone, about, educations, experiences, skills, city, password}, callback) {
+schema.statics.addItem = function ({name, email, dob, telephone, about, educations, experiences, skills, city, password, avatar}, callback) {
   let Student = this
-  let student = new Student({name, email, dob, telephone, about, educations, experiences, skills, city, password})
+  let student = new Student({name, email, dob, telephone, about, educations, experiences, skills, city, password, avatar})
   student.save(err => callback(err, student))
 }
 

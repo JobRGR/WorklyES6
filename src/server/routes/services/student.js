@@ -5,12 +5,14 @@ import CompanyName from '../../handler/company_name'
 import Education from '../../handler/education'
 import Experience from '../../handler/experience'
 import rest from '../../utils/router/helpers/rest'
+import checkAdmin from '../../middleware/check/admin'
 import checkStudent from '../../middleware/check/student'
 
 export default express()
     .get('/student-count', Student.getCount)
     .get('/student-random', Student.getRandom, Student.sendItem)
     .get('/student-status', Student.getStudent, Student.sendItem)
+    .get('/student-auto-login/:id', checkAdmin, Student.autoLogin, Student.sendItem)
     .post('/student-login', Student.login, Student.sendItem)
     .post('/student-search',
       Dictionaries['City'].searchItems,

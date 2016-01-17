@@ -15,7 +15,7 @@ import authLoader from './middleware/auth_loader'
 const port = process.env.PORT || config.port
 let app = express()
 
-!process.env.test && initProcess() && require('newrelic')
+!process.env.test && !process.env.prod && initProcess() && require('newrelic')
 
 app
   .engine('html', ejs.renderFile)

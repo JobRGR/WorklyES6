@@ -1,5 +1,7 @@
 # GuidMe Blog
 
+[![Build Status](https://travis-ci.org/JobRGR/WorklyES6.svg?branch=master)](https://travis-ci.org/JobRGR/WorklyES6)
+
 It is study project which use React server/client rendering and Babel-Node
 
 
@@ -11,7 +13,13 @@ Install all dependencies.
 $ npm install
 ```
 
-## Run app
+## Run development app (local db)
+
+```
+$ npm run dev
+```
+
+## Run production app (prod db)
 
 ```
 $ npm run start

@@ -38,6 +38,9 @@ handler.initUser = (req, res, next) => {
 handler.login = (req, res, next) => Company.authorize(req.body, (err, company) => saveSession(err, company, req, res, next))
 handler.getCompany = (req, res, next) => nextItem(null, req._company, res, next)
 
+handler.autoLogin = (req, res, next) =>
+  Company.getItem(req.params.id, (err, company) => saveSession(err, company, req, res, next))
+
 handler.searchItems = (req, res, next) => {
   let search = {}
   if (req.body.email) search.email = req.body.email

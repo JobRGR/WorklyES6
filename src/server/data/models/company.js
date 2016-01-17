@@ -1,5 +1,6 @@
 import Charlatan from 'charlatan'
 import async from 'async'
+import faker from 'faker'
 import {City, CompanyName, Company} from '../../models/models'
 import addArray from '../utils/add_array'
 import random from '../utils/random'
@@ -9,7 +10,8 @@ let data = []
 for (let i = 0; i < 100; i++)
   data.push({
     about: Charlatan.Lorem.text(3, 20, '\n'),
-    password: '1111'
+    password: '1111',
+    avatar: faker.image.abstract(200, 200)
   })
 
 export default cb => async.waterfall([

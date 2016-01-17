@@ -1,9 +1,12 @@
 var gulp = require('gulp')
 var watch = require('gulp-watch')
+var concat = require('gulp-concat')
 var styleBuild = require('./utils/style')
 var scriptBuild = require('./utils/script')
 var imageBuild = require('./utils/image')
 var htmlBuild = require('./utils/html')
+var rename = require('gulp-rename')
+var rewrite = require('./utils/rewrite')
 
 var dist = './dist/client/'
 var src =  './src/client/'
@@ -17,6 +20,13 @@ gulp.task('js', scriptBuild.bind(this, src, dist))
 gulp.task('img', imageBuild.bind(this, img, dist))
 gulp.task('html', htmlBuild.bind(this, html, dist))
 gulp.task('style', styleBuild.bind(this, style, dist))
+gulp.task('style', styleBuild.bind(this, style, dist))
+
+gulp.task('lib', function() {
+  return gulp.src('./src/lib/**/*.js')
+    .pipe(concat('lib.js'))
+    .pipe(gulp.dest(dist + 'js'))
+})
 
 gulp.task('watch', function() {
   function start(name) {
@@ -29,4 +39,4 @@ gulp.task('watch', function() {
   watch(clientApi, start.bind(this, 'js'))
 })
 
-gulp.task('client', ['js', 'style', 'img', 'html', 'watch'])
+gulp.task('client', ['js', 'style', 'img', 'html', 'lib'])
