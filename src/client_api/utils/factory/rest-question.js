@@ -5,10 +5,6 @@ class RestQuestion {
     this.path = `/api/${name}`
   }
 
-  status() {
-    return request({url: `${this.path}-status`})
-  }
-
   getAll() {
     return request({url: this.path})
   }
@@ -33,49 +29,9 @@ class RestQuestion {
     })
   }
 
-  updateSelf(body) {
+  updateItem(id, body) {
     return request({
-      url: `${this.path}-update`,
-      method: 'put',
-      body
-    })
-  }
-
-  searchItems(body) {
-    return request({
-      url: `${this.path}-search`,
-      method: 'post',
-      body
-    })
-  }
-
-  changeEmailItem(id, body) {
-    return request({
-      url: `${this.path}-email/${id}`,
-      method: 'put',
-      body
-    })
-  }
-
-  changeEmailSelf(body) {
-    return request({
-      url: `${this.path}-email`,
-      method: 'put',
-      body
-    })
-  }
-
-  changePasswordItem(id, body) {
-    return request({
-      url: `${this.path}-password/${id}`,
-      method: 'put',
-      body
-    })
-  }
-
-  changePasswordSelf(body) {
-    return request({
-      url: `${this.path}-password`,
+      url: `${this.path}/${id}`,
       method: 'put',
       body
     })

@@ -10,7 +10,7 @@ let {Schema} = mongoose
 let schema = new Schema({
     question: {type: String, required: true},
     answer: {type: String, required: true},
-    owner: {type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true},
+    owner: {type: mongoose.Schema.Types.ObjectId, ref: 'Company'},
     free: {type: Boolean, required: true}
 }, {timestamps: true})
 

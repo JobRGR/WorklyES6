@@ -15,7 +15,14 @@ const style = {
 
 export default React.createClass({
   getInitialState() {
-    return {open: false}
+    return {
+      open: false,
+      question: '',
+      errorTextQuestion: '',
+      answer: [],
+      errorTextAnswer: '',
+      free: '',
+      errorTextFree: ''}
   },
 
   handleOpen() {
@@ -26,22 +33,36 @@ export default React.createClass({
     this.setState({open: false});
   },
 
+  handleAddAnswer() {
+    let answer = this.state.answer
+    answer.push('')
+    this.setState({answer})
+  },
+
   handleChangeQuestion(event) {
     event.preventDefault()
     event.stopPropagation()
     this.setState({question: event.target.value, errorTextQuestion: ''})
   },
 
-  handleChangeAnswer(event) {
+  handleChangeAnswer(event, index) {
     event.preventDefault()
     event.stopPropagation()
-    this.setState({answer: event.target.value, errorTextAnswer: ''})
+    let {answer} = this.state
+    answer[index] = event.target.value
+    this.setState({answer})
   },
 
   handleChangeFree(event) {
     event.preventDefault()
     event.stopPropagation()
     this.setState({free: event.target.value, errorTextFree: ''})
+  },
+
+  handleChangeCorrect(event) {
+    event.preventDefault()
+    event.stopPropagation()
+    this.setState({correct: event.target.value, errorTextCorrect: ''})
   },
 
   handleAdd() {
@@ -64,7 +85,8 @@ export default React.createClass({
     this.props.Api.addItem({
       question: this.state.question,
       answer: this.state.answer,
-      free: this.state.free
+      free: this.state.free,
+      correct: this.state.correct
     })
     this.handleClose()
   },
@@ -105,16 +127,6 @@ export default React.createClass({
             errorText={this.state.errorTextQuestion}
             onChange={this.handleChangeQuestion}/>
           <TextField
-            hintText={`${name} answer`}
-            floatingLabelText='Enter answer'
-            fullWidth
-            inputStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
-            hintStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
-            floatingLabelStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
-            value={this.state.answer}
-            errorText={this.state.errorTextAnswer}
-            onChange={this.handleChangeAnswer} />
-          <TextField
             hintText={`${name} privacy`}
             floatingLabelText='Enter privacy'
             fullWidth
@@ -124,6 +136,36 @@ export default React.createClass({
             value={this.state.free}
             errorText={this.state.errorTextFree}
             onChange={this.handleChangeFree} />
+          <TextField
+            hintText={`${name} correct`}
+            floatingLabelText='Enter correct'
+            fullWidth
+            inputStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
+            hintStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
+            floatingLabelStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
+            value={this.state.correct}
+            errorText={this.state.errorTextCorrect}
+            onChange={this.handleChangeCorrect} />
+          <FlatButton
+            label="Add answer"
+            primary={true}
+            keyboardFocused={true}
+            onTouchTap={() => this.handleAddAnswer()}/>
+          {this.state.answer.map((el, index) => {
+            return <TextField
+              hintText={`${name} answer`}
+              floatingLabelText='Enter answer'
+              fullWidth
+              inputStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
+              hintStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
+              floatingLabelStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
+              value={el}
+              key={index}
+              errorText={this.state.errorTextAnswer}
+              onChange={(event) => this.handleChangeAnswer(event, index)} />;
+          })}
+
+
         </Dialog>
       </div>
     )
