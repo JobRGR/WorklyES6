@@ -123,7 +123,6 @@ export default React.createClass({
         {this.props.name == 'open-questions'?
           <AddOpen name={this.props.name} Api={this.props.Api} ref='add' /> :
           <AddTest name={this.props.name} Api={this.props.Api} ref='add' />}
-
       </div>
     )
   }

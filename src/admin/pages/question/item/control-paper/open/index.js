@@ -61,7 +61,7 @@ export default React.createClass({
           name='createdAt' />
         <TextField
           fullWidth
-          hintText={`enter ${alias} privacy`}
+          hintText={`Add ${alias} privacy`}
           floatingLabelText='Privacy'
           inputStyle={textFieldStyle}
           hintStyle={textFieldStyle}
@@ -71,7 +71,7 @@ export default React.createClass({
           onChange={this.handleTextFieldChange} />
         <TextField
           fullWidth
-          hintText={`enter ${alias} owner`}
+          hintText={`Add ${alias} owner`}
           floatingLabelText='Owner'
           inputStyle={textFieldStyle}
           hintStyle={textFieldStyle}
@@ -82,7 +82,7 @@ export default React.createClass({
         <TextField
           multiLine
           fullWidth
-          hintText={`enter ${alias}`}
+          hintText={`Add ${alias}`}
           floatingLabelText='Question'
           inputStyle={textFieldStyle}
           hintStyle={textFieldStyle}
@@ -93,7 +93,7 @@ export default React.createClass({
         <TextField
           multiLine
           fullWidth
-          hintText={`enter answer of ${alias}`}
+          hintText={`Add answer of ${alias}`}
           floatingLabelText='Answer'
           inputStyle={textFieldStyle}
           hintStyle={textFieldStyle}

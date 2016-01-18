@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import CardTitle from 'material-ui/lib/card/card-title'
 import Tabs from 'material-ui/lib/tabs/tabs'
@@ -17,10 +18,16 @@ export default React.createClass({
     this.setState({value})
   },
 
+  componentDidMount() {
+    this.setState({
+      initTop: ReactDOM.findDOMNode(this).offsetTop + ReactDOM.findDOMNode(this.refs.tab).offsetHeight
+    })
+  },
+
   tab(name, Api, index) {
     return (
       <Tab label={name} value={index} key={index} ref='tab'>
-        {index == this.state.value && <Item name={name} Api={Api} />}
+        {index == this.state.value && <Item name={name} Api={Api} initTop={this.state.initTop} />}
       </Tab>
     )
   },
