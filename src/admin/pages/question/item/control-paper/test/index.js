@@ -3,7 +3,6 @@ import TextField from 'material-ui/lib/text-field'
 import FlatButton from 'material-ui/lib/flat-button'
 import DatePicker from 'material-ui/lib/date-picker/date-picker'
 import Snackbar from 'material-ui/lib/snackbar'
-import Avatar from '../avatar'
 import capitalize from '../../../../../tools/capitalize'
 import dateFormat from 'dateformat'
 
@@ -26,6 +25,14 @@ export default React.createClass({
     event.stopPropagation()
     let item = this.state.item
     item[event.target.name] = event.target.value
+    this.setState({item})
+  },
+
+  handleQuestion(event) {
+    event.preventDefault()
+    event.stopPropagation()
+    let item = this.state.item
+    item.answer[event.target.name] = event.target.value
     this.setState({item})
   },
 
@@ -56,66 +63,73 @@ export default React.createClass({
     const name = capitalize(this.props.name.toLowerCase())
     const alias = name.toLowerCase()
     const textFieldStyle = {width: '98%', marginLeft: '1%', marginRight: '1%'}
-    return (
+    const item = this.state.item
+      return (
       <div>
-        {this.props.item.avatar && <Avatar src={this.props.item.avatar} email={this.props.item.email} />}
-        <TextField
-          hintText={`enter ${alias} name`}
-          floatingLabelText={`${name} name`}
-          style={{minWidth: '50%'}}
-          inputStyle={textFieldStyle}
-          hintStyle={textFieldStyle}
-          floatingLabelStyle={textFieldStyle}
-          value={this.state.item.name}
-          name='name'
-          onChange={this.handleTextFieldChange}
-        />
         <TextField
           disabled={true}
+          fullWidth
           floatingLabelText='Created at'
-          style={{minWidth: '50%'}}
           inputStyle={textFieldStyle}
           hintStyle={textFieldStyle}
           floatingLabelStyle={textFieldStyle}
           value={dateFormat(new Date(this.state.item.createdAt), "dddd, mmmm dS, yyyy, hh:MM:ss")}
           name='createdAt' />
         <TextField
-          hintText={`enter ${alias} mobile`}
-          floatingLabelText='Mobile'
-          style={{minWidth: '50%'}}
+          fullWidth
+          hintText={`enter ${alias} privacy`}
+          floatingLabelText='Privacy'
           inputStyle={textFieldStyle}
           hintStyle={textFieldStyle}
           floatingLabelStyle={textFieldStyle}
-          value={this.state.item.telephone || ''}
-          name='telephone'
+          value={this.state.item.free || 'false'}
+          name='privacy'
           onChange={this.handleTextFieldChange} />
-        <DatePicker
-          hintText="Landscape Dialog"
-          mode="landscape"
-          textFieldStyle={{height: '72px'}}
-          style={{display: 'inline-block', minWidth: '50%', boxSizing: 'border-box', verticalAlign: 'top'}}
-          value={this.state.item.dob ? new Date(this.state.item.dob) : ''}
-          onChange={this.handleDateChange} />
         <TextField
-          hintText={`${alias} location`}
-          floatingLabelText='City'
-          style={{minWidth: '50%'}}
+          fullWidth
+          hintText={`enter ${alias} owner`}
+          floatingLabelText='Owner'
           inputStyle={textFieldStyle}
           hintStyle={textFieldStyle}
           floatingLabelStyle={textFieldStyle}
-          value={this.state.item.city || ''}
-          name='city'
+          value={this.state.item.owner ? this.state.item.owner._id : ''}
+          name='owner'
           onChange={this.handleTextFieldChange} />
         <TextField
           multiLine
           fullWidth
-          hintText={`enter information about ${alias}`}
-          floatingLabelText='About'
+          hintText={`enter ${alias}`}
+          floatingLabelText='Question'
           inputStyle={textFieldStyle}
           hintStyle={textFieldStyle}
           floatingLabelStyle={textFieldStyle}
-          name='about'
-          value={this.state.item.about || ''}
+          name='question'
+          value={this.state.item.question || ''}
+          onChange={this.handleTextFieldChange} />
+        {this.state.item.answer.map((value, index) => {
+          return <TextField
+            multiLine
+            fullWidth
+            hintText={`enter correct answer of ${alias}`}
+            floatingLabelText='Answer'
+            inputStyle={textFieldStyle}
+            hintStyle={textFieldStyle}
+            floatingLabelStyle={textFieldStyle}
+            name={index}
+            value={value}
+            key={index}
+            onChange={this.handleQuestion}/>;
+        })}
+        <TextField
+          multiLine
+          fullWidth
+          hintText={`enter ${alias}`}
+          floatingLabelText='Correct'
+          inputStyle={textFieldStyle}
+          hintStyle={textFieldStyle}
+          floatingLabelStyle={textFieldStyle}
+          name='correct'
+          value={this.state.item.correct || ''}
           onChange={this.handleTextFieldChange} />
         <FlatButton
           label='Update'
@@ -129,7 +143,7 @@ export default React.createClass({
           autoHideDuration={this.state.autoHideDuration}
           onActionTouchTap={this.handleUndo}
           onRequestClose={this.handleClose}
-        />
+          />
       </div>
     )
   }

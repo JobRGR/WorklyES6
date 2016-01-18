@@ -2,7 +2,6 @@ import React from 'react'
 import TextField from 'material-ui/lib/text-field'
 import FlatButton from 'material-ui/lib/flat-button'
 import Snackbar from 'material-ui/lib/snackbar'
-import Avatar from '../avatar'
 import capitalize from '../../../../../tools/capitalize'
 import dateFormat from 'dateformat'
 
@@ -51,58 +50,56 @@ export default React.createClass({
     const textFieldStyle = {width: '98%', marginLeft: '1%', marginRight: '1%'}
     return (
       <div>
-        {this.props.item.avatar && <Avatar src={this.props.item.avatar} email={this.props.item.email} />}
-        <TextField
-          disabled
-          hintText={`enter ${alias} name`}
-          floatingLabelText={`${name} name`}
-          style={{minWidth: '50%'}}
-          inputStyle={textFieldStyle}
-          hintStyle={textFieldStyle}
-          floatingLabelStyle={textFieldStyle}
-          value={this.state.item.name}
-          name='name'
-          onChange={this.handleTextFieldChange}
-        />
         <TextField
           disabled={true}
+          fullWidth
           floatingLabelText='Created at'
-          style={{minWidth: '50%'}}
           inputStyle={textFieldStyle}
           hintStyle={textFieldStyle}
           floatingLabelStyle={textFieldStyle}
           value={dateFormat(new Date(this.state.item.createdAt), "dddd, mmmm dS, yyyy, hh:MM:ss")}
           name='createdAt' />
         <TextField
-          hintText={`enter ${alias} website`}
-          floatingLabelText='Website'
-          style={{minWidth: '50%'}}
+          fullWidth
+          hintText={`enter ${alias} privacy`}
+          floatingLabelText='Privacy'
           inputStyle={textFieldStyle}
           hintStyle={textFieldStyle}
           floatingLabelStyle={textFieldStyle}
-          value={this.state.item.site || ''}
-          name='site'
+          value={this.state.item.free || 'false'}
+          name='privacy'
           onChange={this.handleTextFieldChange} />
         <TextField
-          hintText={`${alias} location`}
-          floatingLabelText='City'
-          style={{minWidth: '50%'}}
+          fullWidth
+          hintText={`enter ${alias} owner`}
+          floatingLabelText='Owner'
           inputStyle={textFieldStyle}
           hintStyle={textFieldStyle}
           floatingLabelStyle={textFieldStyle}
-          value={this.state.item.city || ''}
-          name='city'
+          value={this.state.item.owner ? this.state.item.owner._id : ''}
+          name='owner'
           onChange={this.handleTextFieldChange} />
         <TextField
           multiLine
           fullWidth
-          hintText={`enter information about ${alias}`}
-          floatingLabelText='About'
+          hintText={`enter ${alias}`}
+          floatingLabelText='Question'
           inputStyle={textFieldStyle}
           hintStyle={textFieldStyle}
           floatingLabelStyle={textFieldStyle}
-          name='about'
-          value={this.state.item.about || ''}
+          name='question'
+          value={this.state.item.question || ''}
+          onChange={this.handleTextFieldChange} />
+        <TextField
+          multiLine
+          fullWidth
+          hintText={`enter answer of ${alias}`}
+          floatingLabelText='Answer'
+          inputStyle={textFieldStyle}
+          hintStyle={textFieldStyle}
+          floatingLabelStyle={textFieldStyle}
+          name='answer'
+          value={this.state.item.answer || ''}
           onChange={this.handleTextFieldChange} />
         <FlatButton
           label='Update'
@@ -116,7 +113,7 @@ export default React.createClass({
           autoHideDuration={this.state.autoHideDuration}
           onActionTouchTap={this.handleUndo}
           onRequestClose={this.handleClose}
-        />
+          />
       </div>
     )
   }

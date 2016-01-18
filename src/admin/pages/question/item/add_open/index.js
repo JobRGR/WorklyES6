@@ -15,7 +15,15 @@ const style = {
 
 export default React.createClass({
   getInitialState() {
-    return {open: false}
+
+    return {
+      open: false,
+      question: '',
+      errorTextQuestion: '',
+      answer: '',
+      errorTextAnswer: '',
+      free: '',
+      errorTextFree: ''}
   },
 
   handleOpen() {

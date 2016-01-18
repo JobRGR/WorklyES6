@@ -26,10 +26,10 @@ class QuestionService extends Events {
       .catch(err => this.setError(err))
   }
 
-  editItem(id, name) {
+  editItem(id, item) {
     const {itemName, items} = this
     this.api
-      .updateItem(id, {name})
+      .updateItem(id, item)
       .then(({data}) => data[itemName] &&
       this.setItems(items.map(item => item._id == data[itemName]._id ? data[itemName]: item)))
   }
@@ -41,7 +41,7 @@ class QuestionService extends Events {
       .then(({data}) => {
         if(!data[itemName]) return null
         if(items.some(({_id}) => data[itemName]._id == _id)) return null
-        items.push(data[itemName])
+        items.unshift(data[itemName])
         this.setItems(items)
       })
   }

@@ -10,7 +10,7 @@ let {Schema} = mongoose
 let schema = new Schema({
     question: {type: String, required: true},
     answer: {type: String, required: true},
-    owner: {type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true},
+    owner: {type: mongoose.Schema.Types.ObjectId, ref: 'Company'},
     free: {type: Boolean, required: true}
 }, {timestamps: true})
 
@@ -25,6 +25,7 @@ schema.statics.getItem = function (id, callback) {
 }
 
 schema.statics.updateItem = function (id, update, callback) {
+    delete update.owner
     return updateItem.apply(this, [id, update, callback, foreignKeys])
 }
 
