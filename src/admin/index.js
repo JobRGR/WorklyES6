@@ -5,6 +5,7 @@ import {browserHistory, Router, Route, IndexRoute} from 'react-router'
 import Index from './pages/index'
 import Dictionary from './pages/dictionary'
 import User from './pages/user'
+import Question from './pages/question'
 import App from './pages/app'
 import NotFound from '../client/pages/not_found'
 
@@ -17,6 +18,7 @@ const router = (
       <Route path='dictionary' component={Dictionary} />
       <Route path='user' component={User} />
       <Route path="*" component={NotFound}/>
+      <Route path='question' component={Question} />
     </Route>
   </Router>
 )
