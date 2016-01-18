@@ -24,7 +24,12 @@ schema.statics.getItem = function (id, callback) {
 }
 
 schema.statics.updateItem = function (id, update, callback) {
-    delete update.owner
+    if (typeof update.owner != 'string') {
+        delete update.owner
+    }
+    else if (mongoose.Types.ObjectId.isValid(update.owner)) {
+        delete update.owner
+    }
     return updateItem.apply(this, [id, update, callback, foreignKeys])
 }
 
