@@ -1,7 +1,7 @@
 import React from 'react'
 import Paper from 'material-ui/lib/paper'
-import Company from './company'
-import Student from './student'
+import Open from './open'
+import Test from './test'
 
 export default React.createClass({
 
@@ -41,9 +41,9 @@ export default React.createClass({
     return (
       <Paper className='control-paper' style={{top: this.state.top, maxHeight: this.state.maxHeight}}>
         {
-          this.props.name == 'company' ?
-            <Company {...props} /> :
-            <Student {...props} />
+          this.props.name == 'open-questions' ?
+            <Open {...props} /> :
+            <Test {...props} />
         }
       </Paper>
     )

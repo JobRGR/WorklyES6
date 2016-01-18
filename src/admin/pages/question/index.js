@@ -1,6 +1,5 @@
 import React from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
-import Card from 'material-ui/lib/card/card'
 import CardTitle from 'material-ui/lib/card/card-title'
 import Tabs from 'material-ui/lib/tabs/tabs'
 import Tab from 'material-ui/lib/tabs/tab'
@@ -28,12 +27,11 @@ export default React.createClass({
 
   render() {
     return (
-      <Card style={{width: '80%', margin: '40px auto', minWidth: 740}}>
+      <div style={{width: '80%', margin: '40px auto', minWidth: 740}}>
         <Tabs
           onChange={this.handleChange}
           value={this.state.value}
-          inkBarStyle={{backgroundColor: 'rgb(255, 245, 157)'}}
-          >
+          inkBarStyle={{backgroundColor: 'rgb(255, 245, 157)'}}>
           {
             [
               {name: 'open-questions', Api: QuestionService.OpenQuestionService},
@@ -41,7 +39,7 @@ export default React.createClass({
             ].map(({name, Api}, index) => this.tab(name, Api, index))
           }
         </Tabs>
-      </Card>
+      </div>
     )
   }
 })

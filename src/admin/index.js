@@ -17,8 +17,9 @@ const router = (
       <IndexRoute component={Index} />
       <Route path='dictionary' component={Dictionary} />
       <Route path='user' component={User} />
-      <Route path="*" component={NotFound}/>
       <Route path='question' component={Question} />
+      <Route path="*" component={NotFound}/>
+
     </Route>
   </Router>
 )
