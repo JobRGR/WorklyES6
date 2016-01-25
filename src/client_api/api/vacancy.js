@@ -1,6 +1,6 @@
-import request from '../request'
+import request from '../utils/request'
 
-class Rest {
+class VacancyApi {
   constructor(name) {
     this.path = `/api/${name}`
   }
@@ -13,7 +13,7 @@ class Rest {
     return request({url: `${this.path}/${id}`})
   }
 
-  addItem(body) {
+  addItem(id, body) {
     return request({
       url: this.path,
       method: 'post',
@@ -44,4 +44,4 @@ class Rest {
   }
 }
 
-export default Rest
+export default new VacancyApi('vacancy')

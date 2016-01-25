@@ -83,6 +83,7 @@ handler.inspectItems = (req, res, next) => {
       }
     })
   } else if (req._student) {
+    return next(req.session)
     let id = req._student._id
     res[names].forEach(item => item.haveSubscription = item.subscribers
         .some(subscriber => id.equals(subscriber) || id.equals(subscriber._id)))

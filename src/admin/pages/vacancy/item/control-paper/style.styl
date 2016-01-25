@@ -1,0 +1,21 @@
+.preview-block
+  position relative
+  display inline-block
+  box-sizing border-box
+  vertical-align top
+  width 49%
+  margin 20px 0.5% 0
+  font-size 16px
+  font-family Roboto, sans-serif
+  line-height 24px
+  &:before
+    content 'About - preview'
+    position absolute
+    height 20px
+    line-height 20px
+    left 0.5%
+    top -20px
+    transform perspective(1px) scale(0.75) translate3d(2px, 24px, 0)
+    transform-origin left top
+
+
