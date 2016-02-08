@@ -111,6 +111,7 @@ export default React.createClass({
           <Add />
         </FloatingActionButton>
         <Dialog
+          autoScrollBodyContent={true}
           title={`Add ${name}`}
           actions={actions}
           modal={true}

@@ -86,6 +86,7 @@ export default React.createClass({
           name='privacy'
           onChange={this.handleTextFieldChange} />
         <TextField
+          disabled={true}
           fullWidth
           hintText={`enter ${alias} owner`}
           floatingLabelText='Owner'
@@ -129,7 +130,7 @@ export default React.createClass({
           hintStyle={textFieldStyle}
           floatingLabelStyle={textFieldStyle}
           name='correct'
-          value={this.state.item.correct || ''}
+          value={this.state.item.correct}
           onChange={this.handleTextFieldChange} />
         <FlatButton
           label='Update'
