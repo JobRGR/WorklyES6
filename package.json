@@ -48,13 +48,13 @@
     "normalize-styl": "^3.0.3",
     "pluralize": "^1.2.1",
     "portscanner": "^1.0.0",
-    "react": "^0.14.0",
+    "react": "^0.14.7",
     "react-addons-create-fragment": "^0.14.0",
     "react-addons-pure-render-mixin": "^0.14.0",
     "react-addons-transition-group": "^0.14.0",
     "react-addons-update": "^0.14.0",
     "react-chartist": "^0.10.1",
-    "react-dom": "^0.14.0",
+    "react-dom": "^0.14.7",
     "react-hot-loader": "^1.2.2",
     "react-router": "^2.0.0-rc4",
     "react-tap-event-plugin": "^0.2.1",
@@ -74,5 +74,9 @@
     "debug": "./node_modules/.bin/gulp dev",
     "dev": "./node_modules/.bin/babel-node ./src/server",
     "start": "./node_modules/.bin/babel-node ./src/server/prod.js"
+  },
+  "devDependencies": {
+    "enzyme": "^1.5.0",
+    "react-addons-test-utils": "^0.14.7"
   }
 }
