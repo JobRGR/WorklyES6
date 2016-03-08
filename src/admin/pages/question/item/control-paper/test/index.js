@@ -5,6 +5,8 @@ import DatePicker from 'material-ui/lib/date-picker/date-picker'
 import Snackbar from 'material-ui/lib/snackbar'
 import capitalize from '../../../../../tools/capitalize'
 import dateFormat from 'dateformat'
+import IconButton from 'material-ui/lib/icon-button'
+import Delete from 'material-ui/lib/svg-icons/action/delete'
 
 export default React.createClass({
 
@@ -33,6 +35,12 @@ export default React.createClass({
     event.stopPropagation()
     let item = this.state.item
     item.answer[event.target.name] = event.target.value
+    this.setState({item})
+  },
+
+  handleRemoveAnswer(index) {
+    let item = this.state.item
+    item.answer.splice(index, 1)
     this.setState({item})
   },
 
@@ -108,18 +116,30 @@ export default React.createClass({
           value={this.state.item.question || ''}
           onChange={this.handleTextFieldChange} />
         {this.state.item.answer.map((value, index) => {
-          return <TextField
-            multiLine
-            fullWidth
-            hintText={`enter correct answer of ${alias}`}
-            floatingLabelText='Answer'
-            inputStyle={textFieldStyle}
-            hintStyle={textFieldStyle}
-            floatingLabelStyle={textFieldStyle}
-            name={index}
-            value={value}
-            key={index}
-            onChange={this.handleQuestion}/>;
+          return (
+            <div key={index}>
+              <IconButton
+                onTouchTap={() => this.handleRemoveAnswer(index) }
+                style={{
+                  position: 'absolute',
+                  left: '45px',
+                  zIndex :'999'}
+                }>
+                <Delete />
+              </IconButton>
+              <TextField
+                multiLine
+                fullWidth
+                hintText={`enter correct answer of ${alias}`}
+                floatingLabelText='Answer'
+                inputStyle={textFieldStyle}
+                hintStyle={textFieldStyle}
+                floatingLabelStyle={textFieldStyle}
+                name={index}
+                value={value}
+                onChange={this.handleQuestion}/>
+            </div>
+          );
         })}
         <TextField
           multiLine

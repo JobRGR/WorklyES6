@@ -18,12 +18,17 @@ const style = {
     top: 'calc(100% - 100px)'
   },
   TextField: {
-    width: '90%'
+    width: '85%'
   },
   RaisedButton: {
     position: 'absolute',
     top: '24px',
     right: '20px'
+  },
+  checkbox: {
+    display: 'inline-block',
+    width: '30px',
+    height: '15px'
   }
 }
 
@@ -179,10 +184,14 @@ export default React.createClass({
           {this.state.answer.map((el, index) => {
             return (
               <div key={index}>
+                <Checkbox
+                  style={style.checkbox}
+                  defaultChecked={false}
+                  onCheck={() => this.handleCheckbox(index)}/>
                 <TextField
                   hintText={`${name} answer`}
                   floatingLabelText='Enter answer'
-                  inputStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
+                  //inputStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
                   hintStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
                   floatingLabelStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
                   value={el}
@@ -194,11 +203,7 @@ export default React.createClass({
                   fullWidth={false}>
                   <Delete />
                 </IconButton>
-                <Checkbox
-                  label="- mark this answer as correct"
-                  defaultChecked={false}
-                  onCheck={() => this.handleCheckbox(index)}
-                  fullWidth={false}/>
+
               </div>
             );
           })}
