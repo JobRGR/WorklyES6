@@ -170,5 +170,6 @@ export default (url, name) => {
     })
 
     it('.check remove items - get count', done => count(url, path, list.length, done))
+    
   })
 }
