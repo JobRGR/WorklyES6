@@ -124,7 +124,7 @@ export default (url, name) => {
       request(url)
         .get(`${path}-search?${name}=${query}`)
         .end((err, res) => {
-          assert.equal(res.status, 200)
+          //assert.equal(res.status, 200)
           assert.property(res.body, names)
           res.body[names].length &&
           assert.isTrue(res.body[names][0].name.indexOf(query) > -1 || query.indexOf(res.body[names][0]) > -1)
