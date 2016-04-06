@@ -1,6 +1,10 @@
 import express from 'express'
+
 import render from '../handler/render'
 import logout from '../handler/logout'
+import login from '../handler/login'
+import status from '../handler/status'
+
 import Dictionary from './services/dictionary'
 import CompanyName from './services/company_name'
 import Company from './services/company'
@@ -13,12 +17,13 @@ import AllQuestion from './services/all_question'
 import Vacancy from './services/vacancy'
 import Admin from './services/admin'
 
-
 const services = ['City', 'Skill', 'University', 'Speciality', 'Position']
 let api = express.Router()
 services.forEach(item => api.use(Dictionary[item]))
 api
   .get('/logout', logout)
+  .get('/status', status)
+  .post('/login', login)
   .use(Education)
   .use(Experience)
   .use(CompanyName)
