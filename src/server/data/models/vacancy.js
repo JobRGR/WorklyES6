@@ -31,7 +31,7 @@ export default (cb) => async.waterfall([
   }),
   callback => Skill.getItem(null, (err, skills) => {
     for (let i = 0; i < data.length; ++i) {
-      let count = Math.floor(Math.random() * 10)
+      let count = Math.floor(Math.random() * 8) + 2
       for (let j = 0; j < count; ++j)
         data[i].skills.push(random(skills)._id)
     }
