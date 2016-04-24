@@ -1,10 +1,15 @@
-import { shallow } from 'enzyme';
-import Index from '../../../../src/client/pages/index/index.js';
+var webdriverio = require('../../');
+var options = {
+  desiredCapabilities: {
+    browserName: 'firefox'
+  }
+};
 
-describe('<Index />', () => {
-
-  it('should render one index component', () => {
-    const wrapper = shallow(<Index />)
-    assert.equal(wrapper.find('.index').length(), 1)
+webdriverio
+  .remote(options)
+  .init()
+  .url('http://www.google.com')
+  .title(function(err, res) {
+    console.log('Title was: ' + res.value);
   })
-})
+  .end();

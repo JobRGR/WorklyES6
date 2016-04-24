@@ -18,6 +18,13 @@ let router = (name, handler) =>
       handler.inspectItem,
       handler.sendItem
     )
+    .post(`/${name}-subscribe/:id`,
+      checkStudent,
+      handler.getItem,
+      handler.updateAsStudentItem,
+      handler.inspectItem,
+      handler.sendItem
+    )
     .get(`/${name}-unsubscribe/:id`,
       checkStudent,
       handler.getItem,
@@ -40,6 +47,7 @@ let router = (name, handler) =>
       handler.addItem,
       handler.sendItem
     )
+
     .put(`/${name}-update/:id`,
       checkCompany,
       checkVacancy,
