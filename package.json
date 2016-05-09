@@ -44,6 +44,7 @@
     "morgan": "^1.6.1",
     "newrelic": "^1.24.0",
     "node-inspector": "^0.12.4",
+    "node-wikipedia": "0.0.2",
     "nodemon": "^1.5.0",
     "normalize-styl": "^3.0.3",
     "pluralize": "^1.2.1",
