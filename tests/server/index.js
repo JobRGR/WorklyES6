@@ -14,6 +14,7 @@ import statistic from './lib/statistic'
 import errorStudent from './error/student'
 import errorCompany from './error/company'
 import status from './lib/status'
+import competence from './lib/competence'
 
 
 const {port} = config
@@ -45,3 +46,4 @@ allQuestion(url)
 admin(url)
 statistic(url)
 status(url)
+competence(url)
