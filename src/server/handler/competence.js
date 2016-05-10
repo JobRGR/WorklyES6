@@ -1,5 +1,5 @@
 import wikipedia from 'node-wikipedia'
-import request from '../../client_api/utils/request'
+import searchImage from '../utils/search_image'
 
 export default {
   wikipedia(req, res, next) {
@@ -17,17 +17,8 @@ export default {
   },
 
   duckduckgo(req, res, next) {
-    const url = `https://duckduckgo.com/i.js?q=${req.query.value}%20wilkipedia&format=json&pretty=1`
-    request({url}).then(result => {
-      try {
-        let {data} = result
-        if (Array.isArray(data.results)) {
-          res.image = data.results[0].image
-        }
-      }
-      catch (err) {
-        res.image = null
-      }
+    searchImage(req.query.value, image => {
+      res.image = image
       next()
     })
   },
