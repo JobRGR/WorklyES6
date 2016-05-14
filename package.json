@@ -75,5 +75,8 @@
     "debug": "./node_modules/.bin/gulp dev",
     "dev": "./node_modules/.bin/babel-node ./src/server",
     "start": "./node_modules/.bin/babel-node ./src/server/prod.js"
+  },
+  "devDependencies": {
+    "to-markdown": "^3.0.0"
   }
 }

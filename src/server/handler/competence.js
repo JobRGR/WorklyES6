@@ -1,4 +1,5 @@
 import wikipedia from 'node-wikipedia'
+import toMarkdown from 'to-markdown'
 import searchImage from '../utils/search_image'
 
 export default {
@@ -6,9 +7,11 @@ export default {
     wikipedia.page.data(req.query.value, {content: true}, data => {
       try {
         res.text = data.text['*']
+        res.markdownText = toMarkdown(res.text)
       }
       catch (err) {
         res.text = null
+        res.markdownText = null
       }
       finally {
         next()
@@ -24,9 +27,9 @@ export default {
   },
 
   send(req, res) {
-    let {image, text} = res
+    let {image, text, markdownText} = res
     let {value: title} = req.query
-    let competence = {image, title, text}
+    let competence = {image, title, text, markdownText}
     res.send({competence})
   }
 }
