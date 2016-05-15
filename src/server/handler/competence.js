@@ -1,5 +1,5 @@
 import wikipedia from 'node-wikipedia'
-import toMarkdown from 'to-markdown'
+import toMarkdown from 'html-md'
 import searchImage from '../utils/search_image'
 
 export default {
