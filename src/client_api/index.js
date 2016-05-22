@@ -6,6 +6,7 @@ import QuestionApi from './api/question'
 const {CityApi, SkillApi, CompanyNameApi, PositionApi, SpecialityApi, UniversityApi} = DictionaryApi
 const {CompanyApi, StudentApi} = UserApi
 const {OpenQuestionApi, TestQuestionApi} = QuestionApi
+
 export default {
   CityApi,
   SkillApi,
