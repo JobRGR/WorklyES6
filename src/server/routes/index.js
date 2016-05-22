@@ -4,6 +4,7 @@ import render from '../handler/render'
 import logout from '../handler/logout'
 import login from '../handler/login'
 import status from '../handler/status'
+import competence from '../handler/competence'
 
 import Dictionary from './services/dictionary'
 import CompanyName from './services/company_name'
@@ -23,6 +24,11 @@ services.forEach(item => api.use(Dictionary[item]))
 api
   .get('/logout', logout)
   .get('/status', status)
+  .get('/competence',
+    competence.wikipedia,
+    competence.duckduckgo,
+    competence.send
+  )
   .post('/login', login)
   .use(Education)
   .use(Experience)
