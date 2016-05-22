@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {browserHistory} from 'react-router'
 import Header from '../components/header'
 import PageLoader from '../components/page-loader'
 import request from '../../client_api/utils/request'
@@ -18,17 +19,24 @@ export default class extends Component{
     StatusService.onLoaded(({company, student}) => {
       if (student) {
         this.setState({isStudent: true, item: student, loaded: true, isAuth: true})
-      } else {
+      } else if (company) {
         this.setState({isStudent: false, item: company, loaded: true, isAuth: true})
+      } else {
+        this.setState({isAuth: false, loaded: true})
       }
-      if (this.props.location.pathname == '/')
-        this.props.history.push('/feed')
     })
     StatusService.onError(err => {
       this.setState({isAuth: false, loaded: true})
-      if (this.props.location.pathname != '/')
-        this.props.history.push('/')
     })
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    if (nextState.loaded) {
+      if (nextProps.location.pathname == '/' && nextState.isAuth)
+        browserHistory.push('/feed')
+      if (nextProps.location.pathname != '/' && !nextState.isAuth)
+        browserHistory.push('/')
+    }
   }
 
   render() {
