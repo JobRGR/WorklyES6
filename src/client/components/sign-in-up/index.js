@@ -4,14 +4,15 @@ import {Tabs, Tab} from 'material-ui/Tabs'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
+import Snackbar from 'material-ui/Snackbar'
 import {green700, red700} from 'material-ui/styles/colors'
 import request from '../../../client_api/utils/request'
-
 
 export default class extends Component {
   constructor(props){
     super(props)
     this.state = {
+      open: false,
       signInState: null,
       isStudent: true,
       error: {
@@ -40,7 +41,7 @@ export default class extends Component {
     request({url: `${location.origin}/api/login`, method: 'post', body: {email, password}})
       .then(({data}) => {
         if (!data.err) return location.reload()
-        this.setState({error: {authText: 'Неправильно вказана пошта чи пароль'}})
+        this.setState({error: {authText: 'Неправильно вказана пошта чи пароль'}, open: true})
       })
   }
 
@@ -60,10 +61,8 @@ export default class extends Component {
     let url = `${location.origin}/api/${this.state.isStudent ? 'student': 'company'}`
     request({url, method: 'post', body: {email, password, name}})
       .then(({data}) => {
-        if (!data.err)
-          return location.reload()
-        this.setState({error: {authText: 'Щось пійшло не так... Спробуйте пізніше'}})
-        console.log(data)
+        if (!data.err) return location.reload()
+        this.setState({error: {authText: 'Щось пійшло не так... Спробуйте пізніше'}, open: true})
       })
   }
 
@@ -102,7 +101,7 @@ export default class extends Component {
       <div>
         <TextField hintText='Введіть пошту'
                    floatingLabelText='Пошта'
-                   errorText={this.state.errorEmailText}
+                   errorText={this.state.error.mailText}
                    errorStyle={{textAlign: 'left'}}
                    onChange={(e) => this._handleTextFieldChange(e, 'inMail')}
                    name='inMail'
@@ -110,7 +109,7 @@ export default class extends Component {
                    value={this.state.inMail} />
         <TextField hintText='Введіть пароль'
                    floatingLabelText='Пароль'
-                   errorText={this.state.errorPassText}
+                   errorText={this.state.error.passText}
                    errorStyle={{textAlign: 'left'}}
                    onChange={(e) => this._handleTextFieldChange(e, 'inPass')}
                    name='inPass'
@@ -183,6 +182,10 @@ export default class extends Component {
     this.setState(state)
   }
 
+  handleRequestClose = () => {
+    this.setState({open: false})
+  }
+
 
   render() {
     const drawerStyle = {textAlign: 'center', fontFamily: 'sans-serif'}
@@ -193,6 +196,11 @@ export default class extends Component {
           {this.state.signInState === false && this.getSignUpState()}
           {this.state.signInState === null && this.getChoiceState()}
         </div>
+        <Snackbar
+          open={this.state.open}
+          message={this.state.error.authText || ''}
+          autoHideDuration={3000}
+          onRequestClose={this.handleRequestClose} />
       </Drawer>
     )
   }
