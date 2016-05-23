@@ -40,11 +40,18 @@ export default class extends Component{
   }
 
   render() {
+    let childProps = {
+      type: this.state.isAuth ? this.state.isStudent ? 'student' : 'company' : null,
+      item: this.state.item
+    }
     return (
       <div style={{width: '100%', height: '100%'}}>
         {!this.state.loaded && <PageLoader />}
         {this.state.loaded && this.props.location.pathname != '/' && <Header />}
-        {this.state.loaded && this.props.children}
+        {
+          this.state.loaded && React.Children.map(this.props.children,
+            child => React.cloneElement(child, childProps))
+        }
       </div>
     )
   }

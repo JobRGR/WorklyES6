@@ -8,6 +8,8 @@ import NotFound from './pages/not_found'
 import Feed from './pages/feed'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import EditWrapper from './pages/edit-wrapper'
+
 
 injectTapEventPlugin()
 const muiTheme = getMuiTheme()
@@ -19,6 +21,7 @@ const router = (
       <Route path='/' component={App}>
         <IndexRoute component={Index}/>
         <Route path='feed' component={Feed}/>
+        <Route path='edit' component={EditWrapper}/>
         <Route path='*' component={NotFound}/>
       </Route>
     </Router>

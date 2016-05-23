@@ -27,7 +27,6 @@ class StatusService extends events {
   }
 
   setItem({company = null, student = null}) {
-    this.loading = null
     this.data = {company, student}
     this.emit('loaded', {company, student})
   }
