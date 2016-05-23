@@ -101,6 +101,14 @@ class RestUser {
     })
   }
 
+  changeNameSelf(body) {
+    return request({
+      url: `${this.path}-name`,
+      method: 'put',
+      body
+    })
+  }
+
   removeAll() {
     return request({
       url: this.path,
