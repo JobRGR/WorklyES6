@@ -17,7 +17,7 @@ let schema = new Schema({
     student: {type: ObjectId, ref:'Student'},
     testAnswers: [{type: Number}],
     openAnswers: [{type: String}],
-    rating: Number
+    correct: Number
   }],
   testQuestions: [{
     type: ObjectId,
@@ -50,7 +50,6 @@ schema.statics.getItem = function (id, callback) {
 }
 
 schema.statics.updateItem = function (id, update, callback) {
-  console.log(update)
   for (let key in update)
     if (/name|about|city|skills|testQuestions|openQuestions|testsResults/.test(key) == false)
       delete update[key]
@@ -83,26 +82,29 @@ schema.statics.searchItem = function(search, callback) {
     .exec(callback)
 }
 
-schema.statics.addSubscription = function(vacancy, subscriber, callback) {
-  if (this.checkSubscription(vacancy, subscriber)) return callback(null, vacancy)
+schema.statics.addSubscription = function(vacancy, subscriber, result, callback) {
+  if (this.checkSubscription(vacancy, subscriber)) {
+    return callback(null, vacancy)
+  }
+  result.correct = (
+    vacancy.testQuestions.filter(({correct}, index) => correct == result.testAnswers[index]).length +
+    vacancy.openQuestions.filter(({answer}, index) => answer == result.openAnswers[index]).length
+  )
+  vacancy.testsResults.push(result)
   vacancy.subscribers.push(subscriber)
   vacancy.save(err => callback(err, vacancy))
 }
-schema.statics.removeSubscription = function(vacancy, subscriber, callback) {
-  if (!this.checkSubscription(vacancy, subscriber)) return callback(null, vacancy)
+
+schema.statics.removeSubscription = function(vacancy , subscriber, callback) {
+  if (!this.checkSubscription(vacancy, subscriber)) {
+    return callback(null, vacancy)
+  }
+  vacancy.testsResults.pull({student: mongoose.Types.ObjectId(subscriber)})
   vacancy.subscribers.pull(subscriber)
   vacancy.save(err => callback(err, vacancy))
 }
-schema.statics.checkSubscription = (vacancy, subscriber) => vacancy.subscribers.some(cur => cur.equals(subscriber))
 
-schema.statics.addResult = function(vacancy, result, callback) {
-  vacancy.testResults.push(result)
-  vacancy.save(err => callback(err, vacancy))
-}
-schema.statics.removeResult = function(vacancy, result, callback) {
-  vacancy.testResults.pull(result)
-  vacancy.save(err => callback(err, vacancy))
-}
+schema.statics.checkSubscription = (vacancy, subscriber) => vacancy.subscribers.some(cur => cur.equals(subscriber))
 
 schema.statics.getCount = getCount
 schema.statics.removeItem = removeItem

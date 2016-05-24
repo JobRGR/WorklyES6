@@ -1,9 +1,7 @@
 import pluralize from 'pluralize'
 import Next from '../utils/handler/helpers/next'
 import Handler from '../utils/handler'
-import getDate from '../utils/get_date'
 import toObjectArray from '../utils/to_object_array'
-import HttpError from '../utils/error'
 import {Vacancy, Company} from '../models/models'
 
 const name = 'vacancy'
@@ -48,22 +46,17 @@ handler.updateItem = (req, res, next) => {
   Vacancy.updateItem(req.params.id, data, (err, vacancy) => nextItem(err, vacancy, res, next))
 }
 
-handler.updateAsStudentItem = (req, res, next) => {
-  let data = {}
-  if (req.body.testsResults) {
-    data.testsResults = req.body.testsResults
-    data.testsResults.student = req._student._id
- }
-  Vacancy.updateItem(req.params.id, data, (err, vacancy) => nextItem(err, vacancy, res, next))
-}
-
 handler.addSubscription = (req, res, next) => {
-  let id = req._student._id
-  Vacancy.addSubscription(res[name], id, (err, vacancy) => next(err))
+  const subscriber = req._student._id
+  const results = {
+    ...req.body.testsResults,
+    student: req._student._id
+  }
+  Vacancy.addSubscription(res[name], subscriber, results, (err, vacancy) => next(err))
 }
 
 handler.removeSubscription = (req, res, next) => {
-  let id = req._student._id
+  const id = req._student._id
   Vacancy.removeSubscription(res[name], id, (err, vacancy) => next(err))
 }
 
@@ -71,7 +64,7 @@ handler.inspectItem = (req, res, next) => {
   res[name] = res[name].toObject()
   if (req._company){
     let id = req._company._id
-    if (!id.equals(res[name].company) && !id.equals(res[name].company._id))
+    if (!res[name].company || (!id.equals(res[name].company) && !id.equals(res[name].company._id)))
       delete res[name].subscribers
   } else if (req._student) {
     let id = req._student._id
@@ -87,7 +80,7 @@ handler.inspectItems = (req, res, next) => {
   if (req._company){
     let id = req._company._id
     res[names].forEach(item => {
-      if (!id.equals(item.company) && !id.equals(item.company._id)) {
+      if (!item.company || (!id.equals(item.company) && !id.equals(item.company._id))) {
         delete item.subscribers
       }
     })

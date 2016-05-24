@@ -2,7 +2,6 @@ import express from 'express'
 import Vacancy from '../../handler/vacancy'
 import Dictionaries from '../../handler/dictionary'
 import CompanyName from '../../handler/company_name'
-import Company from '../../handler/company'
 import checkStudent from '../../middleware/check/student'
 import checkCompany from '../../middleware/check/company'
 import checkVacancy from '../../middleware/check/vacancy'
@@ -11,17 +10,10 @@ let router = (name, handler) =>
   express()
     .get(`/${name}-count`, handler.getCount)
     .get(`/${name}-random`, handler.getRandom, handler.sendItem)
-    .get(`/${name}-subscribe/:id`,
-      checkStudent,
-      handler.getItem,
-      handler.addSubscription,
-      handler.inspectItem,
-      handler.sendItem
-    )
     .post(`/${name}-subscribe/:id`,
       checkStudent,
       handler.getItem,
-      handler.updateAsStudentItem,
+      handler.addSubscription,
       handler.inspectItem,
       handler.sendItem
     )
