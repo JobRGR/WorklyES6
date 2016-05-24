@@ -480,7 +480,7 @@ export default (url) => {
         })
     })
 
-    it('.add test and open results', done => {
+    it('.subscribe and pass tests on vacnacy', done => {
       tmpVacancy.testsResults = {}
       tmpVacancy.testsResults.testAnswers = [testQuestion1.correct, testQuestion2.correct]
       tmpVacancy.testsResults.openAnswers = [openQuestion1.answer, openQuestion2.answer]
@@ -513,6 +513,17 @@ export default (url) => {
           done()
         })
     })
+
+    it('.сheck subscribe iser', done => {
+      companyUser
+        .get(`${url + path}/${tmpModel._id}`)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.equal(res.body.vacancy.testsResults.length, 1)
+          done()
+        })
+    })
+
     auth.logout.company()
     auth.logout.student()
   })
