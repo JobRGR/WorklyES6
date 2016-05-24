@@ -488,6 +488,7 @@ export default (url) => {
         .post(`${url + path}-subscribe/${tmpModel._id}`)
         .send(tmpVacancy)
         .end((err, res) => {
+          console.log(res.body, res.status)
           assert.equal(res.status, 200)
           assert.property(res.body.vacancy, 'testsResults')
           assert.isArray(res.body.vacancy.testsResults)
