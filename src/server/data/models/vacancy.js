@@ -1,6 +1,6 @@
 import Charlatan from 'charlatan'
 import async from 'async'
-import {City, Skill, Company, Vacancy, Position} from '../../models/models'
+import {City, Skill, Company, Vacancy, Position, OpenQuestion, TestQuestion} from '../../models/models'
 import addArray from '../utils/add_array'
 import random from '../utils/random'
 
@@ -10,7 +10,9 @@ for (let i = 0; i < 50; i++) {
   data.push({
     name: '',
     about: Charlatan.Lorem.text(3, 20, '\n'),
-    skills: []
+    skills: [],
+    testQuestions: [],
+    openQuestions: []
   })
 }
 
@@ -26,6 +28,22 @@ export default (cb) => async.waterfall([
   callback => Company.getItem(null, (err, company) => {
     for (let i = 0; i < data.length; ++i) {
       data[i].company = company[i]._id
+    }
+    callback()
+  }),
+  callback => OpenQuestion.getItem(null, (err, openQuestions) => {
+    for (let i = 0; i < data.length;i++) {
+      let count = Math.floor(Math.random() * 2) + 1
+      for (let j = 0; j < count; j++)
+        data[i].openQuestions.push(random(openQuestions)._id)
+    }
+    callback()
+  }),
+  callback => TestQuestion.getItem(null, (err, testQuestions) => {
+    for (let i = 0; i < data.length;i++) {
+      let count = Math.floor(Math.random() * 3) + 1
+      for (let j = 0; j < count; j++)
+        data[i].testQuestions.push(random(testQuestions)._id)
     }
     callback()
   }),
