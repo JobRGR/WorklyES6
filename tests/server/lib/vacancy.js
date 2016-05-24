@@ -17,59 +17,63 @@ export default (url) => {
     tmpModel = null,
     tmpCompanyId = null,
     tmpStudentId = null,
-    list = []
+    list = [],
+    openQuestion1 = null,
+    openQuestion2 = null,
+    testQuestion1 = null,
+    testQuestion2 = null,
+    index = null
 
-  describe('vacancy tests', () => {
-
-    let auth = {
-      login: {
-        company: () => {
-          it('.set company/save cookies', done => {
-            companyUser
-              .post(`${url}/api/company`)
-              .send(tmpCompany)
-              .end((err, res) => {
-                tmpCompanyId = res.body.company._id
-                assert.equal(res.status, 200)
-                assert.property(res.body, 'company')
-                assert.property(res.body.company, 'name')
-                assert.property(res.body.company, 'email')
-                assert.equal(res.body.company.email, tmpCompany.email)
-                assert.notProperty(res.body.company, 'salt')
-                assert.notProperty(res.body.company, 'hashedPassword')
-                done()
-              })
-          })
-        },
-        student: () => {
-          it('.set student/save cookies', done => {
-            studentUser
-              .post(`${url}/api/student`)
-              .send(tmpStudent)
-              .end((err, res) => {
-                tmpStudentId = res.body.student._id
-                assert.equal(res.status, 200)
-                assert.property(res.body, 'student')
-                assert.equal(res.body.student.name, tmpStudent.name)
-                assert.equal(res.body.student.email, tmpStudent.email)
-                assert.notProperty(res.body.student, 'salt')
-                assert.notProperty(res.body.student, 'hashedPassword')
-                done()
-              })
-          })
-        }
+  let auth = {
+    login: {
+      company: () => {
+        it('.set company/save cookies', done => {
+          companyUser
+            .post(`${url}/api/company`)
+            .send(tmpCompany)
+            .end((err, res) => {
+              tmpCompanyId = res.body.company._id
+              assert.equal(res.status, 200)
+              assert.property(res.body, 'company')
+              assert.property(res.body.company, 'name')
+              assert.property(res.body.company, 'email')
+              assert.equal(res.body.company.email, tmpCompany.email)
+              assert.notProperty(res.body.company, 'salt')
+              assert.notProperty(res.body.company, 'hashedPassword')
+              done()
+            })
+        })
       },
-      logout: {
-        company: () => {
-          it('.delete company/reset cookies', done => deleteItem(url, `/api/company/${tmpCompanyId}`, done))
-        },
-        student: () => {
-          it('.delete student/reset cookies', done => deleteItem(url, `/api/student/${tmpStudentId}`, done))
-        }
+      student: () => {
+        it('.set student/save cookies', done => {
+          studentUser
+            .post(`${url}/api/student`)
+            .send(tmpStudent)
+            .end((err, res) => {
+              tmpStudentId = res.body.student._id
+              assert.equal(res.status, 200)
+              assert.property(res.body, 'student')
+              assert.equal(res.body.student.name, tmpStudent.name)
+              assert.equal(res.body.student.email, tmpStudent.email)
+              assert.notProperty(res.body.student, 'salt')
+              assert.notProperty(res.body.student, 'hashedPassword')
+              done()
+            })
+        })
       }
-
+    },
+    logout: {
+      company: () => {
+        it('.delete company/reset cookies', done => deleteItem(url, `/api/company/${tmpCompanyId}`, done))
+      },
+      student: () => {
+        it('.delete student/reset cookies', done => deleteItem(url, `/api/student/${tmpStudentId}`, done))
+      }
     }
 
+  }
+
+  describe.skip('vacancy tests', () => {
     auth.login.company()
 
     it('.get list', done => {
@@ -98,11 +102,20 @@ export default (url) => {
           assert.property(res.body.vacancy, 'company')
           assert.property(res.body.vacancy, 'city')
           assert.property(res.body.vacancy, 'skills')
+          assert.property(res.body.vacancy, 'openQuestions')
+          assert.property(res.body.vacancy, 'testQuestions')
+          assert.property(res.body.vacancy, 'testResults')
           assert.equal(res.body.vacancy.name, list[index].name)
           assert.equal(res.body.vacancy.about, list[index].about)
           assert.equal(res.body.vacancy._id, list[index]._id)
+          assert.deepEqual(res.body.vacancy.openQuestions, list[index].openQuestions)
+          assert.deepEqual(res.body.vacancy.testQuestions, list[index].testQuestions)
+          assert.deepEqual(res.body.vacancy.testResults, list[index].testResults)
           assert.isObject(res.body.vacancy.company)
           assert.isObject(res.body.vacancy.city)
+          assert.isArray(res.body.vacancy.openQuestions)
+          assert.isArray(res.body.vacancy.testQuestions)
+          assert.isArray(res.body.vacancy.testResults)
           assert.isArray(res.body.vacancy.skills)
           assert.deepEqual(res.body.vacancy.company, list[index].company)
           assert.deepEqual(res.body.vacancy.city, list[index].city)
@@ -323,7 +336,7 @@ export default (url) => {
           done()
         })
     })
-
+    
     auth.logout.student()
 
     auth.logout.company()
@@ -363,4 +376,128 @@ export default (url) => {
         })
     })
   })
+
+  describe('vacancy question & answers tests', () => {
+
+    it('.get random open questions', done => {
+      request(url)
+        .get('/api/open-question')
+        .end((err, res) =>  {
+          list = res.body.openQuestions || []
+          index = Math.floor(list.length * Math.random())
+          openQuestion1 = list[index]
+          index = Math.floor(list.length * Math.random())
+          openQuestion2 = list[index]
+          done()
+        })
+    })
+
+    it('.get random test questions', done => {
+      request(url)
+        .get('/api/test-question')
+        .end((err, res) =>  {
+          list = res.body.testQuestions || []
+          index = Math.floor(list.length * Math.random())
+          testQuestion1 = list[index]
+          index = Math.floor(list.length * Math.random())
+          testQuestion2 = list[index]
+          done()
+        })
+    })
+
+    it('Create new vacancy unauthorized', done => {
+      request(url)
+        .post(`${path}-add`)
+        .send(tmpVacancy)
+        .end((err, res) => {
+          assert.equal(res.status, 401)
+          done()
+        })
+    })
+
+    auth.login.student()
+    auth.login.company()
+
+    it('Create new vacancy as student', done => {
+      studentUser
+        .post(`${url + path}-add`)
+        .send(tmpVacancy)
+        .end((err, res) => {
+          assert.equal(res.status, 401)
+          done()
+        })
+    })
+
+    it('Create new vacancy as company', done => {
+      companyUser
+        .post(`${url + path}-add`)
+        .send(tmpVacancy)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          tmpModel = res.body.vacancy || {}
+          console.log(tmpModel)
+          done()
+        })
+    })
+
+    it('Add test and open questions', done => {
+      tmpVacancy.openQuestions = [openQuestion1, openQuestion2]
+      tmpVacancy.testQuestions = [testQuestion1, testQuestion2]
+      companyUser
+        .put(`${url + path}-update/${tmpModel._id}`)
+        .send(tmpVacancy)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'vacancy')
+          assert.property(res.body.vacancy, 'name')
+          assert.property(res.body.vacancy, 'about')
+          assert.property(res.body.vacancy, 'createdAt')
+          assert.property(res.body.vacancy, 'updatedAt')
+          assert.property(res.body.vacancy, 'company')
+          assert.property(res.body.vacancy, 'city')
+          assert.property(res.body.vacancy, 'skills')
+          assert.property(res.body.vacancy, 'openQuestions')
+          assert.property(res.body.vacancy, 'testQuestions')
+          assert.equal(res.body.vacancy._id, tmpModel._id)
+          assert.equal(res.body.vacancy.name, tmpVacancy.name)
+          assert.equal(res.body.vacancy.about, tmpVacancy.about)
+          assert.equal(res.body.vacancy.openQuestions.length, 2)
+          assert.equal(res.body.vacancy.testQuestions.length, 2)
+          assert.equal(res.body.vacancy.openQuestions[0], openQuestion1._id)
+          assert.equal(res.body.vacancy.openQuestions[1], openQuestion2._id)
+          assert.equal(res.body.vacancy.testQuestions[0], testQuestion1._id)
+          assert.equal(res.body.vacancy.testQuestions[1], testQuestion2._id)
+          done()
+        })
+    })
+
+    it('Add test and open results', done => {
+      tmpVacancy.testsResults = {}
+      tmpVacancy.testsResults.testAnswers = [1, 2, 1, 3]
+      tmpVacancy.testsResults.openAnswers = ["asdsad", "two", "qqqqq"]
+      tmpVacancy.testsResults.rating = 234
+      studentUser
+        .post(`${url + path}-subscribe/${tmpModel._id}`)
+        .send(tmpVacancy)
+        .end((err, res) => {
+          console.log(res.body.vacancy.testsResults)
+          assert.equal(res.status, 200)
+          assert.property(res.body.vacancy, 'testsResults')
+          assert.isArray(res.body.vacancy.testsResults)
+          assert.property(res.body.vacancy.testsResults[0], 'testAnswers')
+          assert.property(res.body.vacancy.testsResults[0], 'openAnswers')
+          assert.property(res.body.vacancy.testsResults[0], 'student')
+          assert.property(res.body.vacancy.testsResults[0], 'rating')
+          assert.deepEqual(res.body.vacancy.testsResults[0].testAnswers, [1, 2, 1, 3])
+          assert.deepEqual(res.body.vacancy.testsResults[0].openAnswers, ["asdsad", "two", "qqqqq"])
+          assert.equal(res.body.vacancy.testsResults[0].student, tmpStudentId)
+          assert.equal(res.body.vacancy.testsResults[0].rating, 234)
+
+          done()
+        })
+    })
+    auth.logout.company()
+    auth.logout.student()
+  })
+
 }

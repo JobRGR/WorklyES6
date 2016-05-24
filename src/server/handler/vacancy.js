@@ -39,12 +39,21 @@ handler.searchItems = (req, res, next) => {
 }
 
 handler.updateItem = (req, res, next) => {
-  let data = ['name', 'about'].reduce((memo, key) => {
+  let data = ['name', 'about', 'testQuestions', 'openQuestions', 'testsResults'].reduce((memo, key) => {
     if (req.body[key]) memo[key] = req.body[key]
     return memo
   }, {})
   if (res.city) data.city = res.city._id
   if (res.skills) data.skills = toObjectArray(res.skills)
+  Vacancy.updateItem(req.params.id, data, (err, vacancy) => nextItem(err, vacancy, res, next))
+}
+
+handler.updateAsStudentItem = (req, res, next) => {
+  let data = {}
+  if (req.body.testsResults) {
+    data.testsResults = req.body.testsResults
+    data.testsResults.student = req._student._id
+ }
   Vacancy.updateItem(req.params.id, data, (err, vacancy) => nextItem(err, vacancy, res, next))
 }
 
