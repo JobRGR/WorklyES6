@@ -93,9 +93,11 @@ handler.inspectItems = (req, res, next) => {
     })
   } else if (req._student) {
     let id = req._student._id
-    res[names].forEach(item => item.haveSubscription = item.subscribers
-        .some(subscriber => id.equals(subscriber) || id.equals(subscriber._id)))
-    delete item.subscribers
+    res[names].forEach(item => {
+      item.haveSubscription = item.subscribers
+        .some(subscriber => id.equals(subscriber) || id.equals(subscriber._id))
+      delete item.subscribers
+    })
   }
   next()
 }

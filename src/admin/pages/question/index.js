@@ -30,7 +30,7 @@ export default React.createClass({
   tab(name, Api, index) {
     return (
       <Tab label={name} value={index} key={index} ref='tab'>
-        {index == this.state.value && <Item name={name} Api={Api} initTop={this.state.initTop}/>}
+        {index == this.state.value && <Item name={name} Api={Api} initTop={this.state.initTop} />}
       </Tab>
     )
   },

@@ -1,7 +1,6 @@
 import React from 'react'
 import TextField from 'material-ui/lib/text-field'
 import FlatButton from 'material-ui/lib/flat-button'
-import DatePicker from 'material-ui/lib/date-picker/date-picker'
 import Snackbar from 'material-ui/lib/snackbar'
 import capitalize from '../../../../../tools/capitalize'
 import dateFormat from 'dateformat'
@@ -72,7 +71,7 @@ export default React.createClass({
     const alias = name.toLowerCase()
     const textFieldStyle = {width: '98%', marginLeft: '1%', marginRight: '1%'}
     const item = this.state.item
-      return (
+    return (
       <div>
         <TextField
           disabled={true}
@@ -164,7 +163,7 @@ export default React.createClass({
           autoHideDuration={this.state.autoHideDuration}
           onActionTouchTap={this.handleUndo}
           onRequestClose={this.handleClose}
-          />
+        />
       </div>
     )
   }

@@ -105,7 +105,7 @@ export default (url, name) => {
 
     it('.check get delete', done => count(url, path, list.length, done))
 
-    it('.autocomplete', done => {
+    xit('.autocomplete', done => {
       const index = Math.floor(list.length * Math.random())
       const query = list[index].name.split(' ')[0]
       request(url)
@@ -118,7 +118,7 @@ export default (url, name) => {
         })
     })
 
-    it('.search', done => {
+    xit('.search', done => {
       const index = Math.floor(list.length * Math.random())
       const query = list[index].name
       request(url)
@@ -170,5 +170,6 @@ export default (url, name) => {
     })
 
     it('.check remove items - get count', done => count(url, path, list.length, done))
+    
   })
 }

@@ -13,6 +13,9 @@ import admin from './lib/admin'
 import statistic from './lib/statistic'
 import errorStudent from './error/student'
 import errorCompany from './error/company'
+import status from './lib/status'
+import competence from './lib/competence'
+
 
 const {port} = config
 const ip = '127.0.0.1'
@@ -42,3 +45,5 @@ openQuestion(url)
 allQuestion(url)
 admin(url)
 statistic(url)
+status(url)
+competence(url)

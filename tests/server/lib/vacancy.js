@@ -279,7 +279,7 @@ export default (url) => {
         })
     })
 
-    it('.subscribe to new vacancy', done => {
+    xit('.subscribe to new vacancy', done => {
       studentUser
         .get(`${url + path}-subscribe/${tmpModel._id}`)
         .end((err, res) => {
