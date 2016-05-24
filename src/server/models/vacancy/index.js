@@ -26,7 +26,7 @@ let schema = new Schema({
   openQuestions: [{
     type: ObjectId,
     ref: 'OpenQuestion'
-  }],
+  }]
 }, {timestamps: true})
 
 const foreignKeys = ['city', 'skills', 'subscribers', 'company.name', 'company.city', 'testResults.student', 'testQuestions', 'openQuestions']
@@ -87,8 +87,8 @@ schema.statics.addSubscription = function(vacancy, subscriber, result, callback)
     return callback(null, vacancy)
   }
   result.correct = (
-    result.testAnswers.filter((correct, index) => correct == vacancy.testQuestions[index].correct).length +
-    result.openAnswers.filter((answer, index) => answer == vacancy.openQuestions[index].answer).length
+    (result.testAnswers || []).filter((correct, index) => correct == vacancy.testQuestions[index].correct).length +
+    (result.openAnswers || []).filter((answer, index) => answer == vacancy.openQuestions[index].answer).length
   )
   vacancy.testsResults.push(result)
   vacancy.subscribers.push(subscriber)
