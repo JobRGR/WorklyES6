@@ -527,6 +527,9 @@ export default (url) => {
 
     auth.logout.company()
     auth.logout.student()
+
+    it('.delete student', done => deleteItem(url, `/api/student/${tmpStudentId}`, done))
+    it('.delete company', done => deleteItem(url, `/api/company/${tmpStudentId}`, done))
   })
 
 }
