@@ -480,7 +480,7 @@ export default (url) => {
         })
     })
 
-    it('.subscribe and pass tests on vacnacy', done => {
+    it('.subscribe and pass tests on vacancy', done => {
       tmpVacancy.testsResults = {}
       tmpVacancy.testsResults.testAnswers = [testQuestion1.correct, testQuestion2.correct]
       tmpVacancy.testsResults.openAnswers = [openQuestion1.answer, openQuestion2.answer]

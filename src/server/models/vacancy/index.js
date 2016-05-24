@@ -87,8 +87,8 @@ schema.statics.addSubscription = function(vacancy, subscriber, result, callback)
     return callback(null, vacancy)
   }
   result.correct = (
-    vacancy.testQuestions.filter(({correct}, index) => correct == result.testAnswers[index]).length +
-    vacancy.openQuestions.filter(({answer}, index) => answer == result.openAnswers[index]).length
+    result.testAnswers.filter((correct, index) => correct == vacancy.testQuestions[index].correct).length +
+    result.openAnswers.filter((answer, index) => answer == vacancy.openQuestions[index].answer).length
   )
   vacancy.testsResults.push(result)
   vacancy.subscribers.push(subscriber)
