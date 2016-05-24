@@ -47,7 +47,7 @@ export default class extends Component{
     return (
       <div style={{width: '100%', height: '100%'}}>
         {!this.state.loaded && <PageLoader />}
-        {this.state.loaded && this.props.location.pathname != '/' && <Header />}
+        {this.state.loaded && this.props.location.pathname != '/' && <Header {...childProps}/>}
         {
           this.state.loaded && React.Children.map(this.props.children,
             child => React.cloneElement(child, childProps))
