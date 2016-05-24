@@ -514,7 +514,7 @@ export default (url) => {
         })
     })
 
-    it('.сheck subscribe iser', done => {
+    it('.check subscribe user', done => {
       companyUser
         .get(`${url + path}/${tmpModel._id}`)
         .end((err, res) => {
