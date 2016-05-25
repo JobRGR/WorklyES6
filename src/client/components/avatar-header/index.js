@@ -9,7 +9,7 @@ const textStyle = {
   fontWeight: 500,
   fontSize: 18,
   color: '#ffffff',
-  marginRight: 5
+  marginRight: 15
 }
 
 const downPointerStyle = {
@@ -17,7 +17,7 @@ const downPointerStyle = {
   fontWeight: 700,
   fontSize: 20,
   color: 'rgba(255, 255, 255, 0.7)',
-  marginLeft: 5
+  marginLeft: 10
 }
 
 class AvatarHeader extends Component {
@@ -37,8 +37,8 @@ class AvatarHeader extends Component {
         </span>
         {
           this.props.src
-            ? <Avatar src={this.props.src} size={this.props.size} style={{verticalAlign: 'middle'}} />
-            : <Avatar size={this.props.size} style={{verticalAlign: 'middle'}}>{letters}</Avatar>
+          ? <Avatar src={this.props.src} size={this.props.size} style={{verticalAlign: 'middle'}} />
+          : <Avatar size={this.props.size} style={{verticalAlign: 'middle'}}>{letters}</Avatar>
         }
         <span style={downPointerStyle}>▾</span>
       </div>

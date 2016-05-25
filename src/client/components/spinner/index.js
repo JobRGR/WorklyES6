@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import {green700} from 'material-ui/styles/colors'
 
 
 class Spinner extends Component {
@@ -17,8 +16,9 @@ class Spinner extends Component {
 Spinner.defaultProps = {
   style: {width: 120},
   bounceStyle: {
-    width: 40,
-    backgroundColor: green700
+    width: 30,
+    margin: 5,
+    backgroundColor: '#00bcd4'
   }
 }
 
