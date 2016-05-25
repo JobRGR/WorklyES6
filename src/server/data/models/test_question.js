@@ -1,5 +1,6 @@
 import async from 'async'
 import addArray from '../utils/add_array'
+import {answers, questions} from './open_question'
 import {TestQuestion, Company} from '../../models/models'
 
 let data = []
