@@ -1,8 +1,7 @@
 import React from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
-import Card from 'material-ui/lib/card/card'
-import Tabs from 'material-ui/lib/tabs/tabs'
-import Tab from 'material-ui/lib/tabs/tab'
+import {Card} from 'material-ui/Card'
+import {Tabs, Tab} from 'material-ui/Tabs'
 import Search from './search'
 import Main from './main'
 

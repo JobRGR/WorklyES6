@@ -1,9 +1,8 @@
 import React from 'react'
-import Card from 'material-ui/lib/card/card'
-import CardHeader from 'material-ui/lib/card/card-header'
-import TextField from 'material-ui/lib/TextField/TextField'
-import RefreshIndicator from 'material-ui/lib/refresh-indicator'
-import FlatButton from 'material-ui/lib/flat-button'
+import {Card, CardHeader} from 'material-ui/Card'
+import TextField from 'material-ui/TextField'
+import RefreshIndicator from 'material-ui/RefreshIndicator'
+import FlatButton from 'material-ui/FlatButton'
 import AdminService from '../../service/admin'
 
 

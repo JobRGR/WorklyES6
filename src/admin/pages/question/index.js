@@ -1,9 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
-import CardTitle from 'material-ui/lib/card/card-title'
-import Tabs from 'material-ui/lib/tabs/tabs'
-import Tab from 'material-ui/lib/tabs/tab'
+import {CardTitle} from 'material-ui/Card'
+import {Tabs, Tab} from 'material-ui/Tabs'
 import QuestionService from '../../service/question'
 import Item from './item'
 
