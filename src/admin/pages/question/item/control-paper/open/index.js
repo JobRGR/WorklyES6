@@ -23,7 +23,6 @@ export default React.createClass({
     event.preventDefault()
     event.stopPropagation()
     let item = this.state.item
-    console.log(item)
     item[event.target.name] = event.target.value
     this.setState({item})
   },
@@ -71,7 +70,6 @@ export default React.createClass({
           name='privacy'
           onChange={this.handleTextFieldChange} />
         <TextField
-          disabled={true}
           fullWidth
           hintText={`Add ${alias} owner`}
           floatingLabelText='Owner'

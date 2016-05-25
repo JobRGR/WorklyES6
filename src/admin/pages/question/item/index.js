@@ -67,6 +67,10 @@ export default React.createClass({
     this.refs.remove.handleRemove(id)
   },
 
+  handleLoginAs(item) {
+
+  },
+
   handleRowSelection(currentItemId) {
     let currentItem = this.state.items.filter(item => item._id == currentItemId)[0]
     this.setState({currentItemId, currentItem})

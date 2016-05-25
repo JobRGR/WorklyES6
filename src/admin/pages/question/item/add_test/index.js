@@ -1,35 +1,16 @@
 import React from 'react'
 import TextField from 'material-ui/lib/TextField/TextField'
 import FlatButton from 'material-ui/lib/flat-button'
-import RaisedButton from 'material-ui/lib/raised-button'
 import FloatingActionButton from 'material-ui/lib/floating-action-button'
 import Add from 'material-ui/lib/svg-icons/content/add'
 import Dialog from 'material-ui/lib/dialog'
 import capitalize from '../../../../tools/capitalize'
 import validateEmail from '../../../../tools/validateEmail'
-import Checkbox from 'material-ui/lib/checkbox'
-import IconButton from 'material-ui/lib/icon-button'
-import Delete from 'material-ui/lib/svg-icons/action/delete'
 
 const style = {
-  FloatingActionButton:{
-    position: 'fixed',
-    left: 'calc(100% - 100px)',
-    top: 'calc(100% - 100px)'
-  },
-  TextField: {
-    width: '85%'
-  },
-  RaisedButton: {
-    position: 'absolute',
-    top: '24px',
-    right: '20px'
-  },
-  checkbox: {
-    display: 'inline-block',
-    width: '30px',
-    height: '15px'
-  }
+  position: 'fixed',
+  left: 'calc(100% - 100px)',
+  top: 'calc(100% - 100px)',
 }
 
 export default React.createClass({
@@ -56,22 +37,6 @@ export default React.createClass({
     let answer = this.state.answer
     answer.push('')
     this.setState({answer})
-  },
-
-  handleRemoveAnswer(index) {
-    let answer = this.state.answer
-    answer.splice(index, 1)
-    this.setState({answer})
-  },
-
-  handleClearAll() {
-    this.setState({answer: [], question: "", free: ""})
-  },
-
-  handleCheckbox(index) {
-    let correct = this.state.correct
-    correct = correct ^ (1 << index)
-    this.setState({correct})
   },
 
   handleChangeQuestion(event) {
@@ -142,20 +107,15 @@ export default React.createClass({
 
     return (
       <div>
-        <FloatingActionButton style={style.FloatingActionButton} onTouchTap={() => this.handleOpen()}>
+        <FloatingActionButton style={style} onTouchTap={() => this.handleOpen()}>
           <Add />
         </FloatingActionButton>
         <Dialog
-          autoScrollBodyContent={true}
           title={`Add ${name}`}
           actions={actions}
           modal={true}
           open={this.state.open}
           onRequestClose={() => this.handleClose()} >
-          <RaisedButton
-            style={style.RaisedButton}
-            onTouchTap={() => this.handleClearAll()}
-            label="Clear all"/>
           <TextField
             hintText={`${name}`}
             floatingLabelText='Enter question'
@@ -176,36 +136,33 @@ export default React.createClass({
             value={this.state.free}
             errorText={this.state.errorTextFree}
             onChange={this.handleChangeFree} />
+          <TextField
+            hintText={`${name} correct`}
+            floatingLabelText='Enter correct'
+            fullWidth
+            inputStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
+            hintStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
+            floatingLabelStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
+            value={this.state.correct}
+            errorText={this.state.errorTextCorrect}
+            onChange={this.handleChangeCorrect} />
           <FlatButton
             label="Add answer"
             primary={true}
             keyboardFocused={true}
             onTouchTap={() => this.handleAddAnswer()}/>
           {this.state.answer.map((el, index) => {
-            return (
-              <div key={index}>
-                <Checkbox
-                  style={style.checkbox}
-                  defaultChecked={false}
-                  onCheck={() => this.handleCheckbox(index)}/>
-                <TextField
-                  hintText={`${name} answer`}
-                  floatingLabelText='Enter answer'
-                  //inputStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
-                  hintStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
-                  floatingLabelStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
-                  value={el}
-                  style={style.TextField}
-                  errorText={this.state.errorTextAnswer}
-                  onChange={(event) => this.handleChangeAnswer(event, index)} />
-                <IconButton
-                  onTouchTap={() => this.handleRemoveAnswer(index) }
-                  fullWidth={false}>
-                  <Delete />
-                </IconButton>
-
-              </div>
-            );
+            return <TextField
+              hintText={`${name} answer`}
+              floatingLabelText='Enter answer'
+              fullWidth
+              inputStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
+              hintStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
+              floatingLabelStyle={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
+              value={el}
+              key={index}
+              errorText={this.state.errorTextAnswer}
+              onChange={(event) => this.handleChangeAnswer(event, index)} />;
           })}
 
 
