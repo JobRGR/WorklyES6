@@ -530,7 +530,7 @@ export default (url) => {
 
     it('.delete student', done => deleteItem(url, `/api/student/${tmpStudentId}`, done))
     it('.delete company', done => deleteItem(url, `/api/company/${tmpStudentId}`, done))
-    it('.delete company', done => deleteItem(url, `/api/vacancy/${tmpModel._id}`, done))
+    it('.delete vacancy', done => deleteItem(url, `/api/vacancy/${tmpModel._id}`, done))
   })
 
 }
