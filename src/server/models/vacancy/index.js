@@ -29,7 +29,30 @@ let schema = new Schema({
   }]
 }, {timestamps: true})
 
-const foreignKeys = ['city', 'skills', 'subscribers', 'company.name', 'company.city', 'testsResults.student', 'testQuestions', 'openQuestions']
+const foreignKeys = [
+  'city',
+  'skills',
+  'subscribers',
+  'company.name',
+  'company.city',
+  'testsResults.student',
+  'testQuestions',
+  'openQuestions',
+
+  'subscribers.educations.speciality',
+  'subscribers.experiences.companyName',
+  'subscribers.educations.university',
+  'subscribers.experiences.position',
+  'subscribers.city',
+  'subscribers.skills',
+
+  'testsResults.student.educations.speciality',
+  'testsResults.student.experiences.companyName',
+  'testsResults.student.educations.university',
+  'testsResults.student.experiences.position',
+  'testsResults.student.city',
+  'testsResults.student.skills'
+]
 
 schema.statics.addItem = function ({name, about, city, skills, company, testQuestions = [], openQuestions = []}, callback) {
   let Vacancy = this
