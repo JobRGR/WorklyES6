@@ -11,7 +11,7 @@ for (let i = 0; i<100; i++){
     data[i].question = questions[index]
     data[i].correct = Math.round(Math.random() * ansNumber)
     data[i].answer = []
-    for (let j = 0; j < ansNumber; j++) {
+    for (let j = 0; j <= ansNumber; j++) {
         index = Math.round(Math.random() * (answers.length - 1) + 1)
         data[i].answer.push(answers[index])
     }
