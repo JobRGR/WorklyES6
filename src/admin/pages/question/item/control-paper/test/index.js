@@ -1,10 +1,11 @@
 import React from 'react'
 import TextField from 'material-ui/lib/text-field'
 import FlatButton from 'material-ui/lib/flat-button'
-import DatePicker from 'material-ui/lib/date-picker/date-picker'
 import Snackbar from 'material-ui/lib/snackbar'
 import capitalize from '../../../../../tools/capitalize'
 import dateFormat from 'dateformat'
+import IconButton from 'material-ui/lib/icon-button'
+import Delete from 'material-ui/lib/svg-icons/action/delete'
 
 export default React.createClass({
 
@@ -36,6 +37,12 @@ export default React.createClass({
     this.setState({item})
   },
 
+  handleRemoveAnswer(index) {
+    let item = this.state.item
+    item.answer.splice(index, 1)
+    this.setState({item})
+  },
+
   handleDateChange(event, date) {
     let item = this.state.item
     item.dob = date
@@ -64,7 +71,7 @@ export default React.createClass({
     const alias = name.toLowerCase()
     const textFieldStyle = {width: '98%', marginLeft: '1%', marginRight: '1%'}
     const item = this.state.item
-      return (
+    return (
       <div>
         <TextField
           disabled={true}
@@ -77,7 +84,7 @@ export default React.createClass({
           name='createdAt' />
         <TextField
           fullWidth
-          hintText={`Add ${alias} privacy`}
+          hintText={`enter ${alias} privacy`}
           floatingLabelText='Privacy'
           inputStyle={textFieldStyle}
           hintStyle={textFieldStyle}
@@ -86,8 +93,9 @@ export default React.createClass({
           name='privacy'
           onChange={this.handleTextFieldChange} />
         <TextField
+          disabled={true}
           fullWidth
-          hintText={`Add ${alias} owner`}
+          hintText={`enter ${alias} owner`}
           floatingLabelText='Owner'
           inputStyle={textFieldStyle}
           hintStyle={textFieldStyle}
@@ -98,7 +106,7 @@ export default React.createClass({
         <TextField
           multiLine
           fullWidth
-          hintText={`Add ${alias}`}
+          hintText={`enter ${alias}`}
           floatingLabelText='Question'
           inputStyle={textFieldStyle}
           hintStyle={textFieldStyle}
@@ -107,29 +115,41 @@ export default React.createClass({
           value={this.state.item.question || ''}
           onChange={this.handleTextFieldChange} />
         {this.state.item.answer.map((value, index) => {
-          return <TextField
-            multiLine
-            fullWidth
-            hintText={`Add correct answer of ${alias}`}
-            floatingLabelText='Answer'
-            inputStyle={textFieldStyle}
-            hintStyle={textFieldStyle}
-            floatingLabelStyle={textFieldStyle}
-            name={index}
-            value={value}
-            key={index}
-            onChange={this.handleQuestion}/>;
+          return (
+            <div key={index}>
+              <IconButton
+                onTouchTap={() => this.handleRemoveAnswer(index) }
+                style={{
+                  position: 'absolute',
+                  left: '45px',
+                  zIndex :'999'}
+                }>
+                <Delete />
+              </IconButton>
+              <TextField
+                multiLine
+                fullWidth
+                hintText={`enter correct answer of ${alias}`}
+                floatingLabelText='Answer'
+                inputStyle={textFieldStyle}
+                hintStyle={textFieldStyle}
+                floatingLabelStyle={textFieldStyle}
+                name={index}
+                value={value}
+                onChange={this.handleQuestion}/>
+            </div>
+          );
         })}
         <TextField
           multiLine
           fullWidth
-          hintText={`Add ${alias}`}
+          hintText={`enter ${alias}`}
           floatingLabelText='Correct'
           inputStyle={textFieldStyle}
           hintStyle={textFieldStyle}
           floatingLabelStyle={textFieldStyle}
           name='correct'
-          value={this.state.item.correct ?  this.state.item.correct.toString() :  ''}
+          value={this.state.item.correct}
           onChange={this.handleTextFieldChange} />
         <FlatButton
           label='Update'
@@ -143,7 +163,7 @@ export default React.createClass({
           autoHideDuration={this.state.autoHideDuration}
           onActionTouchTap={this.handleUndo}
           onRequestClose={this.handleClose}
-          />
+        />
       </div>
     )
   }

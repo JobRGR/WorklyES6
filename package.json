@@ -43,7 +43,7 @@
     "marked": "^0.3.5",
     "material-ui": "^0.15.0",
     "mocha": "^2.3.3",
-    "mongoose": "^4.2.4",
+    "mongoose": "4.2.4",
     "mongoose-deep-populate": "^2.0.3",
     "morgan": "^1.6.1",
     "newrelic": "^1.24.0",

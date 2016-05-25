@@ -11,7 +11,10 @@ export default React.createClass({
   mixins: [PureRenderMixin],
 
   getInitialState() {
-    return {value: 0}
+    return {
+      value: 0,
+      initTop: 0
+    }
   },
 
   handleChange(value) {
