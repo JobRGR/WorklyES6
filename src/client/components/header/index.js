@@ -24,8 +24,10 @@ export default class extends Component{
   signOut = () => {
     request({url: `${location.origin}/api/logout`})
       .then((data) => {
-        if (data.err) throw err
-        location.reload()
+        if (data.err) {
+          throw data.err
+        }
+        document.location.pathname = '/'
       })
       .catch(err => console.log(err))
   }
@@ -42,8 +44,8 @@ export default class extends Component{
   navigate = (path) => browserHistory.push(path)
 
   render() {
-    let name = this.props.type == 'student' 
-      ? this.props.item.name 
+    let name = this.props.type == 'student'
+      ? this.props.item.name
       : this.props.item.name.name
     return (
       <AppBar title={<span className='header-logo'>Workly</span>}
