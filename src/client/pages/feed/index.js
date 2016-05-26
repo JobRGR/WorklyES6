@@ -1,28 +1,20 @@
 import React, {Component} from 'react'
 import {Tabs, Tab} from 'material-ui/Tabs'
+import TextField from 'material-ui/TextField'
 import {Card, CardHeader, CardText} from 'material-ui/Card'
 import FlatButton from 'material-ui/FlatButton'
 import {browserHistory} from 'react-router'
+import {toAvatar, short, searchCompany, searchStudent, searchVacancy, getType, count, defaultState, students, companies, vacancies} from './utils'
 import {VacancyService, CompanyService, StudentService} from '../../service/feed'
 
-const count = 15
-
-const defaultState = {
-  data: [],
-  error: false,
-  loading: false,
-  count
-}
-
-const students = 'students'
-const vacancies = 'vacancies'
-const companies = 'companies'
 
 export default class extends Component {
 
   constructor() {
     super()
     this.state = {
+      active: vacancies,
+      search: '',
       students: {...defaultState, data: StudentService.cachedItems || []},
       vacancies: {...defaultState, data: VacancyService.cachedItems || []},
       companies: {...defaultState, data: CompanyService.cachedItems || []}
@@ -67,6 +59,7 @@ export default class extends Component {
   onLoadingCompany = _ => this.setState(({companies}) => ({companies: {...companies, loading: true, error: false}}))
 
   handleChange(name) {
+    this.setState({active: name, search: ''})
     switch (name) {
       case vacancies: return !this.state.vacancies.data.length && VacancyService.load()
       case companies: return !this.state.companies.data.length && CompanyService.load()
@@ -78,48 +71,31 @@ export default class extends Component {
     this.setState(state => ({[type]: {...state[type], count: state[type].count + count}}))
   }
 
-  short(text = '', length) {
-    if (text.length < length) {
-      return text
-    }
-    let str = text.split('').splice(0, length).join('')
-    const lastIndex = str.lastIndexOf(' ')
-    const res = str.substring(0, lastIndex)
-    return `${res}${res[res.length - 1] != '.' ? '...' : ''}`
-  }
-
   vacancies() {
     return (
       <div>
         {
           this.state.vacancies.data
+            .filter(vacancy => searchVacancy(this.state.search, vacancy))
             .filter((_, index) => index < this.state.vacancies.count)
-            .map(({_id, name, company, about}) =>
+            .map(({_id, name, company, about, city}) =>
               <Card onClick={() => browserHistory.push(`/feed/${_id}`)} style={{cursor: 'pointer'}} key={_id}>
-                <CardHeader title={name} subtitle={`${company.name.name} ${company.city ? `| ${company.city.name}` : ''}`} avatar={company.avatar || this.toAvatar(company.name.name)} />
-                <CardText style={{marginTop: -20}}>{this.short(about, 300)}</CardText>
+                <CardHeader title={name} subtitle={`${company.name.name} ${city ? `| ${city.name}` : ''}`} avatar={company.avatar || toAvatar(company.name.name)} />
+                <CardText style={{marginTop: -20}}>{short(about, 300)}</CardText>
               </Card>
             )
         }
-        {
-          this.state.vacancies.data.length > this.state.vacancies.count &&
-          <FlatButton
-            label='More'
-            secondary
-            style={{width: '100%'}}
-            onClick={() => this.handleMore(vacancies)}/>
-        }
+        {this.state.vacancies.data.length > this.state.vacancies.count && this.button(vacancies)}
       </div>
     )
   }
-
-  toAvatar(name) {
-    return name.trim()
-      .split(' ')
-      .splice(0, 2)
-      .map(x => x.charAt(0))
-      .join('')
-      .toUpperCase()
+  
+  button(name) {
+    return <FlatButton
+      label='More'
+      secondary
+      style={{width: '100%'}}
+      onClick={() => this.handleMore(name)}/>
   }
 
   students() {
@@ -127,22 +103,16 @@ export default class extends Component {
       <div>
         {
           this.state.students.data
+            .filter(student => searchStudent(this.state.search, student))
             .filter((_, index) => index < this.state.students.count)
             .map(({_id, name, city = {}, avatar, about}) =>
               <Card onClick={() => browserHistory.push(`/student/${_id}`)} style={{cursor: 'pointer'}}  key={_id}>
-                <CardHeader title={name} subtitle={city.name} avatar={avatar || this.toAvatar(name)} />
-                <CardText style={{marginTop: -20}}>{this.short(about, 300)}</CardText>
+                <CardHeader title={name} subtitle={city.name} avatar={avatar || toAvatar(name)} />
+                <CardText style={{marginTop: -20}}>{short(about, 300)}</CardText>
               </Card>
             )
         }
-        {
-          this.state.students.data.length > this.state.students.count &&
-          <FlatButton
-            label='More'
-            secondary
-            style={{width: '100%'}}
-            onClick={() => this.handleMore(students)}/>
-        }
+        {this.state.students.data.length > this.state.students.count && this.button(students)}
       </div>
     )
   }
@@ -152,22 +122,16 @@ export default class extends Component {
       <div>
         {
           this.state.companies.data
+            .filter(company => searchCompany(this.state.search, company))
             .filter((_, index) => index < this.state.companies.count)
             .map(({_id, name, city = {}, avatar, about}) =>
               <Card key={_id} onClick={() => browserHistory.push(`/company/${_id}`)} style={{cursor: 'pointer'}}>
-                <CardHeader title={name.name} subtitle={city.name} avatar={avatar || this.toAvatar(name.name)} />
-                <CardText style={{marginTop: -20}}>{this.short(about, 300)}</CardText>
+                <CardHeader title={name.name} subtitle={city.name} avatar={avatar || toAvatar(name.name)} />
+                <CardText style={{marginTop: -20}}>{short(about, 300)}</CardText>
               </Card>
             )
         }
-        {
-          this.state.companies.data.length > this.state.companies.count &&
-          <FlatButton
-            label='More'
-            secondary
-            style={{width: '100%'}}
-            onClick={() => this.handleMore(companies)}/>
-        }
+        {this.state.companies.data.length > this.state.companies.count && this.button(companies)}
       </div>
     )
   }
@@ -175,6 +139,14 @@ export default class extends Component {
   render() {
     return (
       <div className='feed'>
+        <TextField
+          hintText={`Пошук ${getType(this.state.active)}`}
+          floatingLabelText='Пошук'
+          type='text'
+          fullWidth
+          value={this.state.search}
+          onChange={event => this.setState({search: event.target.value})}
+        />
         <Tabs>
           <Tab label='Вакансії' onActive={() => this.handleChange(vacancies)}>
             <div>
