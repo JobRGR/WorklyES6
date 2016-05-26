@@ -1,13 +1,13 @@
 import React from 'react'
-import TextField from 'material-ui/lib/TextField/TextField'
-import FlatButton from 'material-ui/lib/flat-button'
+import TextField from 'material-ui/TextField'
+import FlatButton from 'material-ui/FlatButton'
 import Table from './table'
 import AddOpen from './add_open'
 import AddTest from './add_test'
 import Remove from './remove'
 import Edit from './edit'
 import Loader from '../../../components/loader'
-import Paper from 'material-ui/lib/paper'
+import Paper from 'material-ui/Paper'
 import ControlPaper from './control-paper'
 
 export default React.createClass({

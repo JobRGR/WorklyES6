@@ -1,12 +1,12 @@
 import React from 'react'
 import {browserHistory} from 'react-router'
-import AppBar from 'material-ui/lib/app-bar'
-import IconButton from 'material-ui/lib/icon-button'
-import FlatButton from 'material-ui/lib/flat-button'
-import Menu from 'material-ui/lib/svg-icons/navigation/menu'
-import LeftNav from 'material-ui/lib/left-nav'
-import MenuItem from 'material-ui/lib/menus/menu-item'
-import RaisedButton from 'material-ui/lib/raised-button'
+import AppBar from 'material-ui/AppBar'
+import IconButton from 'material-ui/IconButton'
+import FlatButton from 'material-ui/FlatButton'
+import Menu from 'material-ui/svg-icons/navigation/menu'
+import Drawer from 'material-ui/Drawer'
+import MenuItem from 'material-ui/MenuItem'
+import RaisedButton from 'material-ui/RaisedButton'
 import AdminService from '../../service/admin'
 
 
@@ -38,7 +38,7 @@ export default React.createClass({
         <IconButton iconStyle={{fill: '#fff', color: '#fff'}} onTouchTap={this.handleToggle}>
           <Menu />
         </IconButton>
-        <LeftNav
+        <Drawer
           docked={false} width={300}
           open={this.state.open}
           onRequestChange={open => this.setState({open})}
@@ -47,7 +47,7 @@ export default React.createClass({
           <MenuItem onTouchTap={() => this.navigate('/admin/dictionary')}>Dictionary Dashboard</MenuItem>
           <MenuItem onTouchTap={() => this.navigate('/admin/user')}>User Dashboard</MenuItem>
           <MenuItem onTouchTap={() => this.navigate('/admin/question')}>Question Dashboard</MenuItem>
-        </LeftNav>
+        </Drawer>
       </div>
     )
   },

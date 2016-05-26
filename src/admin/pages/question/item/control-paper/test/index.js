@@ -1,11 +1,11 @@
 import React from 'react'
-import TextField from 'material-ui/lib/text-field'
-import FlatButton from 'material-ui/lib/flat-button'
-import Snackbar from 'material-ui/lib/snackbar'
+import TextField from 'material-ui/TextField'
+import FlatButton from 'material-ui/FlatButton'
+import Snackbar from 'material-ui/Snackbar'
 import capitalize from '../../../../../tools/capitalize'
 import dateFormat from 'dateformat'
-import IconButton from 'material-ui/lib/icon-button'
-import Delete from 'material-ui/lib/svg-icons/action/delete'
+import IconButton from 'material-ui/IconButton'
+import Delete from 'material-ui/svg-icons/action/delete'
 
 export default React.createClass({
 

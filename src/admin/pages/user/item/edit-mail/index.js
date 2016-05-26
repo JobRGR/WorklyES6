@@ -1,7 +1,7 @@
 import React from 'react'
-import TextField from 'material-ui/lib/TextField/TextField'
-import FlatButton from 'material-ui/lib/flat-button'
-import Dialog from 'material-ui/lib/dialog'
+import TextField from 'material-ui/TextField'
+import FlatButton from 'material-ui/FlatButton'
+import Dialog from 'material-ui/Dialog'
 import capitalize from '../../../../tools/capitalize'
 import validateEmail from '../../../../tools/validateEmail'
 

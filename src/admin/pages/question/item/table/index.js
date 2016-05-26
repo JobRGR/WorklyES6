@@ -1,18 +1,13 @@
 import React from 'react'
-import Table from 'material-ui/lib/table/table'
-import IconButton from 'material-ui/lib/icon-button'
-import ModeEdit from 'material-ui/lib/svg-icons/editor/mode-edit'
-import Delete from 'material-ui/lib/svg-icons/action/delete'
-import Mail from 'material-ui/lib/svg-icons/content/mail'
-import Lock from 'material-ui/lib/svg-icons/action/lock'
-import Home from 'material-ui/lib/svg-icons/action/home'
-import TableBody from 'material-ui/lib/table/table-body'
-import TableHeader from 'material-ui/lib/table/table-header'
-import TableFooter from 'material-ui/lib/table/table-footer'
-import TableHeaderColumn from 'material-ui/lib/table/table-header-column'
-import TableRow from 'material-ui/lib/table/table-row'
-import TableRowColumn from 'material-ui/lib/table/table-row-column'
-import FlatButton from 'material-ui/lib/flat-button'
+import {Table, TableBody, TableHeader, TableFooter, TableHeaderColumn, TableRow, TableRowColumn}
+  from 'material-ui/Table'
+import IconButton from 'material-ui/IconButton'
+import ModeEdit from 'material-ui/svg-icons/editor/mode-edit'
+import Delete from 'material-ui/svg-icons/action/delete'
+import Mail from 'material-ui/svg-icons/content/mail'
+import Lock from 'material-ui/svg-icons/action/lock'
+import Home from 'material-ui/svg-icons/action/home'
+import FlatButton from 'material-ui/FlatButton'
 
 
 export default React.createClass({
