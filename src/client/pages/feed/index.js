@@ -4,7 +4,7 @@ import TextField from 'material-ui/TextField'
 import {Card, CardHeader, CardText} from 'material-ui/Card'
 import FlatButton from 'material-ui/FlatButton'
 import {browserHistory} from 'react-router'
-import {toAvatar, short, searchCompany, searchStudent, searchVacancy, getType, count, defaultState, students, companies, vacancies} from './utils'
+import {toAvatar, short, searchCompany, searchStudent, searchVacancy, getType, getVacancy, count, defaultState, students, companies, vacancies} from './utils'
 import {VacancyService, CompanyService, StudentService} from '../../service/feed'
 
 
@@ -105,9 +105,9 @@ export default class extends Component {
           this.state.students.data
             .filter(student => searchStudent(this.state.search, student))
             .filter((_, index) => index < this.state.students.count)
-            .map(({_id, name, city = {}, avatar, about}) =>
+            .map(({_id, name, city = {}, avatar, about, experiences}) =>
               <Card onClick={() => browserHistory.push(`/student/${_id}`)} style={{cursor: 'pointer'}}  key={_id}>
-                <CardHeader title={name} subtitle={city.name} avatar={avatar || toAvatar(name)} />
+                <CardHeader title={name} subtitle={`${city ? city.name : ''} ${experiences ? `| ${getVacancy(experiences)}` : ''}`} avatar={avatar || toAvatar(name)} />
                 <CardText style={{marginTop: -20}}>{short(about, 300)}</CardText>
               </Card>
             )

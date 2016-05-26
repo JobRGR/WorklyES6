@@ -44,16 +44,16 @@ export default class extends Component{
   navigate = (path) => browserHistory.push(path)
 
   render() {
-    let name = this.props.type == 'student'
+    let name = this.props.type ? (this.props.type == 'student'
       ? this.props.item.name
-      : this.props.item.name.name
+      : this.props.item.name.name) : ''
     return (
       <AppBar title={<span className='header-logo'>Workly</span>}
               iconElementLeft={<IconButton onClick={() => this.navigate('/feed')}><Home/></IconButton>}
               iconStyleRight={{margin: 0}}
               iconElementRight={
               <div>
-                <AvatarHeader name={name} src={this.props.item.avatar} handleClick={this.handleAvatarClick}/>
+                {this.props.item && <AvatarHeader name={name} src={this.props.item.avatar} handleClick={this.handleAvatarClick}/>}
                 <Popover open={this.state.open}
                          anchorEl={this.state.anchorEl}
                          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}

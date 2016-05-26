@@ -76,3 +76,10 @@ export let searchCompany = (search, company) =>
       || (company.city && check(company.city.name, search))
     )
 
+export let getVacancy = experiences => {
+  if (!experiences || !Array.isArray(experiences) || !experiences.length) {
+    return null
+  }
+  const {position} = experiences[experiences.length - 1]
+  return !position || !position.name ? null : position.name
+}
