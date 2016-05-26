@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import VacancyApi from '../../../client_api/api/vacancy'
 import {browserHistory} from 'react-router'
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import {Card, CardMedia, CardTitle} from 'material-ui/Card'
 import Snackbar from 'material-ui/Snackbar'
 import IconButton from 'material-ui/IconButton'
@@ -101,7 +101,7 @@ export default class extends Component {
                       {item.city ? item.city.name : '–'}
                     </TableRowColumn>
                     <TableRowColumn style={{width: '15%'}}>
-                      <IconButton onTouchTap={() => {}}><Results /></IconButton>
+                      <IconButton onTouchTap={() => browserHistory.push(`/vacancy/result/${item._id}`)}><Results /></IconButton>
                     </TableRowColumn>
                     <TableRowColumn style={{width: '15%'}}>
                       <IconButton onTouchTap={() => browserHistory.push(`/vacancy/edit/${item._id}`)}><ModeEdit /></IconButton>

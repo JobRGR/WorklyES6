@@ -10,4 +10,5 @@ gulp.task('build', ['clean'], function () {
   gulp.start(['client', 'admin'])
 })
 gulp.task('dev', ['build', 'debug', 'inspector'])
+gulp.task('prod', ['build', 'server:prod', 'admin:watch', 'watch'])
 gulp.task('default', ['build', 'server', 'admin:watch', 'watch'])
