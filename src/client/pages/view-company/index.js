@@ -35,9 +35,8 @@ export default class extends Component {
   render() {
     return (
       <div style={{width: '100%'}}>
-        <div className='company-banner' style={{backgroundImage: `url(${this.props.item.avatar})`}}>
-          {this.props.item.name.name}
-        </div>
+        <div className='company-image' style={{backgroundImage: `url(${this.props.item.avatar})`}}></div>
+        <div className='company-banner'>{this.props.item.name.name}</div>
         <div className='view-user'>
           <div className='view-user_left-side'>
             {

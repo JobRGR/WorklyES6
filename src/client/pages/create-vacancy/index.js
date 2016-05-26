@@ -55,7 +55,7 @@ export default class extends Component {
     let addSkill = this.state.addSkill
     if (!addSkill || !addSkill.trim()) return
     item.skills.push(addSkill)
-    this.setState({item})
+    this.setState({item, addSkill: ''})
   }
 
   createVacancy = () => {
