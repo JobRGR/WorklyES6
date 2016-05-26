@@ -50,6 +50,7 @@
     "node-wikipedia": "0.0.2",
     "nodemon": "^1.5.0",
     "normalize-styl": "^3.0.3",
+    "pdfmake-browserified": "^0.1.4",
     "pluralize": "^1.2.1",
     "portscanner": "^1.0.0",
     "react": "^15.0.0",

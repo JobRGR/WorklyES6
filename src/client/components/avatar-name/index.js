@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import Avatar from 'material-ui/Avatar'
+import dateFormat from 'dateformat'
 
 
 class AvatarName extends Component {
@@ -12,15 +13,18 @@ class AvatarName extends Component {
       .join('')
       .toUpperCase()
     return (
-      <div>
+      <div className='avatar-name'>
         {
           this.props.src
           ? <Avatar src={this.props.src} size={this.props.size} />
           : <Avatar size={this.props.size}>{letters}</Avatar>
         }
-        <h3 style={{fontFamily: 'sans-serif', fontWeight: 400, fontSize: 24, display: 'inline-block', marginLeft: 20}}>
-          {this.props.name}
-        </h3>
+        <div className='avatar-name-info'>
+          <h3 className='avatar-name-title'>{this.props.name}</h3>
+          {this.props.city && <span className='avatar-name-subtitle'>{this.props.city}</span>}
+          {this.props.city && this.props.dob && <span className='avatar-name-delim'>|</span>}
+          {this.props.dob && <span className='avatar-name-subtitle'>{dateFormat(new Date(this.props.dob), "mmmm dS, yyyy")}</span>}
+        </div>
       </div>
     )
   }
