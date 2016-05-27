@@ -49,11 +49,11 @@ export default class extends Component {
   subscribe = () => {
     let correct = 0
     correct += this.props.item.openQuestions.reduce((sum, q, i) => {
-      return (q.answer == this.state.openAnswers[i] ? 1 : 0)
+      return sum + (q.answer == this.state.openAnswers[i] ? 1 : 0)
     }, 0)
     correct += this.props.item.testQuestions.reduce((sum, q, i) => {
-      return (q.correct == this.state.testAnswers[i] ? 1 : 0)
-    })
+      return sum + (q.correct == this.state.testAnswers[i] ? 1 : 0)
+    }, 0)
     let testsResults = {
       correct,
       testAnswers: this.state.testAnswers,
