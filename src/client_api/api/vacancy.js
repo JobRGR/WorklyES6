@@ -37,6 +37,14 @@ class VacancyApi {
     })
   }
 
+  subscribe(id, body) {
+    return request({
+      url: `${this.path}-subscribe/${id}`,
+      method: 'post',
+      body
+    })
+  }
+
   removeAll() {
     return request({
       url: this.path,

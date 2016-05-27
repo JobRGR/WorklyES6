@@ -17,6 +17,7 @@ import PageView from './pages/page-view'
 import ViewVacancy from './pages/view-vacancy'
 import ViewStudent from './pages/view-student'
 import ViewCompany from './pages/view-company'
+import ResultVacancy from './pages/result-vacancy'
 import {VacancyApi} from '../client_api'
 import {StudentApi} from '../client_api'
 import {CompanyApi} from '../client_api'
@@ -39,6 +40,7 @@ const router = (
           <IndexRoute component={VacancyList}/>
           <Route path='create' component={CreateVacancy}/>
           <Route path='edit/:id' component={EditVacancy}/>
+          <Route path='result/:id' component={ResultVacancy}/>
         </Route>
         <Route path='*' component={NotFound}/>
       </Route>
