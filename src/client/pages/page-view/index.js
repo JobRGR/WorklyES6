@@ -6,6 +6,9 @@ export default class extends Component {
   constructor(props) {
     super(props)
     this.state = {loaded: false, item: null}
+  }
+
+  loadItem = (props) => {
     let name = props.route.type
     props.route.api
       .getItem(props.params.id)
@@ -17,6 +20,15 @@ export default class extends Component {
         console.log(err)
         this.setState({item: null, loaded: true})
       })
+  }
+
+  componentWillMount() {
+    this.loadItem(this.props)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({item: null, loaded: false})
+    this.loadItem(nextProps)
   }
 
   render() {
