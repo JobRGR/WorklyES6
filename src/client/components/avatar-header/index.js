@@ -6,7 +6,7 @@ const textStyle = {
   display: 'inline-block',
   verticalAlign: 'middle',
   fontFamily: 'sans-serif',
-  fontWeight: 500,
+  fontWeight: 400,
   fontSize: 18,
   color: '#ffffff',
   marginRight: 15
@@ -15,9 +15,9 @@ const textStyle = {
 const downPointerStyle = {
   fontFamily: 'sans-serif',
   fontWeight: 700,
-  fontSize: 20,
-  color: 'rgba(255, 255, 255, 0.7)',
-  marginLeft: 10
+  fontSize: 16,
+  color: '#fff',
+  marginLeft: 12
 }
 
 class AvatarHeader extends Component {
@@ -47,7 +47,7 @@ class AvatarHeader extends Component {
 }
 
 AvatarHeader.defaultProps = {
-  size: 50,
+  size: 38,
   src: null,
   name: 'Mister X'
 }

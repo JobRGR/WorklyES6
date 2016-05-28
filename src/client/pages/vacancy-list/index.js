@@ -2,8 +2,9 @@ import React, {Component} from 'react'
 import VacancyApi from '../../../client_api/api/vacancy'
 import {browserHistory} from 'react-router'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
-import {Card, CardMedia, CardTitle} from 'material-ui/Card'
+import {Card, CardHeader, CardTitle} from 'material-ui/Card'
 import Snackbar from 'material-ui/Snackbar'
+import AvatarName from '../../components/avatar-name'
 import IconButton from 'material-ui/IconButton'
 import ModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import Results from 'material-ui/svg-icons/navigation/menu'
@@ -67,15 +68,13 @@ export default class extends Component {
     return (
       <div className='vacancy-list'>
         <Card>
-          {
-            this.props.item.avatar
-            ? <CardMedia
-              overlay={<CardTitle title='Відкритті вакансії' subtitle={this.props.item.name.name} />}
-            >
-              <img src={this.props.item.avatar}/>
-            </CardMedia>
-            : < CardTitle title='Відкритті вакансії' subtitle={this.props.item.name.name} />
-          }
+          <div className='vacancy-list-avatar'>
+            <AvatarName
+              src={this.props.item.avatar}
+              name={this.props.item.name.name} size={90}
+              text={<CardTitle title='Відкритті вакансії' subtitle={this.props.item.name.name} />}
+            />
+          </div>
           <Table>
             <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
               <TableRow>

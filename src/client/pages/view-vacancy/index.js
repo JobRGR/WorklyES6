@@ -77,7 +77,7 @@ export default class extends Component {
     const spanStyle = {
       verticalAlign: 'middle',
       fontFamily: 'sans-serif',
-      fontWeight: 400,
+      fontWeight: 300,
       fontSize: 20,
       marginLeft: 10
     }
@@ -118,11 +118,11 @@ export default class extends Component {
     let openQuestions = this.props.item.openQuestions,
       testQuestions = this.props.item.testQuestions
     return (
-      <Card>
-        <div style={{padding: 10, boxSizing: 'border-box', width: '100%'}}>
+      <div>
+        <div className='question-wrapper'>
           {
             openQuestions.length && [
-              <h4>Питання з розгорнутою відповіддю</h4>,
+              <h4 className='question-title'>Питання з розгорнутою відповіддю</h4>,
               ...openQuestions.map((q, ind) => (
                 <div key={q._id} className='question-item'>
                   <div className='question-problem'>{q.question}</div>
@@ -136,16 +136,19 @@ export default class extends Component {
           }
           {
             testQuestions.length && [
-              <h4>Питання з варіантами вибору</h4>,
+              <h4 className='question-title'>Питання з варіантами вибору</h4>,
               ...testQuestions.map((q, ind) => (
                 <div key={q._id} className='question-item'>
                   <div className='question-problem'>{q.question}</div>
-                  <RadioButtonGroup name={q._id}
-                                    onChange={(e, val) => this.handleRadioChange(e, val, ind)}>
+                  <RadioButtonGroup 
+                    name={q._id}
+                    onChange={(e, val) => this.handleRadioChange(e, val, ind)}>
                     {
                       q.answer.map((ans, index) => (
-                        <RadioButton value={index.toString()}
-                                     label={ans} />
+                        <RadioButton
+                          className='question-test'
+                          value={index.toString()}
+                          label={ans} />
                       ))
                     }
                   </RadioButtonGroup>
@@ -157,15 +160,15 @@ export default class extends Component {
         <RaisedButton label='Завершити все та відгукнутись'
                       labelStyle={{textTransform: 'none'}}
                       style={{width: '100%'}}
-                      secondary={true}
+                      primary={true}
                       onClick={this.subscribe}/>
-      </Card>
+      </div>
     )
   }
 
   render() {
     return (
-      <div className='view-vacancy'>
+      <Card className='view-vacancy'>
         <div className='view-vacancy_left-side'>
           <AvatarName src={this.props.item.company.avatar}
                       name={this.props.item.name}
@@ -187,7 +190,7 @@ export default class extends Component {
           {this.props.item.haveSubscription && this.haveSubscriptionState()}
           {!this.props.item.haveSubscription && this.notHaveSubscriptionState()}
         </div>
-      </div>
+      </Card>
     )
   }
 }

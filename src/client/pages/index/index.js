@@ -10,7 +10,7 @@ export default class extends React.Component {
           <span className='index-logo'>Workly</span>
           <div className='index-bg'></div>
           <div className='index-text'>
-            <h1>WELCOME</h1>
+            <h1>Вітаємо у Workly</h1>
           </div>
         </div>
         <SignInUp />

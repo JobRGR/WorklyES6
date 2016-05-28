@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import {browserHistory} from 'react-router'
+import AvatarName from '../../components/avatar-name'
+import {Card, CardTitle} from 'material-ui/Card'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import Snackbar from 'material-ui/Snackbar'
@@ -74,7 +76,14 @@ export default class extends Component {
 
   render() {
     return (
-      <div className='vacancy-create'>
+      <Card className='vacancy-create'>
+        <div className='vacancy-create-avatar'>
+          <AvatarName
+            src={this.props.item.avatar}
+            name={this.props.item.name.name} size={90}
+            text={<CardTitle title='Створення вакансії' subtitle={this.props.item.name.name} />}
+          />
+        </div>
         <div className='vacancy-create_left-side'>
           <TextField floatingLabelText={'Заголовок вакансії'}
                      value={this.state.item.name}
@@ -92,19 +101,8 @@ export default class extends Component {
                      fullWidth={true}
                      multiLine={true}
                      onChange={this._handleTextFieldChange} />
-          <div className='preview-block'
-               dangerouslySetInnerHTML={this.rawMarkup()}/>
+          <div className='preview-block' dangerouslySetInnerHTML={this.rawMarkup()} />
           <Divider style={{}}/>
-          {
-            this.state.item.skills.map((skill, ind, arr) => (
-              <div className='skill-item'>
-                {skill}
-                <NavigationClose onClick={() => this.removeItem(arr, ind)}
-                                 style={{cursor: 'pointer', verticalAlign: 'middle'}}
-                                 color='#ffffff' />
-              </div>
-            ))
-          }
           <div className='add-skill'>
             <TextField hintText='Вміння'
                        value={this.state.addSkill}
@@ -112,14 +110,27 @@ export default class extends Component {
                        name='addSkill'
                        onChange={this._handleAddSkillChange} />
             <RaisedButton label="Додати"
+                          className='add-skill-btn'
                           labelStyle={{textTransform: 'none', font: 'normal 16px sans-serif'}}
                           primary={true}
                           onClick={this.addSkillItem} />
           </div>
+          <div className='skill-wrapper'>
+            {
+              this.state.item.skills.map((skill, ind, arr) => (
+                <div className='skill-item'>
+                  {skill}
+                  <NavigationClose onClick={() => this.removeItem(arr, ind)}
+                                   style={{cursor: 'pointer', verticalAlign: 'middle'}}
+                                   color='#ffffff' />
+                </div>
+              ))
+            }
+          </div>
           <RaisedButton label="Створити вакансію"
                         labelStyle={{textTransform: 'none', font: 'normal 18px sans-serif'}}
                         style={{marginTop: 20, width: '100%'}}
-                        secondary={true}
+                        primary={true}
                         onClick={this.createVacancy} />
           <Snackbar
             open={this.state.open}
@@ -128,7 +139,7 @@ export default class extends Component {
             onRequestClose={this.handleRequestClose} />
         </div>
         <div className='vacancy-create_right-side'></div>
-      </div>
+      </Card>
     )
   }
 }

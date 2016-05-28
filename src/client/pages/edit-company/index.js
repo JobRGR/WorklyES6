@@ -3,6 +3,7 @@ import TextField from 'material-ui/TextField'
 import DatePicker from 'material-ui/DatePicker'
 import RaisedButton from 'material-ui/RaisedButton'
 import Snackbar from 'material-ui/Snackbar'
+import {Card} from 'material-ui/Card'
 import NavigationClose from 'material-ui/svg-icons/navigation/close'
 import ActionDelete from 'material-ui/svg-icons/action/delete'
 import AvatarName from '../../components/avatar-name'
@@ -78,52 +79,60 @@ export default class extends Component {
 
   render() {
     return (
-      <div className='edit-user'>
+      <Card className='edit-user'>
         <div className='edit-user_left-side'>
-          <AvatarName src={this.state.item.avatar} name={this.state.item.name}/>
-          <TextField floatingLabelText='Сайт компанії'
-                     value={this.state.item.site}
-                     name='site'
-                     fullWidth={true}
-                     onChange={this._handleTextFieldChange} />
-          <TextField floatingLabelText='Місто'
-                     value={this.state.item.city}
-                     name='city'
-                     fullWidth={true}
-                     onChange={this._handleTextFieldChange} />
-          <TextField floatingLabelText='Про компанію'
-                     value={this.state.item.about}
-                     name='about'
-                     multiLine={true}
-                     fullWidth={true}
-                     onChange={this._handleTextFieldChange} />
-          <RaisedButton label="Завершити редагування"
-                        labelStyle={{textTransform: 'none', font: 'normal 18px sans-serif'}}
-                        style={{marginTop: 20, width: '100%'}}
-                        secondary={true}
-                        onClick={this.editUser} />
+          <AvatarName src={this.state.item.avatar} name={this.state.item.name} size={90} />
+          <TextField
+            floatingLabelText='Сайт компанії'
+            value={this.state.item.site}
+            name='site'
+            fullWidth={true}
+            onChange={this._handleTextFieldChange} />
+          <TextField
+            floatingLabelText='Місто'
+            value={this.state.item.city}
+            name='city'
+            fullWidth={true}
+            onChange={this._handleTextFieldChange} />
+          <TextField
+            floatingLabelText='Про компанію'
+            value={this.state.item.about}
+            name='about'
+            multiLine={true}
+            fullWidth={true}
+            onChange={this._handleTextFieldChange} />
+          <RaisedButton
+            label="Завершити редагування"
+            labelStyle={{textTransform: 'none', font: 'normal 18px sans-serif'}}
+            style={{marginTop: 20, width: '100%'}}
+            primary={true}
+            onClick={this.editUser} />
           <Snackbar
             open={this.state.open}
             message={this.state.message || ''}
             autoHideDuration={3000}
             onRequestClose={this.handleRequestClose} />
         </div>
-        <div className='edit-user_right-side' style={{textAlign: 'center'}}>
-          <TextField floatingLabelText={'Назва компанії'}
-                     style={{marginTop: 40}}
-                     value={this.state.item.name}
-                     errorText={this.state.errorName}
-                     errorStyle={{textAlign: 'left'}}
-                     name='name'
-                     fullWidth={true}
-                     onChange={this._handleTextFieldChange} />
-          <RaisedButton label="Змінити назву"
-                        labelStyle={{textTransform: 'none', font: 'normal 16px sans-serif'}}
-                        primary={true}
-                        onClick={this.changeName} />
+        <div className='edit-user_right-side edit-company-right-side'>
+          <TextField
+            floatingLabelText={'Назва компанії'}
+            style={{marginTop: 40}}
+            value={this.state.item.name}
+            errorText={this.state.errorName}
+            errorStyle={{textAlign: 'left'}}
+            name='name'
+            fullWidth={true}
+            onChange={this._handleTextFieldChange} />
+
+          <RaisedButton
+            label="Змінити назву"
+            labelStyle={{textTransform: 'none', font: 'normal 16px sans-serif'}}
+            primary={true}
+            onClick={this.changeName} />
+
           <ChangeMailPass api={CompanyApi} email={this.props.item.email} />
         </div>
-      </div>
+      </Card>
     )
   }
 }

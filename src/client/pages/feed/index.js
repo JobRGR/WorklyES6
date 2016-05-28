@@ -147,7 +147,9 @@ export default class extends Component {
           value={this.state.search}
           onChange={event => this.setState({search: event.target.value})}
         />
-        <Tabs>
+        <Tabs
+          inkBarStyle={{backgroundColor: 'rgb(255, 245, 157)'}}
+        >
           <Tab label='Вакансії' onActive={() => this.handleChange(vacancies)}>
             <div>
               {this.state.vacancies.data.length > 0 && this.vacancies()}

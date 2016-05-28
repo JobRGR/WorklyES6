@@ -19,7 +19,7 @@ export default class extends Component {
       .replace(/[^0-9]/g, '')
 
     return (
-      <div className='view-user'>
+      <Card className='view-user'>
         <div className='view-user_left-side'>
           <AvatarName src={this.props.item.avatar}
                       name={this.props.item.name}
@@ -30,18 +30,13 @@ export default class extends Component {
             <div className='student-about'>{this.props.item.about}</div>
           }
           {
-            this.props.item.skills.map((skill) => (
-              <div key={skill._id} className='skill-item'>{skill.name}</div>
-            ))
-          }
-          {
             this.props.item.educations.length && [
               <div className='student-subtitle'>Освіта</div>,
               <Divider/>,
               ...this.props.item.educations.map(education => [
                 <div key={education._id} className='student-item'>
-                  <div style={{fontWeight: 'bold'}}>{education.speciality.name}</div>
-                  <div style={{marginTop: 5}}>{education.university.name}</div>
+                  <div className='student-list-title'>{education.speciality.name}</div>
+                  <div className='student-list-speciality'>{education.university.name}</div>
                   <div className='student-dates'>
                     {education.start && <span>з {dateFormat(new Date(education.start), "mmmm dS, yyyy")}</span>}
                     {education.end && <span> по {dateFormat(new Date(education.end), "mmmm dS, yyyy")}</span>}
@@ -58,14 +53,15 @@ export default class extends Component {
               ...this.props.item.experiences.map(experience => [
                 <div key={experience._id} className='student-item'>
                   <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                    <div style={{fontWeight: 'bold'}}>{experience.position.name}</div>
-                    <div style={{fontStyle: 'italic'}}>{experience.companyName.name}</div>
+                    <div className='student-list-title'>{experience.position.name}</div>
                   </div>
-                  <div style={{marginTop: 5}}>{experience.about}</div>
                   <div className='student-dates'>
-                    {experience.start && <span>з {dateFormat(new Date(experience.start), "mmmm dS, yyyy")}</span>}
-                    {experience.end && <span> по {dateFormat(new Date(experience.end), "mmmm dS, yyyy")}</span>}
+                    <span style={{fontStyle: 'italic'}}>{experience.companyName.name}</span>
+                    {' | '}
+                    {experience.start && <span>з {new Date(experience.start).toLocaleDateString()}</span>}
+                    {experience.end && <span> по {new Date(experience.end).toLocaleDateString()}</span>}
                   </div>
+                  <div style={{marginTop: 5}} className='student-list-about'>{experience.about}</div>
                 </div>,
                 <Divider/>
               ])
@@ -73,6 +69,16 @@ export default class extends Component {
           }
         </div>
         <div className='view-user_right-side'>
+          {
+            this.props.item.skills.length > 0 &&
+            <div className='skill-wrapper'>
+              {
+                this.props.item.skills.map((skill) => (
+                  <div key={skill._id} className='skill-item'>{skill.name}</div>
+                ))
+              }
+            </div>
+          }
           <Card>
             <CardHeader
               title={'Зв\'язатись з кандидатом'}
@@ -81,7 +87,7 @@ export default class extends Component {
               showExpandableButton={true}
             />
             <Divider/>
-            <CardActions expandable={true} style={{textAlign: 'center'}}>
+            <CardActions expandable={true}>
               <FlatButton label='Завантажити резюме'
                           style={{width: '100%', marginBottom: 8}}
                           labelStyle={buttonStyle}
@@ -95,7 +101,6 @@ export default class extends Component {
                             labelClassName='action-button-label'
                             linkButton={true}
                             href={`tel:${this.props.item.telephone}`} />,
-                <div style={{fontStyle: 'italic', marginBottom: 5}}>{this.props.item.telephone}</div>,
                 <Divider/>
               ]}
               <FlatButton label='Написати електроного листа'
@@ -103,11 +108,10 @@ export default class extends Component {
                           labelStyle={buttonStyle}
                           linkButton={true}
                           href={`mailto::${this.props.item.email}`} />
-              <div style={{fontStyle: 'italic'}}>{this.props.item.email}</div>
             </CardActions>
           </Card>
         </div>
-      </div>
+      </Card>
     )
   }
 }

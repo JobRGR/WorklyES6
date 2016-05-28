@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import TextField from 'material-ui/TextField'
 import DatePicker from 'material-ui/DatePicker'
 import RaisedButton from 'material-ui/RaisedButton'
+import {Card} from 'material-ui/Card'
 import Snackbar from 'material-ui/Snackbar'
 import NavigationClose from 'material-ui/svg-icons/navigation/close'
 import ActionDelete from 'material-ui/svg-icons/action/delete'
@@ -119,9 +120,9 @@ export default class extends Component {
 
   render() {
     return (
-      <div className='edit-user'>
+      <Card className='edit-user'>
         <div className='edit-user_left-side'>
-          <AvatarName src={this.state.item.avatar} name={this.state.item.name}/>
+          <AvatarName src={this.state.item.avatar} name={this.state.item.name} size={80} />
           <TextField floatingLabelText={'Ім\'я та Прізвище'}
                      value={this.state.item.name}
                      name='name'
@@ -149,16 +150,6 @@ export default class extends Component {
                      multiLine={true}
                      fullWidth={true}
                      onChange={this._handleTextFieldChange} />
-          {
-            this.state.item.skills.map((skill, ind, arr) => (
-              <div className='skill-item'>
-                {skill}
-                <NavigationClose onClick={() => this.removeItem(arr, ind)}
-                                 style={{cursor: 'pointer', verticalAlign: 'middle'}}
-                                 color='#ffffff' />
-              </div>
-            ))
-          }
           <div className='add-skill'>
             <TextField hintText='Вміння'
                        value={this.state.addSkill}
@@ -166,10 +157,24 @@ export default class extends Component {
                        name='addSkill'
                        onChange={this._handleAddSkillChange} />
             <RaisedButton label="Додати"
+                          className='add-skill-btn'
                           labelStyle={{textTransform: 'none', font: 'normal 16px sans-serif'}}
                           primary={true} 
                           onClick={this.addSkillItem} />
           </div>
+          <div className='skill-wrapper'>
+            {
+              this.state.item.skills.map((skill, ind, arr) => (
+                <div className='skill-item'>
+                  {skill}
+                  <NavigationClose onClick={() => this.removeItem(arr, ind)}
+                                   style={{cursor: 'pointer', verticalAlign: 'middle'}}
+                                   color='#ffffff' />
+                </div>
+              ))
+            }
+          </div>
+          <span className='user-edit-title'>Освіта</span>
           {
             this.state.item.educations.map((education, ind, arr) => (
               <div className='education-item'>
@@ -178,6 +183,9 @@ export default class extends Component {
                            name='speciality'
                            fullWidth={true}
                            onChange={(e) => this._handleArrayChange(e, education)} />
+                <ActionDelete onClick={() => this.removeItem(arr, ind)}
+                              style={{cursor: 'pointer', verticalAlign: 'bottom', height: 25, width: 25, marginLeft: -25, marginTop: 22, position: 'absolute'}}
+                              color='#00bcd4' />
                 <TextField floatingLabelText='Місце навчання'
                            value={education.university}
                            name='university'
@@ -195,19 +203,17 @@ export default class extends Component {
                             textFieldStyle={{width: '100%', height: '72px'}}
                             value={education.end ? new Date(education.end) : ''}
                             onChange={(e, date) => this._handleArrayDateChange(education, 'end', date)} />
-                <ActionDelete onClick={() => this.removeItem(arr, ind)}
-                                 style={{cursor: 'pointer', verticalAlign: 'bottom', height: 50, width: 50}}
-                                 color='#8BC34A' />
               </div>
             ))
           }
-          <div style={{textAlign: 'right'}}>
+          <div>
             <RaisedButton label="Додати місце навчання"
                           labelStyle={{textTransform: 'none', font: 'normal 16px sans-serif'}}
                           style={{marginBottom: 20, marginTop: 15}}
                           primary={true}
                           onClick={this.addEducationItem} />
           </div>
+          <span className='user-edit-title'>Досвід</span>
           {
             this.state.item.experiences.map((experience, ind, arr) => (
               <div className='experience-item'>
@@ -216,6 +222,9 @@ export default class extends Component {
                            name='position'
                            fullWidth={true}
                            onChange={(e) => this._handleArrayChange(e, experience)} />
+                <ActionDelete onClick={() => this.removeItem(arr, ind)}
+                              style={{cursor: 'pointer', verticalAlign: 'bottom', height: 25, width: 25, marginLeft: -25, marginTop: 22, position: 'absolute'}}
+                              color='#00bcd4' />
                 <TextField floatingLabelText='Місце роботи(компанія)'
                            value={experience.companyName}
                            name='companyName'
@@ -239,13 +248,10 @@ export default class extends Component {
                             textFieldStyle={{width: '100%', height: '72px'}}
                             value={experience.end ? new Date(experience.end) : ''}
                             onChange={(e, date) => this._handleArrayDateChange(experience, 'end', date)} />
-                <ActionDelete onClick={() => this.removeItem(arr, ind)}
-                              style={{cursor: 'pointer', verticalAlign: 'bottom', height: 50, width: 50}}
-                              color='#8BC34A' />
               </div>
             ))
           }
-          <div style={{textAlign: 'right'}}>
+          <div>
             <RaisedButton label="Додати місце роботи"
                           labelStyle={{textTransform: 'none', font: 'normal 16px sans-serif'}}
                           style={{marginBottom: 20}}
@@ -255,7 +261,7 @@ export default class extends Component {
           <RaisedButton label="Завершити редагування"
                         labelStyle={{textTransform: 'none', font: 'normal 18px sans-serif'}}
                         style={{marginTop: 20, width: '100%'}}
-                        secondary={true}
+                        primary={true}
                         onClick={this.editUser} />
           <Snackbar
             open={this.state.open}
@@ -266,7 +272,7 @@ export default class extends Component {
         <div className='edit-user_right-side'>
           <ChangeMailPass api={StudentApi} email={this.props.item.email} />
         </div>
-      </div>
+      </Card>
     )
   }
 }

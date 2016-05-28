@@ -5,7 +5,6 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 import Snackbar from 'material-ui/Snackbar'
-import {green700, red700} from 'material-ui/styles/colors'
 import request from '../../../client_api/utils/request'
 
 export default class extends Component {
@@ -77,10 +76,12 @@ export default class extends Component {
     return (
       <div>
         <div className='sign_text'>
-          Lorem Ipsum is simply dummy text of the
-          printing and typesetting industry. Lorem
-          Ipsum has been the industry's standard dummy
-          text ever since the 1500s
+          <span className='sign_text_title'>
+            Шукаєш Свій Шлях в IT?
+          </span>
+          <span className='sign_text_sub'>
+            Кожен день безліч компаній відкривають вакасії стажування та практик. Вони шукать саме тебе.
+          </span>
         </div>
         <RaisedButton label='Зареєструватись'
                       onClick={() => this.setState({signInState: false})}
@@ -136,10 +137,10 @@ export default class extends Component {
         <Tabs value={this.state.isStudent}
               onChange={(value) => this.switchState({isStudent: value})}
               style={{width: 250, margin: 'auto'}}
-              inkBarStyle={{backgroundColor: green700}}
+              inkBarStyle={{backgroundColor: '#00BCD4'}}
               tabItemContainerStyle={{backgroundColor: 'none'}} >
-          <Tab label='Студент' value={true} style={{color: green700, textTransform: 'none'}} />
-          <Tab label='Компанія' value={false} style={{color: green700, textTransform: 'none'}} />
+          <Tab label='Студент' value={true} style={{color: '#00BCD4', textTransform: 'none', fontSize: 14}} />
+          <Tab label='Компанія' value={false} style={{color: '#00BCD4', textTransform: 'none', fontSize: 14}} />
         </Tabs>
         <TextField floatingLabelText={name}
                    errorText={this.state.error.nameText}

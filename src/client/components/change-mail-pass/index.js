@@ -64,7 +64,7 @@ export default class extends Component {
 
   render() {
     return (
-      <div style={{textAlign: 'center'}}>
+      <div>
         <TextField floatingLabelText={'Електрона пошта'}
                    style={{marginTop: 40}}
                    value={this.state.email}

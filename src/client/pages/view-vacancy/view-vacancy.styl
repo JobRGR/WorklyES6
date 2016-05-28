@@ -1,40 +1,63 @@
 .view-vacancy
-  width 100%
-  max-width 1000px
-  margin 20px auto 50px
+  width 80%
+  max-width 1200px
+  padding 40px
+  margin 50px auto
   font-family 'sans-serif'
   &_left-side
     display inline-block
-    width 49%
+    width 45%
     & .vacancy-about
-      margin-top 20px
+      margin-top 40px
+      margin-bottom 30px
       font-size 16px
+      line-height 21px
+      font-weight 300
     & .skill-item
       display inline-block
-      padding 3px 5px 3px 5px
-      margin-top 5px
-      margin-right 3px
+      padding 5px 8px 5px 8px
+      margin-top 8px
+      margin-right 8px
       border-radius 5px
-      background-color #8BC34A
+      background-color #00bcd4
       color #ffffff
+      font-weight 300
   &_right-side
     font-family 'sans-serif'
     display inline-block
     vertical-align top
-    margin-left 1%
+    margin-left 4%
     width 50%
     & .vacancy-item
       font-size 16px
-      font-style italic
       padding 10px
+      font-weight 300
       transition all 0.5s ease-out
       cursor pointer
+      position relative
+      margin-left 5px
       &:hover
-        background-color #8BC34A
-        color #ffffff
+        transition all 0.5s ease-out
+        background-color #e6e6e6
+    & .question-wrapper
+      padding 10px
+      box-sizing border-box
+      width 100%
+      margin-bottom 30px
     & .question-item
       width 100%
+    & .question-title
+      margin-top 20px
+      margin-bottom 20px
+      font-size: 18px
+      font-weight: 300
+    & .question-test
+      font-weight 300
+      font-size 14px
+      margin-bottom 10px
     & .question-problem
-      font-size 18px
-      font-style italic
-      margin-top 10px
+      font-size: 16px
+      font-style: italic
+      margin-top: 15px
+      font-weight: 300
+      margin-bottom: 20px
