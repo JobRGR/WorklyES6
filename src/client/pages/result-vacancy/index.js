@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {browserHistory} from 'react-router'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import {Card, CardTitle} from 'material-ui/Card'
+import AvatarName from '../../components/avatar-name'
 import {getVacancy} from '../feed/utils'
 import VacancyApi from '../../../client_api/api/vacancy'
 
@@ -38,7 +39,13 @@ export default class extends Component {
     return (
       <div className='result-vacancy-list'>
         <Card>
-          <CardTitle title='Результати тестування' subtitle={this.state.vacancy ? `Кількість тестів: ${testsNumber}` : ''} />
+          <div className='vacancy-list-avatar'>
+            <AvatarName
+              src={this.props.item.avatar}
+              name={this.props.item.name.name} size={90}
+              text={<CardTitle title='Результати тестування' subtitle={this.state.vacancy ? `Кількість тестів: ${testsNumber}` : ''} />}
+            />
+          </div>
           <Table>
             <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
               <TableRow>

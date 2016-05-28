@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {browserHistory} from 'react-router'
-import {Card, CardHeader, CardText, CardActions} from 'material-ui/Card'
+import {Card, CardHeader} from 'material-ui/Card'
 import CircularProgress from 'material-ui/CircularProgress'
 import Divider from 'material-ui/Divider'
 import Place from 'material-ui/svg-icons/maps/place'
@@ -37,33 +37,33 @@ export default class extends Component {
       <div style={{width: '100%'}}>
         <div className='company-image' style={{backgroundImage: `url(${this.props.item.avatar})`}}></div>
         <div className='company-banner'>{this.props.item.name.name}</div>
-        <div className='view-user'>
-          <div className='view-user_left-side'>
-            {
-              this.props.item.city &&
+        <Card className='company-card'>
+          <div>
+            <div className='view-user_left-side'>
+              {
+                this.props.item.city &&
+                <div className='company-prop'>
+                  <Place style={{marginRight: 5}} color={'#00bcd4'}/>
+                  <span className='company-prop-label'>{this.props.item.city.name}</span>
+                </div>
+              }
               <div className='company-prop'>
-                <Place style={{marginRight: 5}} color={'#8BC34A'}/>
-                <span>{this.props.item.city.name}</span>
+                <Email style={{marginRight: 5}} color={'#00bcd4'}/>
+                <span className='company-prop-label'>{this.props.item.email}</span>
               </div>
-            }
-            <div className='company-prop'>
-              <Email style={{marginRight: 5}} color={'#8BC34A'}/>
-              <span>{this.props.item.email}</span>
+              {
+                this.props.item.site &&
+                <div className='company-prop'>
+                  <Forward style={{marginRight: 5}} color={'#00bcd4'}/>
+                  <a className='company-prop-label' href={this.props.item.site} style={{color: '#00bcd4'}}>{this.props.item.site}</a>
+                </div>
+              }
+              {
+                this.props.item.about &&
+                <div className='company-about'>{this.props.item.about}</div>
+              }
             </div>
-            {
-              this.props.item.site &&
-              <div className='company-prop'>
-                <Forward style={{marginRight: 5}} color={'#8BC34A'}/>
-                <a href={this.props.item.site}>{this.props.item.site}</a>
-              </div>
-            }
-            {
-              this.props.item.about &&
-              <div className='company-about'>{this.props.item.about}</div>
-            }
-          </div>
-          <div className='view-user_right-side'>
-            <Card>
+            <div className='view-user_right-side'>
               <CardHeader title={'Вакансії компанії'}
                           titleStyle={{fontFamily: 'sans-serif', fontWeight: 700, fontSize: 18}} />
               <Divider/>
@@ -79,13 +79,13 @@ export default class extends Component {
                   .map(item => (
                     <div className='vacancy-item'
                          onClick={() => this.navigate(`/feed/${item._id}`)}>
-                      {item.name}
+                      {item.name} - {new Date(item.createdAt).toLocaleDateString()}
                     </div>
                   ))
               }
-            </Card>
           </div>
-        </div>
+          </div>
+        </Card>
       </div>
     )
   }

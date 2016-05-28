@@ -1,38 +1,58 @@
 .view-user
-  width 100%
-  max-width 1000px
-  margin 20px auto 50px
+  width 80%
+  max-width 1200px
+  margin 50px auto
+  padding 40px
   font-family 'sans-serif'
   &_left-side
     display inline-block
-    width 60%
+    width 50%
     & .student-about
-      margin-top 20px
+      margin-top 40px
+      margin-bottom 30px
       font-size 16px
+      line-height 21px
+      font-weight 300
+    & .student-list-about
+      font-size 14px
+      line-height 21px
+      font-weight 300
     & .student-subtitle
-      margin-top 20px
+      margin-top 30px
       margin-bottom 5px
+      font-weight 300
       font-size 22px
+      margin-left 12px
+      position relative
     & .student-item
       padding 10px
       transition all 0.5s ease-out
-      &:hover
-        background-color #8BC34A
-        color #ffffff
     & .student-dates
       margin-top 5px
-      font-style italic
-      text-align right
-    & .skill-item
-      display inline-block
-      padding 3px 5px 3px 5px
+      font-weight 300
+      color '#5a5b5f'
+    & .student-list-title
+      font-weight 300
       margin-top 5px
-      margin-right 3px
-      border-radius 5px
-      background-color #8BC34A
-      color #ffffff
+      margin-bottom 4px
+      color: #00bcd4
+    & .student-list-speciality
+      font-weight 300
+      margin-top 5px
+      margin-bottom 4px
   &_right-side
     display inline-block
     vertical-align top
-    margin-left 5%
-    width 35%
+    margin-left 10%
+    width 40%
+    &  .skill-item
+      display inline-block
+      padding 5px 8px 5px 8px
+      margin-top 8px
+      margin-right 8px
+      border-radius 5px
+      background-color #00bcd4
+      color #ffffff
+      font-weight 300
+    & .skill-wrapper
+      margin-bottom 30px
