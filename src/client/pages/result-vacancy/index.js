@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {browserHistory} from 'react-router'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import {Card, CardTitle} from 'material-ui/Card'
+import Loader from '../../../admin/components/loader'
 import AvatarName from '../../components/avatar-name'
 import {getVacancy} from '../feed/utils'
 import VacancyApi from '../../../client_api/api/vacancy'
@@ -75,6 +76,7 @@ export default class extends Component {
                     </TableRow>
                   )
               }
+              {this.state.loading && <div style={{height: 300}}><Loader /></div>}
             </TableBody>
           </Table>
         </Card>

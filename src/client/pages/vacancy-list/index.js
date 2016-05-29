@@ -4,6 +4,7 @@ import {browserHistory} from 'react-router'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import {Card, CardHeader, CardTitle} from 'material-ui/Card'
 import Snackbar from 'material-ui/Snackbar'
+import Loader from '../../../admin/components/loader'
 import AvatarName from '../../components/avatar-name'
 import IconButton from 'material-ui/IconButton'
 import ModeEdit from 'material-ui/svg-icons/editor/mode-edit'
@@ -100,7 +101,11 @@ export default class extends Component {
                       {item.city ? item.city.name : '–'}
                     </TableRowColumn>
                     <TableRowColumn style={{width: '15%'}}>
-                      <IconButton onTouchTap={() => browserHistory.push(`/vacancy/result/${item._id}`)}><Results /></IconButton>
+                      <IconButton
+                        disabled={item.subscribers.length == 0}
+                        onTouchTap={() => item.subscribers.length > 0 && browserHistory.push(`/vacancy/result/${item._id}`)}>
+                        <Results />
+                      </IconButton>
                     </TableRowColumn>
                     <TableRowColumn style={{width: '15%'}}>
                       <IconButton onTouchTap={() => browserHistory.push(`/vacancy/edit/${item._id}`)}><ModeEdit /></IconButton>
@@ -111,6 +116,7 @@ export default class extends Component {
                   </TableRow>
                 )
               }
+              {this.state.loading && <div style={{height: 300}}><Loader /></div>}
             </TableBody>
           </Table>
         </Card>

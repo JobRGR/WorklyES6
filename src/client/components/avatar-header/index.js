@@ -7,7 +7,7 @@ const textStyle = {
   verticalAlign: 'middle',
   fontFamily: 'sans-serif',
   fontWeight: 400,
-  fontSize: 18,
+  fontSize: 16,
   color: '#ffffff',
   marginRight: 15
 }
