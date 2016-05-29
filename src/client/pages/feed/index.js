@@ -5,6 +5,7 @@ import {Card, CardHeader, CardText} from 'material-ui/Card'
 import FlatButton from 'material-ui/FlatButton'
 import {browserHistory} from 'react-router'
 import {toAvatar, short, searchCompany, searchStudent, searchVacancy, getType, getVacancy, count, defaultState, students, companies, vacancies} from './utils'
+import Loader from '../../../admin/components/loader'
 import {VacancyService, CompanyService, StudentService} from '../../service/feed'
 
 
@@ -36,7 +37,7 @@ export default class extends Component {
   componentWillMount() {
     this.subscribe(VacancyService, this.onLoadedVacancy, this.onErrorVacancy, this.onLoadingVacancy)
     this.subscribe(StudentService, this.onLoadedStudent, this.onErrorStudent, this.onLoadingStudent)
-    this.subscribe(CompanyService, this.onLoadedCompany, this.onErrorCompany, this.onLoadingVacancy)
+    this.subscribe(CompanyService, this.onLoadedCompany, this.onErrorCompany, this.onLoadingCompany)
     !this.state.vacancies.data.length && VacancyService.load()
   }
 
@@ -147,25 +148,30 @@ export default class extends Component {
           value={this.state.search}
           onChange={event => this.setState({search: event.target.value})}
         />
-        <Tabs
-          inkBarStyle={{backgroundColor: 'rgb(255, 245, 157)'}}
-        >
-          <Tab label='Вакансії' onActive={() => this.handleChange(vacancies)}>
-            <div>
-              {this.state.vacancies.data.length > 0 && this.vacancies()}
-            </div>
-          </Tab>
-          <Tab label='Компанії' onActive={() => this.handleChange(companies)}>
-            <div>
-              {this.state.companies.data.length > 0 && this.companies()}
-            </div>
-          </Tab>
-          <Tab label='Студенти' onActive={() => this.handleChange(students)}>
-            <div>
-              {this.state.students.data.length > 0 && this.students()}
-            </div>
-          </Tab>
-        </Tabs>
+        <Card>
+          <Tabs
+            inkBarStyle={{backgroundColor: 'rgb(255, 245, 157)'}}
+          >
+            <Tab label='Вакансії' onActive={() => this.handleChange(vacancies)}>
+              <div>
+                {this.state.vacancies.data.length > 0 && this.vacancies()}
+                {this.state.vacancies.loading && <div style={{height: 300}}><Loader /></div>}
+              </div>
+            </Tab>
+            <Tab label='Компанії' onActive={() => this.handleChange(companies)}>
+              <div>
+                {this.state.companies.data.length > 0 && this.companies()}
+                {this.state.companies.loading && <div style={{height: 300}}><Loader /></div>}
+              </div>
+            </Tab>
+            <Tab label='Студенти' onActive={() => this.handleChange(students)}>
+              <div>
+                {this.state.students.data.length > 0 && this.students()}
+                {this.state.students.loading && <div style={{height: 300}}><Loader /></div>}
+              </div>
+            </Tab>
+          </Tabs>
+        </Card>
       </div>
     )
   }
