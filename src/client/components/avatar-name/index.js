@@ -19,7 +19,7 @@ class AvatarName extends Component {
       <div className='avatar-name'>
         {
           this.props.src
-          ? <Avatar src={this.props.src} size={this.props.size} />
+          ? <Avatar src={this.props.src} style={{minWidth: this.props.size}} size={this.props.size} />
           : <Avatar size={this.props.size}>{letters}</Avatar>
         }
         {
