@@ -87,6 +87,7 @@ export default class extends Component {
   }
 
   render() {
+    //const preview = <div className='preview-block' dangerouslySetInnerHTML={this.rawMarkup()} />
     return (
       <Card className='vacancy-create'>
         <div className='vacancy-create-avatar'>
@@ -113,9 +114,6 @@ export default class extends Component {
                      fullWidth={true}
                      multiLine={true}
                      onChange={this._handleTextFieldChange} />
-          <div className='preview-block'
-               dangerouslySetInnerHTML={this.rawMarkup()}/>
-          <Divider style={{}}/>
           <div className='add-skill'>
             <TextField hintText='Вміння'
                        value={this.state.addSkill}

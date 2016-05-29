@@ -149,12 +149,11 @@ export default class extends Component {
                    value={q.answer}
                    name='answer'
                    onChange={(e) => this.handleOpenChange(e, q)} />
-        <div style={{width: '100%', textAlign: 'right', margin: '5px 0'}}>
+        <div style={{width: '100%', margin: '5px 0'}}>
           <RaisedButton primary={true}
                         label='Видалити питання'
                         onClick={() => this.removeItem(this.state.openQuestions, ind)} />
         </div>
-        <Divider style={{backgroundColor: blue500}} />
       </div>
     ))
   }
@@ -195,17 +194,17 @@ export default class extends Component {
             ))
           }
         </SelectField>
-        <div style={{width: '100%', textAlign: 'right', margin: '5px 0'}}>
+        <div style={{width: '100%', margin: '5px 0'}}>
           <RaisedButton primary={true}
                         label='Видалити питання'
                         onClick={() => this.removeItem(this.state.testQuestions, ind)} />
         </div>
-        <Divider style={{backgroundColor: blue500}} />
       </div>
     ))
   }
 
   render() {
+    //const preview = <div className='preview-block' dangerouslySetInnerHTML={this.rawMarkup()} />
     return (
       <Card className='vacancy-create'>
         <div className='vacancy-create-avatar'>
@@ -232,8 +231,6 @@ export default class extends Component {
                      fullWidth={true}
                      multiLine={true}
                      onChange={this._handleTextFieldChange} />
-          <div className='preview-block' dangerouslySetInnerHTML={this.rawMarkup()} />
-          <Divider style={{}}/>
           <div className='add-skill'>
             <TextField hintText='Вміння'
                        value={this.state.addSkill}
@@ -270,16 +267,23 @@ export default class extends Component {
             onRequestClose={this.handleRequestClose} />
         </div>
         <div className='vacancy-create_right-side'>
+          <div>
+            <RaisedButton
+              primary={true}
+              className='question-add'
+              label='Додати відкрите питання'
+              style={{marginRight: 12}}
+              onClick={this.addOpen} />
+            <RaisedButton
+              primary={true}
+              className='question-add'
+              label='Додати тестове питання'
+              onClick={this.addTest} />
+          </div>
+          {this.state.openQuestions.length > 0 && <span className='vacancy-create-test-title'>Відкриті запитання</span>}
           {this.openQuestions()}
-          <RaisedButton primary={true}
-                        className='question-add'
-                        label='Додати відкрите питання'
-                        onClick={this.addOpen} />
+          {this.state.testQuestions.length > 0 && <span className='vacancy-create-test-title'>Тестові запитання</span>}
           {this.testQuestions()}
-          <RaisedButton primary={true}
-                        className='question-add'
-                        label='Додати тестове питання'
-                        onClick={this.addTest} />
         </div>
       </Card>
     )
