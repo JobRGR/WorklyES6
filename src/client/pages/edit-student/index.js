@@ -4,8 +4,8 @@ import DatePicker from 'material-ui/DatePicker'
 import RaisedButton from 'material-ui/RaisedButton'
 import {Card} from 'material-ui/Card'
 import Snackbar from 'material-ui/Snackbar'
-import NavigationClose from 'material-ui/svg-icons/navigation/close'
 import ActionDelete from 'material-ui/svg-icons/action/delete'
+import NavigationClose from 'material-ui/svg-icons/navigation/close'
 import AvatarName from '../../components/avatar-name'
 import ChangeMailPass from '../../components/change-mail-pass'
 import {green500} from 'material-ui/styles/colors'
@@ -183,7 +183,7 @@ export default class extends Component {
                            name='speciality'
                            fullWidth={true}
                            onChange={(e) => this._handleArrayChange(e, education)} />
-                <ActionDelete onClick={() => this.removeItem(arr, ind)}
+                <NavigationClose onClick={() => this.removeItem(arr, ind)}
                               style={{cursor: 'pointer', verticalAlign: 'bottom', height: 25, width: 25, marginLeft: -25, marginTop: 22, position: 'absolute'}}
                               color='#00bcd4' />
                 <TextField floatingLabelText='Місце навчання'
@@ -222,7 +222,7 @@ export default class extends Component {
                            name='position'
                            fullWidth={true}
                            onChange={(e) => this._handleArrayChange(e, experience)} />
-                <ActionDelete onClick={() => this.removeItem(arr, ind)}
+                <NavigationClose onClick={() => this.removeItem(arr, ind)}
                               style={{cursor: 'pointer', verticalAlign: 'bottom', height: 25, width: 25, marginLeft: -25, marginTop: 22, position: 'absolute'}}
                               color='#00bcd4' />
                 <TextField floatingLabelText='Місце роботи(компанія)'
