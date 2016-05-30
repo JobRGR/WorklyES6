@@ -24,7 +24,7 @@ handler.getMyQuestions = (req, res, next) => TestQuestion.searchItems({owner : r
   (err, questions) => nextItems(err, questions, res, next))
 
 handler.setOwner = (req, res, next) => {
-  req.body.testQuestions.forEach(item => item.owner = req._company._id)
+  req.body.testQuestions && req.body.testQuestions.forEach(item => item.owner = req._company._id)
   next()
 }
 
