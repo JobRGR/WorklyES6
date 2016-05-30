@@ -13,7 +13,7 @@ let schema = new Schema({
     free: {type: Boolean, required: true}
 }, {timestamps: true})
 
-schema.statics.addItem = function ({question, correct, answer, owner, free}, callback) {
+schema.statics.addItem = function ({question, correct, answer, owner, free = true}, callback) {
     const TestQuestion = this
     let testQuestion = new TestQuestion({question, correct, answer, owner, free})
     testQuestion.save(err => callback(err, testQuestion))

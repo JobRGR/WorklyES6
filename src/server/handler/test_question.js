@@ -23,4 +23,9 @@ handler.getQuestionsById = (req, res, next) => TestQuestion.searchItems({owner :
 handler.getMyQuestions = (req, res, next) => TestQuestion.searchItems({owner : req._company._id},
   (err, questions) => nextItems(err, questions, res, next))
 
+handler.setOwner = (req, res, next) => {
+  req.body.testQuestions.forEach(item => item.owner = req._company._id)
+  next()
+}
+
 export default handler

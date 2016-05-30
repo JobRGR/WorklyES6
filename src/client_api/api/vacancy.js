@@ -15,7 +15,7 @@ class VacancyApi {
 
   addItem(body) {
     return request({
-      url: this.path,
+      url: `${this.path}-add`,
       method: 'post',
       body
     })

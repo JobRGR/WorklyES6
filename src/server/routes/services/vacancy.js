@@ -38,6 +38,8 @@ let router = (name, handler) =>
       checkCompany,
       Dictionaries['City'].addItem,
       Dictionaries['Skill'].addItems,
+      TestQuestion.setOwner,
+      OpenQuestion.setOwner,
       TestQuestion.addItems,
       OpenQuestion.addItems,
       handler.addItem,
