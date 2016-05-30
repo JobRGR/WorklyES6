@@ -17,6 +17,9 @@ handler.addItem = (req, res, next) => {
   data.company  = req._company ? req._company._id: req.body.company
   if (res.city) data.city = res.city._id
   if (res.skills) data.skills = toObjectArray(res.skills)
+  if (res.testQuestions) data.testQuestions = toObjectArray(res.testQuestions)
+  if (res.openQuestions) data.openQuestions = toObjectArray(res.openQuestions)
+  if (res.skills) data.skills = toObjectArray(res.skills)
   Vacancy.addItem(data, (err, vacancy) => nextItem(err, vacancy, res, next))
 }
 

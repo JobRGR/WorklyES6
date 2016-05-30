@@ -1,7 +1,7 @@
 import mongoose from '../index'
 import Company from '../company'
 import CompanyName from '../company_name'
-import {removeItem, getCount, randomPopulate, getPopulate, searchPopulate, getItem, updateItem, getRandom} from '../../utils/model/helpers'
+import {removeItem, getCount, randomPopulate, getPopulate, searchPopulate, getItem, addArray, updateItem, getRandom} from '../../utils/model/helpers'
 
 const foreignKeys = ['owner']
 
@@ -48,6 +48,7 @@ schema.statics.getQuestionsByName = function(name, callback) {
 }
 
 schema.statics.getCount = getCount
+schema.statics.addArray = addArray
 schema.statics.removeItem = removeItem
 
 export default mongoose.model('OpenQuestion', schema)

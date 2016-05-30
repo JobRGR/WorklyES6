@@ -1,5 +1,5 @@
 import mongoose from '../index'
-import {removeItem, getCount, randomPopulate, getPopulate, searchPopulate, getItem, updateItem, getRandom} from '../../utils/model/helpers'
+import {removeItem, getCount, randomPopulate, addArray, getPopulate, searchPopulate, getItem, updateItem, getRandom} from '../../utils/model/helpers'
 
 const foreignKeys = ['owner']
 
@@ -36,6 +36,7 @@ schema.statics.searchItems = function(search, callback) {
 }
 
 schema.statics.getCount = getCount
+schema.statics.addArray = addArray
 schema.statics.removeItem = removeItem
 
 export default mongoose.model('TestQuestion', schema)

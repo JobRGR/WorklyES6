@@ -525,12 +525,26 @@ export default (url) => {
         })
     })
 
-    auth.logout.company()
     auth.logout.student()
-
     it('.delete student', done => deleteItem(url, `/api/student/${tmpStudentId}`, done))
-    it('.delete company', done => deleteItem(url, `/api/company/${tmpStudentId}`, done))
     it('.delete vacancy', done => deleteItem(url, `/api/vacancy/${tmpModel._id}`, done))
+    
+    it('.create new vacancy as company with questions', done => {
+      companyUser
+        .post(`${url + path}-add`)
+        .send(tmpVacancy)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          tmpModel = res.body.vacancy || {}
+          assert.lengthOf(res.body.vacancy.openQuestions, 2)
+          assert.lengthOf(res.body.vacancy.testQuestions, 2)
+          done()
+        })
+    })
+    
+    auth.logout.company()
+    it('.delete vacancy', done => deleteItem(url, `/api/vacancy/${tmpModel._id}`, done))
+    it('.delete company', done => deleteItem(url, `/api/company/${tmpStudentId}`, done))
   })
 
 }
