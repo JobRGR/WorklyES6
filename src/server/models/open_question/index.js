@@ -1,7 +1,7 @@
 import mongoose from '../index'
 import Company from '../company'
 import CompanyName from '../company_name'
-import {removeItem, getCount, randomPopulate, getPopulate, searchPopulate, getItem, updateItem, getRandom} from '../../utils/model/helpers'
+import {removeItem, getCount, randomPopulate, getPopulate, searchPopulate, getItem, addArray, updateItem, getRandom} from '../../utils/model/helpers'
 
 const foreignKeys = ['owner']
 
@@ -14,7 +14,7 @@ let schema = new Schema({
     free: {type: Boolean, required: true}
 }, {timestamps: true})
 
-schema.statics.addItem = function ({question, answer, free, owner}, callback) {
+schema.statics.addItem = function ({question, answer, free = true, owner}, callback) {
     const OpenQuestion = this
     let openQuestion = new OpenQuestion({question, answer, free, owner})
     openQuestion.save(err => callback(err, openQuestion))
@@ -48,6 +48,7 @@ schema.statics.getQuestionsByName = function(name, callback) {
 }
 
 schema.statics.getCount = getCount
+schema.statics.addArray = addArray
 schema.statics.removeItem = removeItem
 
 export default mongoose.model('OpenQuestion', schema)

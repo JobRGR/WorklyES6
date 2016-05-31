@@ -1,5 +1,7 @@
 import express from 'express'
 import Vacancy from '../../handler/vacancy'
+import OpenQuestion from '../../handler/open_question'
+import TestQuestion from '../../handler/test_question'
 import Dictionaries from '../../handler/dictionary'
 import CompanyName from '../../handler/company_name'
 import checkStudent from '../../middleware/check/student'
@@ -36,6 +38,10 @@ let router = (name, handler) =>
       checkCompany,
       Dictionaries['City'].addItem,
       Dictionaries['Skill'].addItems,
+      TestQuestion.setOwner,
+      OpenQuestion.setOwner,
+      TestQuestion.addItems,
+      OpenQuestion.addItems,
       handler.addItem,
       handler.sendItem
     )
