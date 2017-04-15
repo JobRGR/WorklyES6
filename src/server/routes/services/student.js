@@ -26,6 +26,17 @@ export default express()
       Student.searchItems,
       Student.sendItems
     )
+    .post('/student-search-university',
+      Dictionaries['City'].searchItems,
+      Dictionaries['Skill'].searchItems,
+      Dictionaries['University'].searchItems,
+      Dictionaries['Speciality'].searchItems,
+      Dictionaries['Position'].searchItems,
+      CompanyName.searchItems,
+      Education.searchItems,
+      Experience.searchItems,
+      Student.searchByUniversity
+    )
     .put('/student-update',
       checkStudent,
       Student.initUser,

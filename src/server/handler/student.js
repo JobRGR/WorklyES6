@@ -39,7 +39,7 @@ handler.getStudent = (req, res, next) => nextItem(null, req._student, res, next)
 handler.autoLogin = (req, res, next) =>
   Student.getItem(req.params.id, (err, student) => saveSession(err, student, req, res, next))
 
-handler.searchItems = (req, res, next) => {
+function getSearch(req, res) {
   let search = {}
   if (req.body.age) search.dob = getDate(req.body.age.min, req.body.age.max)
   if (req.body.email) search.email = req.body.email
@@ -48,8 +48,40 @@ handler.searchItems = (req, res, next) => {
   if (res.skills && res.skills.length) search.skills = {$in: toObjectArray(res.skills)}
   if (res.educations && res.educations.length) search.educations = {$in: toObjectArray(res.educations)}
   if (res.experiences && res.experiences.length) search.experiences = {$in: toObjectArray(res.experiences)}
+  return search
+}
+
+
+handler.searchItems = (req, res, next) => {
+  const search = getSearch(req, res)
   Student.searchItem(search, (err, students) => nextItems(err, students, res, next))
 }
+
+handler.searchByUniversity = (req, res, next) => Student.getCount((err, count) => {
+  const search = getSearch(req, res)
+  Student.searchItem(search, (err, students) => {
+    let countCur = 0
+    const groupStudent = students.reduce((memo, student) => {
+      if (Array.isArray(student.educations)) {
+        student.educations.forEach(({university}) => {
+          if (memo[university.name]) memo[university.name].count++
+          else memo[university.name] = {count: 1}
+          countCur++
+        })
+      }
+      else {
+        if (memo.other) memo[university.name].count++
+        else memo.other = {count: 1}
+      }
+      return memo
+    }, {})
+    for(let key in groupStudent) {
+      groupStudent[key].fromAll = groupStudent[key].count * 100 / count
+      groupStudent[key].fromCurrent = groupStudent[key].count * 100 / countCur
+    }
+    res.send({students: groupStudent})
+  })
+})
 
 handler.updateItem = (req, res, next) => {
   let data = ['dob', 'telephone', 'name', 'about'].reduce((memo, key) => {

@@ -23,7 +23,7 @@ handler.addItem = (req, res, next) => {
   Vacancy.addItem(data, (err, vacancy) => nextItem(err, vacancy, res, next))
 }
 
-handler.searchItems = (req, res, next) => {
+function getSearch(req, res, callback) {
   let search = {}
   if (req.body.name) search.name = req.body.name
   if (req.body.about) search.about = req.body.about
@@ -32,12 +32,17 @@ handler.searchItems = (req, res, next) => {
   if (res.companyNames && res.companyNames.length){
     Company.searchItem({name: {$in: toObjectArray(res.companyNames)}}, (err, companies) => {
       search.company = {$in: toObjectArray(companies)}
-      Vacancy.searchItem(search, (err, vacancies) => nextItems(err, vacancies, res, next))
+      callback(search)
     })
   } else {
-    Vacancy.searchItem(search, (err, vacancies) => nextItems(err, vacancies, res, next))
+    callback(search)
   }
 }
+
+handler.searchItems = (req, res, next) => getSearch(req, res, search => {
+  Vacancy.searchItem(search, (err, vacancies) => nextItems(err, vacancies, res, next))
+})
+
 
 handler.updateItem = (req, res, next) => {
   let data = ['name', 'about', 'testQuestions', 'openQuestions', 'testsResults'].reduce((memo, key) => {
