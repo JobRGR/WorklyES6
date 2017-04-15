@@ -28,7 +28,7 @@ export default cb => async.waterfall([
   }), err => callback()),
   callback => Skill.getItem(null, (err, skills) => {
     for (let i = 0; i < data.length;i++) {
-      let count = 2//Math.floor(Math.random() * 15)
+      let count = Math.floor(Math.random() * 4)
       for (let j = 0; j < count; j++)
         data[i].skills.push(random(skills)._id)
     }
@@ -39,8 +39,6 @@ export default cb => async.waterfall([
     for (let i = 0; i < data.length; i++) {
       data[i].educations.push(educations[j]._id)
       j++
-      // data[i].educations.push(educations[j]._id)
-      // j++
     }
     callback()
   }),
@@ -49,8 +47,11 @@ export default cb => async.waterfall([
     for (let i = 0; i < data.length; i++) {
       data[i].experiences.push(experience[j]._id)
       j++
-      data[i].experiences.push(experience[j]._id)
-      j++
+      let count = Math.floor(Math.random() * 3)
+      if (count > 1) {
+        data[i].experiences.push(experience[j]._id)
+        j++
+      }
     }
     callback()
   })

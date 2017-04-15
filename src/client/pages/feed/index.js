@@ -78,10 +78,11 @@ export default class extends Component {
         {
           this.state.vacancies.data
             .filter(vacancy => searchVacancy(this.state.search, vacancy))
+            .filter(vacancy => vacancy.componay)
             .filter((_, index) => index < this.state.vacancies.count)
             .map(({_id, name, company, about, city}) =>
               <Card onClick={() => browserHistory.push(`/feed/${_id}`)} style={{cursor: 'pointer'}} key={_id}>
-                <CardHeader title={name} subtitle={`${company.name.name} ${city ? `| ${city.name}` : ''}`} avatar={company.avatar || toAvatar(company.name.name)} />
+                <CardHeader title={name} subtitle={`${company.name && company.name.name} ${city ? `| ${city.name}` : ''}`} avatar={company.avatar || toAvatar(company.name && company.name.name)} />
                 <CardText style={{marginTop: -20}}>{short(about, 300)}</CardText>
               </Card>
             )
@@ -127,7 +128,7 @@ export default class extends Component {
             .filter((_, index) => index < this.state.companies.count)
             .map(({_id, name, city = {}, avatar, about}) =>
               <Card key={_id} onClick={() => browserHistory.push(`/company/${_id}`)} style={{cursor: 'pointer'}}>
-                <CardHeader title={name.name} subtitle={city.name} avatar={avatar || toAvatar(name.name)} />
+                <CardHeader title={name && name.name} subtitle={city.name} avatar={avatar || toAvatar(name && name.name)} />
                 <CardText style={{marginTop: -20}}>{short(about, 300)}</CardText>
               </Card>
             )
