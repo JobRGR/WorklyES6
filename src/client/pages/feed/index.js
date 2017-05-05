@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {Tabs, Tab} from 'material-ui/Tabs'
+import Avatar from 'material-ui/Avatar'
 import TextField from 'material-ui/TextField'
 import {Card, CardHeader, CardText} from 'material-ui/Card'
 import FlatButton from 'material-ui/FlatButton'
@@ -78,7 +79,7 @@ export default class extends Component {
         {
           this.state.vacancies.data
             .filter(vacancy => searchVacancy(this.state.search, vacancy))
-            .filter(vacancy => vacancy.componay)
+            .filter(vacancy => vacancy.company)
             .filter((_, index) => index < this.state.vacancies.count)
             .map(({_id, name, company, about, city}) =>
               <Card onClick={() => browserHistory.push(`/feed/${_id}`)} style={{cursor: 'pointer'}} key={_id}>
@@ -107,9 +108,14 @@ export default class extends Component {
           this.state.students.data
             .filter(student => searchStudent(this.state.search, student))
             .filter((_, index) => index < this.state.students.count)
-            .map(({_id, name, city = {}, avatar, about, experiences}) =>
+            .map(({_id, name, city, avatar, about, experiences}) =>
               <Card onClick={() => browserHistory.push(`/student/${_id}`)} style={{cursor: 'pointer'}}  key={_id}>
-                <CardHeader title={name} subtitle={`${city ? city.name : ''} ${experiences ? `| ${getVacancy(experiences)}` : ''}`} avatar={avatar || toAvatar(name)} />
+                <CardHeader
+                  title={name}
+                  subtitle={`${city ? city.name : ''} ${experiences && experiences.length ? `| ${getVacancy(experiences)}` : ''}`}
+                  avatar={avatar || null}
+                  leftAvatar={!avatar ? <Avatar>{toAvatar(name)}</Avatar> : null}
+                />
                 <CardText style={{marginTop: -20}}>{short(about, 300)}</CardText>
               </Card>
             )

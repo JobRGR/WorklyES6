@@ -30,7 +30,7 @@ export default class extends Component {
             <div className='student-about'>{this.props.item.about}</div>
           }
           {
-            this.props.item.educations.length && [
+            this.props.item.educations.length > 0 && [
               <div className='student-subtitle'>Освіта</div>,
               <Divider/>,
               ...this.props.item.educations.map(education => [
@@ -47,7 +47,7 @@ export default class extends Component {
             ]
           }
           {
-            this.props.item.experiences.length && [
+            this.props.item.experiences.length > 0 && [
               <div className='student-subtitle'>Досвід роботи</div>,
               <Divider/>,
               ...this.props.item.experiences.map(experience => [
