@@ -25,8 +25,18 @@ export default (url) => {
 
   let tmpModel = null
   let list = null
+  let curCount = null
 
   describe('education tests', () => {
+    before(done => {
+      request(url)
+        .get(`${path}-count`)
+        .end((err, res) => {
+          curCount = res.body.count
+          done()
+        })
+    })
+
     it('.get list', done => {
       request(url)
         .get(path)
@@ -61,7 +71,7 @@ export default (url) => {
         })
     })
 
-    it('.get count', done => count(url, path, list.length, done))
+    it('.get count', done => count(url, path, curCount, done))
 
     it('.set item', done => {
       const index = Math.floor(list.length * Math.random())
@@ -86,7 +96,7 @@ export default (url) => {
         }))
     })
 
-    it('.check set', done => count(url, path, list.length + 1, done))
+    it('.check set', done => count(url, path, curCount + 1, done))
 
     it('.put item', done => {
       const index = Math.floor(list.length * Math.random())
@@ -132,7 +142,7 @@ export default (url) => {
 
     it('.delete item', done => deleteItem(url, `${path}/${tmpModel._id}`, done))
 
-    it('.check get delete', done => count(url, path, list.length, done))
+    it('.check get delete', done => count(url, path, curCount, done))
 
     it('.random', done => {
       request(url)

@@ -13,12 +13,12 @@ import Admin from './models/admin'
 async.waterfall([
   callback => drop(callback),
   callback => Dictionary.generate(err => callback(err)),
+  callback => Admin(err => callback(err)),
   callback => Education(err => callback(err)),
   callback => Experience(err => callback(err)),
   callback => Student(err => callback(err)),
   callback => Company(err => callback(err)),
   callback => OpenQuestion.generate(err => callback(err)),
   callback => TestQuestion(err => callback(err)),
-  callback => Vacancy(err => callback(err)),
-  callback => Admin(err => callback(err))
+  callback => Vacancy(err => callback(err))
 ], err => process.exit(err ? 1 : 0))

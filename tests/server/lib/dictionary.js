@@ -16,8 +16,18 @@ export default (url, name) => {
   let tmpModel = null
   let tmpArrayList = null
   let list = null
+  let curCount = null
 
   describe(`${name} tests`, () => {
+    before(done => {
+      request(url)
+        .get(`${path}-count`)
+        .end((err, res) => {
+          curCount = res.body.count
+          done()
+        })
+    })
+
     it('.get list', done => {
       request(url)
         .get(path)
@@ -43,7 +53,7 @@ export default (url, name) => {
         })
     })
 
-    it('.get count', done => count(url, path, list.length, done))
+    it('.get count', done => count(url, path, curCount, done))
 
     it('.set item', done => {
       request(url)
@@ -99,11 +109,11 @@ export default (url, name) => {
         })
     })
 
-    it('.check get count', done => count(url, path, list.length + 1, done))
+    it('.check get count', done => count(url, path, curCount + 1, done))
 
     it('.delete item', done => deleteItem(url, `${path}/${tmpModel._id}`, done))
 
-    it('.check get delete', done => count(url, path, list.length, done))
+    it('.check get delete', done => count(url, path, curCount, done))
 
     xit('.autocomplete', done => {
       const index = Math.floor(list.length * Math.random())
@@ -156,7 +166,7 @@ export default (url, name) => {
         })
     })
 
-    it('.check add items - get count', done => count(url, path, list.length + 2, done))
+    it('.check add items - get count', done => count(url, path, curCount + 2, done))
 
     it('.remove items', done => {
       request(url)
@@ -169,7 +179,7 @@ export default (url, name) => {
         })
     })
 
-    it('.check remove items - get count', done => count(url, path, list.length, done))
+    it('.check remove items - get count', done => count(url, path, curCount, done))
     
   })
 }

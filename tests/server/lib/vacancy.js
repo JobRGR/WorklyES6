@@ -24,6 +24,8 @@ export default (url) => {
     testQuestion2 = null,
     index = null
 
+  let curCount = null
+
   let auth = {
     login: {
       company: () => {
@@ -76,6 +78,15 @@ export default (url) => {
   describe('vacancy tests', () => {
     auth.login.company()
 
+    before(done => {
+      request(url)
+        .get(`${path}-count`)
+        .end((err, res) => {
+          curCount = res.body.count
+          done()
+        })
+    })
+
     it('.get list', done => {
       request(url)
         .get(path)
@@ -124,7 +135,7 @@ export default (url) => {
         })
     })
 
-    it('.get count', done => count(url, path, list.length, done))
+    it('.get count', done => count(url, path, curCount, done))
 
     it('.set new vacancy(company permission)', done => {
       companyUser
@@ -148,7 +159,7 @@ export default (url) => {
         })
     })
 
-    it('.check set vacancy', done => count(url, path, list.length + 1, done))
+    it('.check set vacancy', done => count(url, path, curCount + 1, done))
 
     it('.get new vacancy', done => {
       request(url)
@@ -343,7 +354,7 @@ export default (url) => {
 
     it('.delete item', done => deleteItem(url, `${path}/${tmpModel._id}`, done))
 
-    it('.check get delete', done => count(url, path, list.length, done))
+    it('.check get delete', done => count(url, path, curCount, done))
 
     it('.search by city', done => {
       const city = list[Math.floor(list.length * Math.random())].city.name

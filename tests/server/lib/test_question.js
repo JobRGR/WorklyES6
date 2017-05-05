@@ -28,6 +28,7 @@ export default (url) => {
     let tmpModel = null
     let list = null
     let tmpCompanyModel = null
+    let curCount = null
 
     describe('test questions tests', () => {
         before(done => {
@@ -36,7 +37,12 @@ export default (url) => {
               .send(tmpCompany)
               .end((err, res) => {
                   tmpCompanyModel = res.body.company || {}
-                  done()
+                request(url)
+                  .get(`${path}-count`)
+                  .end((err, res) => {
+                    curCount = res.body.count
+                    done()
+                  })
               })
         })
 
@@ -117,7 +123,7 @@ export default (url) => {
               })
         })
 
-        it('.get count', done => count(url, path, list.length, done))
+        it('.get count', done => count(url, path, curCount, done))
 
         it('.set item', done => {
           let index = null
@@ -144,7 +150,7 @@ export default (url) => {
               }))
         })
 
-        it('.check set', done => count(url, path, list.length + 1, done))
+        it('.check set', done => count(url, path, curCount + 1, done))
 
         it('.put item', done => {
             let index = null
@@ -195,7 +201,7 @@ export default (url) => {
 
         it('.delete item', done => deleteItem(url, `${path}/${tmpModel._id}`, done))
 
-        it('.check get delete', done => count(url, path, list.length, done))
+        it('.check get delete', done => count(url, path, curCount, done))
 
         it('.random', done => {
             request(url)

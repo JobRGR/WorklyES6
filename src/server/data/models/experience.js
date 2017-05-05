@@ -1,12 +1,13 @@
 import Charlatan from 'charlatan'
 import async from 'async'
 import {Position, Experience, CompanyName} from '../../models/models'
+import mongoose from 'mongoose'
 import addArray from '../utils/add_array'
 import random from '../utils/random'
 
 let data = []
 
-for (let i = 0; i < 200; i++) {
+for (let i = 0; i < 100; i++) {
   data.push({
     start: Charlatan.Date.birthday(4, 7),
     end: Charlatan.Date.birthday(0, 4),
@@ -16,11 +17,11 @@ for (let i = 0; i < 200; i++) {
 
 export default cb => async.waterfall([
   callback => async.each(data, (item, next) => Position.getRandom((err, position) => {
-    item.position = position._id
+    item.position = mongoose.Types.ObjectId(position._id)
     next()
   }), err => callback()),
   callback => async.each(data, (item, next) => CompanyName.getRandom((err, companyName) => {
-    item.companyName = companyName._id
+    item.companyName = mongoose.Types.ObjectId(companyName._id)
     next()
   }), err => callback())
 ], err => addArray(Experience, data, cb))

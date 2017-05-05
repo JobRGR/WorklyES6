@@ -2,6 +2,7 @@ import Charlatan from 'charlatan'
 import async from 'async'
 import faker from 'faker'
 import {City, CompanyName, Company} from '../../models/models'
+import mongoose from 'mongoose'
 import searchImage from '../../utils/search_image'
 import addArray from '../utils/add_array'
 
@@ -17,9 +18,9 @@ export default cb => async.waterfall([
   callback => CompanyName.getItem(null, (err, companyName) => {
     for (let i = 0; i < data.length; ++i) {
       let name = companyName[i].name
-      data[i].name = companyName[i]._id
-      data[i].email = `${name.toLowerCase().split(' ').join('.')}.${Charlatan.Internet.email()}`
-      data[i].site = `${name.toLowerCase().split(' ').join('.')}.${Charlatan.Internet.domainSuffix()}`
+      data[i].name = mongoose.Types.ObjectId(companyName[i]._id)
+      data[i].email = `${name.toLowerCase().replace(/\./g, "").replace(/\,/g, "").split(' ').join('')}.${Charlatan.Internet.email()}`
+      data[i].site = `${name.toLowerCase().replace(/\./g, "").replace(/\,/g, "").split(' ').join('')}.${Charlatan.Internet.domainSuffix()}`
     }
     callback()
   }),
@@ -28,7 +29,7 @@ export default cb => async.waterfall([
     next()
   }), err => callback()),
   callback => async.each(data, (item, next) => City.getRandom((err, city) => {
-    item.city = city._id
+    item.city = mongoose.Types.ObjectId(city._id)
     next()
   }), err => callback())
 ], err => addArray(Company, data, cb))
