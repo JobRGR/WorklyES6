@@ -20,12 +20,12 @@ schema.statics.addItem = function ({question, answer, free = true, owner}, callb
     openQuestion.save(err => callback(err, openQuestion))
 }
 
-schema.statics.getItem = function (id, callback) {
-    return getPopulate.apply(this, [id, callback, foreignKeys])
+schema.statics.getItem = function (id, callback, skip, limit) {
+    return getPopulate.apply(this, [id, callback, foreignKeys, skip, limit])
 }
 
-schema.statics.updateItem = function (id, update, callback) {
-    return updateItem.apply(this, [id, update, callback, foreignKeys])
+schema.statics.updateItem = function (id, update, callback, skip, limit) {
+    return updateItem.apply(this, [id, update, callback, foreignKeys, skip, limit])
 }
 
 schema.statics.getRandom = function(callback) {

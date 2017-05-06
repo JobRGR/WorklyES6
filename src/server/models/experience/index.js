@@ -18,7 +18,7 @@ schema.statics.addItem = function ({start, end, position, about, companyName}, c
   experience.save(err => callback(err, experience))
 }
 
-schema.statics.getItem = function (id, callback) {
+schema.statics.getItem = function (id, callback, skip, limit) {
   return getPopulate.apply(this, [id, callback, foreignKeys])
 }
 
@@ -30,7 +30,7 @@ schema.statics.getRandom = function (callback) {
   return randomPopulate.apply(this, [callback, foreignKeys])
 }
 
-schema.statics.searchItems = function (search, callback) {
+schema.statics.searchItems = function (search, callback, skip, limit) {
   return searchPopulate.apply(this, [search, callback, foreignKeys])
 }
 

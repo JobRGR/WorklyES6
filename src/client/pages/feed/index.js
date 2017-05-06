@@ -113,8 +113,7 @@ export default class extends Component {
                 <CardHeader
                   title={name}
                   subtitle={`${city ? city.name : ''} ${experiences && experiences.length ? `| ${getVacancy(experiences)}` : ''}`}
-                  avatar={avatar || null}
-                  leftAvatar={!avatar ? <Avatar>{toAvatar(name)}</Avatar> : null}
+                  avatar={avatar || <Avatar>{toAvatar(name)}</Avatar>}
                 />
                 <CardText style={{marginTop: -20}}>{short(about, 300)}</CardText>
               </Card>

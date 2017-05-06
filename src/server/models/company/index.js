@@ -64,8 +64,8 @@ schema.statics.addItem = function ({name, email, site, about, city, password, av
   company.save(err => callback(err, company))
 }
 
-schema.statics.getItem = function (id, callback) {
-  return getPopulate.apply(this, [id, callback, foreignKeys])
+schema.statics.getItem = function (id, callback, skip, limit) {
+  return getPopulate.apply(this, [id, callback, foreignKeys, skip, limit])
 }
 
 schema.statics.updateItem = function (id, update, callback) {
@@ -90,8 +90,8 @@ schema.statics.getRandom = function(callback) {
   return randomPopulate.apply(this, [callback, foreignKeys])
 }
 
-schema.statics.searchItem = function(search, callback) {
-  return searchPopulate.apply(this, [search, callback, foreignKeys])
+schema.statics.searchItem = function(search, callback, skip, limit) {
+  return searchPopulate.apply(this, [search, callback, foreignKeys, skip, limit])
 }
 
 schema.statics.changePassword = function(company, password, callback) {

@@ -71,13 +71,15 @@ schema.statics.addItem = function ({name, email, dob, telephone, about, educatio
   student.save(err => callback(err, student))
 }
 
-schema.statics.getItem = function (id, callback) {
+schema.statics.getItem = function (id, callback, skip = 0, limit = 100) {
   if (id) this
     .findById(id)
     .deepPopulate(foreignKeys)
     .exec(callback)
   else this
     .find({})
+    .skip(skip)
+    .limit(limit)
     .deepPopulate(foreignKeys)
     .sort({'updatedAt': -1})
     .exec(callback)
@@ -113,9 +115,11 @@ schema.statics.getRandom = function(callback) {
   })
 }
 
-schema.statics.searchItem = function(search, callback) {
+schema.statics.searchItem = function(search, callback, skip = 0, limit = 100) {
   this
     .find(search)
+    .skip(skip)
+    .limit(limit)
     .deepPopulate(foreignKeys)
     .sort({'updatedAt': -1})
     .exec(callback)

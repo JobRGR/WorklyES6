@@ -1,4 +1,4 @@
-export default function (id, callback, foreignKeys, sort = {'start': 1}, skip = 0, limit = 100) {
+export default function (id, callback, foreignKeys, skip = 0, limit = 100, sort = {'start': 1}) {
   if (id) this
     .findById(id)
     .populate(foreignKeys)

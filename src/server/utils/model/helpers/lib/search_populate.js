@@ -1,4 +1,4 @@
-export default function (search, callback, foreignKeys, sort = {'start': 1}, skip = 0, limit = 100) {
+export default function (search, callback, foreignKeys, skip = 0, limit = 100, sort = {'start': 1}) {
   this
     .find(search)
     .skip(skip)

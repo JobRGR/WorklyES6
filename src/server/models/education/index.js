@@ -17,8 +17,8 @@ schema.statics.addItem = function ({start, end, speciality, university}, callbac
   education.save(err => callback(err, education))
 }
 
-schema.statics.getItem = function (id, callback) {
-  return getPopulate.apply(this, [id, callback, foreignKeys])
+schema.statics.getItem = function (id, callback, skip, limit) {
+  return getPopulate.apply(this, [id, callback, foreignKeys, skip, limit])
 }
 
 schema.statics.updateItem = function (id, update, callback) {
@@ -29,8 +29,8 @@ schema.statics.getRandom = function (callback) {
   return randomPopulate.apply(this, [callback, foreignKeys])
 }
 
-schema.statics.searchItems = function (search, callback) {
-  return searchPopulate.apply(this, [search, callback, foreignKeys])
+schema.statics.searchItems = function (search, callback, skip, limit) {
+  return searchPopulate.apply(this, [search, callback, foreignKeys, skip, limit])
 }
 
 schema.statics.getCount = getCount
