@@ -17,6 +17,7 @@
     "chai": "^3.4.1",
     "charlatan": "^1.0.0",
     "chartist": "^0.9.5",
+    "cheerio": "^0.22.0",
     "connect": "^2.30.2",
     "cookie-parser": "^1.4.0",
     "crypto": "0.0.3",
