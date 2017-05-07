@@ -19,7 +19,7 @@ schema.statics.addItem = function ({start, end, position, about, companyName}, c
 }
 
 schema.statics.getItem = function (id, callback, skip, limit) {
-  return getPopulate.apply(this, [id, callback, foreignKeys])
+  return getPopulate.apply(this, [id, callback, foreignKeys, skip, limit])
 }
 
 schema.statics.updateItem = function (id, update, callback) {
@@ -31,7 +31,7 @@ schema.statics.getRandom = function (callback) {
 }
 
 schema.statics.searchItems = function (search, callback, skip, limit) {
-  return searchPopulate.apply(this, [search, callback, foreignKeys])
+  return searchPopulate.apply(this, [search, callback, foreignKeys, skip, limit])
 }
 
 schema.statics.removeItem = removeItem
