@@ -10,6 +10,9 @@ let data = []
 
 function check(name) {
   for (let i = 0; i < skillComplexity.length; i++) {
+    if (!skillComplexity[i].skill) {
+      continue
+    }
     if (skillComplexity[i].skill.name === name) {
       return true
     }
@@ -37,6 +40,9 @@ export default cb => async.waterfall([
       })
   }, err => callback()),
 ], err => {
+  if (data.length === skills.length) {
+    return addArray(SkillComplexity, data, cb)
+  }
   async.each(data, (name, callback) => {
     SkillComplexity.addItem(name, (err, item) => {
       err && console.log('[Error]:', err, item)

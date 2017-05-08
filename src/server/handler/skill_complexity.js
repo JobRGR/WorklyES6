@@ -5,7 +5,7 @@ import {SkillComplexity} from '../models/models'
 import toObjectArray from '../utils/to_object_array'
 
 let {nextItem, nextItems} = new Next('experience')
-let handler = new Handler('skill-complexity', SkillComplexity, false, false)
+let handler = new Handler('skillComplexity', SkillComplexity, false, false)
 
 handler.addOne = (req, res, next) => {
   let {complexity} = req.body

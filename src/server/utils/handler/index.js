@@ -6,7 +6,7 @@ let Handler =  function (name, Model, searchItem = true, autocomplete = true) {
   this.names = pluralize(name, 2)
   let {nextItem, nextItems} = new Next(this.name)
   let handler = {
-    getItem: (req, res, next) => Model.getItem(req.params.id, (err, item) => nextItem(err, item, res, next)),
+    getItem: (req, res, next) => Model.getItem(req.params.id || req.query.id, (err, item) => nextItem(err, item, res, next)),
     searchItems: (req, res, next) => Model.searchItem(req.query[name] || req.body[name], (err, items) => nextItems(err, items, res, next)),
     getRandom: (req, res, next) => Model.getRandom((err, item) => nextItem(err, item, res, next)),
     getAll: (req, res, next) => Model.getAll(items => nextItems(null, items, res, next)),
