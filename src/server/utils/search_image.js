@@ -20,5 +20,5 @@ export default (val, cb) => {
       .then(() => imageList)
   }
 
-  getImages(val + 'logo').then(x => cb(x[0]))
+  getImages(val + ' logo').then(x => cb(x[0]))
 }

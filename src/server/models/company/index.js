@@ -2,7 +2,7 @@ import crypto from 'crypto'
 import mongoose from '../index'
 import Student from '../student'
 import HttpError from '../../utils/error'
-import {removeItem, getCount, randomPopulate, getPopulate, searchPopulate, toJson} from '../../utils/model/helpers'
+import {removeItem, getCount, randomPopulate, getPopulate, searchPopulate, toJson, getAllPopulate} from '../../utils/model/helpers'
 
 const foreignKeys = ['name', 'city']
 
@@ -92,6 +92,10 @@ schema.statics.getRandom = function(callback) {
 
 schema.statics.searchItem = function(search, callback, skip, limit) {
   return searchPopulate.apply(this, [search, callback, foreignKeys, skip, limit])
+}
+
+schema.statics.getAll = function(callback) {
+  return getAllPopulate.apply(this, [callback, foreignKeys])
 }
 
 schema.statics.changePassword = function(company, password, callback) {

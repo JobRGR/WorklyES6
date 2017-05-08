@@ -10,6 +10,7 @@ import Dictionary from './services/dictionary'
 import CompanyName from './services/company_name'
 import Company from './services/company'
 import Student from './services/student'
+import SkillComplexity from './services/skill_complexity'
 import {Experience, Education} from './services/education_experience'
 import OpenQuestion from './services/open_question'
 import TestQuestion from './services/test_question'
@@ -41,6 +42,7 @@ api
   .use(AllQuestion)
   .use(Vacancy)
   .use(Admin)
+  .use(SkillComplexity)
 
 export default express()
   .use('/api', api)

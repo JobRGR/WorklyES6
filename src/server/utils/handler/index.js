@@ -9,7 +9,7 @@ let Handler =  function (name, Model, searchItem = true, autocomplete = true) {
     getItem: (req, res, next) => Model.getItem(req.params.id, (err, item) => nextItem(err, item, res, next)),
     searchItems: (req, res, next) => Model.searchItem(req.query[name] || req.body[name], (err, items) => nextItems(err, items, res, next)),
     getRandom: (req, res, next) => Model.getRandom((err, item) => nextItem(err, item, res, next)),
-    getAll: (req, res, next) => Model.getItem(null, (err, items) => nextItems(err, items, res, next)),
+    getAll: (req, res, next) => Model.getAll(items => nextItems(null, items, res, next)),
     addItems: (req, res, next) => Model.addArray(req.body[this.names], (err, items) => nextItems(err, items, res, next)),
     addItem: (req, res, next) => Model.addItem(req.body[this.name] || req.body.name || req.body, (err, item) => nextItem(err, item, res, next)),
     updateItem: (req, res, next) => Model.updateItem(req.params.id, req.body, (err, item) => nextItem(err, item, res, next)),

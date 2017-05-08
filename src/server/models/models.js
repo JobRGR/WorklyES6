@@ -12,6 +12,7 @@ import OpenQuestion from './open_question'
 import TestQuestion from './test_question'
 import Vacancy from './vacancy'
 import Admin from './admin'
+import SkillComplexity from './skill_complexity'
 
 export default {
   City,
@@ -27,5 +28,6 @@ export default {
   Company,
   OpenQuestion,
   TestQuestion,
-  Vacancy
+  Vacancy,
+  SkillComplexity
 }
