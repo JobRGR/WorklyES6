@@ -1,5 +1,6 @@
 const maxWeight = 50
-const numberOfPopulation = 10
+const times = 100
+const numberOfPopulation = 30
 
 function checkComparison(curSkills, vacanciesSkills) {
   return vacanciesSkills.map(vacancySkills => {
@@ -146,12 +147,13 @@ function populationCycle(population, defaultSkillsArray, skillsKeys, vacanciesSk
     reincornationPopulation.push(reincornation(populationWithoutDuplicates[i], skillsWeightArray, defaultSkillsArray))
   }
 
-  let sortedPopulation = populationWithoutDuplicates
-    .sort((a, b) => {
-      let aRes = getComparisonResult(arrayToSkills(a, skillsKeys), vacanciesSkills)
-      let bRes = getComparisonResult(arrayToSkills(b, skillsKeys), vacanciesSkills)
-      return aRes <= bRes ? 1 : -1
-    })
+  let sortedPopulation = reincornationPopulation
+    .map((cur, index) => ({
+      val: getComparisonResult(arrayToSkills(cur, skillsKeys), vacanciesSkills),
+      index
+    }))
+    .sort((a, b) => a.val <= b.val ? 1 : -1)
+    .map(cur => reincornationPopulation[cur.index])
 
   return sortedPopulation.slice(0, numberOfPopulation)
 }
@@ -171,7 +173,7 @@ export default function (req, res, next) {
   const skillsWeightArray = skillsKeys.map(x => skillsWeight[x])
 
   let population = getStartPopulation(defaultSkillsArray)
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < times; i++) {
     population = populationCycle(
       population,
       defaultSkillsArray,
