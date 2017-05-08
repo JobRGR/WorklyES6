@@ -9,8 +9,12 @@ function checkComparison(curSkills, vacanciesSkills) {
 }
 
 function getComparisonResult(curSkills, vacanciesSkills) {
-  return checkComparison(curSkills, vacanciesSkills)
-    .reduce((memo, cur) => memo + cur, 0)
+  const arr = checkComparison(curSkills, vacanciesSkills)
+  let res = 0
+  for (let i = 0; i < arr.length; i++) {
+    res += arr[i]
+  }
+  return res
 }
 
 function calcWeight(skills, skillsWeight) {
@@ -26,16 +30,16 @@ function createSkillArray(length) {
 
 function skillsToArray(skills, skillsKeys) {
   let skillsArray = createSkillArray(skillsKeys.length)
-  skills.forEach(skill => {
-    const index = skillsKeys.indexOf(skill)
+  for (let i = 0; i < skills.length; i++) {
+    const index = skillsKeys.indexOf(skills[i])
     skillsArray[index] = 1
-  })
+  }
   return skillsArray
 }
 
 function arrayToSkills(skillsArray, skillsKeys) {
   return skillsArray.reduce((memo, curr, index) =>
-    Boolean(curr) ? [...memo, skillsKeys[index]] : memo, {})
+    Boolean(curr) ? [...memo, skillsKeys[index]] : memo, [])
 }
 
 function random(length) {
@@ -69,23 +73,51 @@ function mutation(arr, defaultSkillsArray) {
   return mutationArray
 }
 
-function removeEls(skillsArr, skillsWeightArray) {
+function removeEls(skillsArr) {
   let set = new Set()
   let res = []
-  skillsArr.forEach(skillArr => {
-    const cur = JSON.stringify(skillArr)
-    const weight = skillArr.reduce((memo, res, index) => memo + (res ? skillsWeightArray[index] : 0), 0)
-    if (!set.has(cur) && weight < maxWeight) {
+  for (let i = 0; i < skillsArr.length; i++) {
+    const cur = JSON.stringify(skillsArr[i])
+    if (!set.has(cur)) {
       set.add(cur)
-      res.push(skillArr)
+      res.push(skillsArr[i])
     }
-  })
+  }
   return res
+}
+
+function reincornation(skillsArr, skillsWeightArray, defaultSkillsArray) {
+  const curIndexArray = []
+  const weightArr = skillsArr.reduce((memo, res, index) => {
+    if (res) {
+      memo.push(skillsWeightArray[index])
+      curIndexArray.push(index)
+    }
+    return memo
+  }, [])
+  const weight = weightArr.reduce((memo, res) => memo + res, 0)
+  if (weight < maxWeight) {
+    return skillsArr
+  }
+  let maxWeightIndex = null
+  let search = true
+  while (search) {
+    const maxVal = Math.max(...weightArr)
+    maxWeightIndex = weightArr.indexOf(maxVal)
+    if (defaultSkillsArray[curIndexArray[maxWeightIndex]] !== 1) {
+      search = false
+    }
+    else {
+      weightArr[maxWeightIndex] = -Infinity
+    }
+  }
+  skillsArr[curIndexArray[maxWeightIndex]] = 0
+  return reincornation(skillsArr, skillsWeightArray, defaultSkillsArray)
 }
 
 function getStartPopulation(defaultSkillsArray) {
   let population = []
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < numberOfPopulation; i++) {
     let cur = mutation(defaultSkillsArray, defaultSkillsArray)
     for (let i = 0; i < 5; i++) {
       cur = mutation(cur, defaultSkillsArray)
@@ -102,23 +134,26 @@ function populationCycle(population, defaultSkillsArray, skillsKeys, vacanciesSk
     newPopulation.push(firstChild, secondChild)
   }
 
-  let populationLength = null
-  for (let j = 0; j < 2; j++) {
-    populationLength = newPopulation.length
-    for (let i = 0; i < populationLength; i++) {
-      newPopulation.push(mutation(newPopulation[i], defaultSkillsArray))
-    }
+  let populationLength = newPopulation.length
+  for (let i = 0; i < populationLength; i++) {
+    newPopulation.push(mutation(newPopulation[i], defaultSkillsArray))
   }
 
-  let newPopulationWithoutDuplicates = removeEls(newPopulation, skillsWeightArray)
+  let populationWithoutDuplicates = removeEls(newPopulation)
 
-  let sortNewPopulation = newPopulationWithoutDuplicates.sort((a, b) => {
-    let aRes = getComparisonResult(arrayToSkills(a, skillsKeys), vacanciesSkills)
-    let bRes = getComparisonResult(arrayToSkills(b, skillsKeys), vacanciesSkills)
-    return aRes <= bRes ? 1 : -1
-  })
+  let reincornationPopulation = []
+  for (let i = 0; i < populationWithoutDuplicates.length; i++) {
+    reincornationPopulation.push(reincornation(populationWithoutDuplicates[i], skillsWeightArray, defaultSkillsArray))
+  }
 
-  return sortNewPopulation.slice(0, numberOfPopulation)
+  let sortedPopulation = populationWithoutDuplicates
+    .sort((a, b) => {
+      let aRes = getComparisonResult(arrayToSkills(a, skillsKeys), vacanciesSkills)
+      let bRes = getComparisonResult(arrayToSkills(b, skillsKeys), vacanciesSkills)
+      return aRes <= bRes ? 1 : -1
+    })
+
+  return sortedPopulation.slice(0, numberOfPopulation)
 }
 
 export default function (req, res, next) {
