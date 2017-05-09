@@ -1,4 +1,6 @@
-const maxWeight = 50
+import HttpError from '../utils/error'
+
+const maxWeight = 40
 const times = 100
 const numberOfPopulation = 30
 
@@ -19,7 +21,7 @@ function getComparisonResult(curSkills, vacanciesSkills) {
 }
 
 function calcWeight(skills, skillsWeight) {
-  return skills.reduce((memo, curr) => memo + (skillsWeight[curr] || 3), 0)
+  return skills.reduce((memo, curr) => memo + (skillsWeight[curr] || 5), 0)
 }
 
 function createSkillArray(length) {
@@ -74,11 +76,11 @@ function mutation(arr, defaultSkillsArray) {
   return mutationArray
 }
 
-function removeEls(skillsArr) {
+function removeEls(skillsArr, skillsKeys) {
   let set = new Set()
   let res = []
   for (let i = 0; i < skillsArr.length; i++) {
-    const cur = JSON.stringify(skillsArr[i])
+    const cur = JSON.stringify(arrayToSkills(skillsArr[i], skillsKeys))
     if (!set.has(cur)) {
       set.add(cur)
       res.push(skillsArr[i])
@@ -131,6 +133,9 @@ function getStartPopulation(defaultSkillsArray) {
 function populationCycle(population, defaultSkillsArray, skillsKeys, vacanciesSkills, skillsWeightArray) {
   let newPopulation = [...population]
   for (let i = 0; i < population.length; i += 2) {
+    if (!population[i + 1]) {
+      continue
+    }
     const [firstChild, secondChild] = hybridization(population[i], population[i + 1], defaultSkillsArray)
     newPopulation.push(firstChild, secondChild)
   }
@@ -140,14 +145,14 @@ function populationCycle(population, defaultSkillsArray, skillsKeys, vacanciesSk
     newPopulation.push(mutation(newPopulation[i], defaultSkillsArray))
   }
 
-  let populationWithoutDuplicates = removeEls(newPopulation)
-
   let reincornationPopulation = []
-  for (let i = 0; i < populationWithoutDuplicates.length; i++) {
-    reincornationPopulation.push(reincornation(populationWithoutDuplicates[i], skillsWeightArray, defaultSkillsArray))
+  for (let i = 0; i < newPopulation.length; i++) {
+    reincornationPopulation.push(reincornation(newPopulation[i], skillsWeightArray, defaultSkillsArray))
   }
 
-  let sortedPopulation = reincornationPopulation
+  let populationWithoutDuplicates = removeEls(reincornationPopulation, skillsKeys)
+
+  let sortedPopulation = populationWithoutDuplicates
     .map((cur, index) => ({
       val: getComparisonResult(arrayToSkills(cur, skillsKeys), vacanciesSkills),
       index
@@ -155,11 +160,15 @@ function populationCycle(population, defaultSkillsArray, skillsKeys, vacanciesSk
     .sort((a, b) => a.val <= b.val ? 1 : -1)
     .map(cur => reincornationPopulation[cur.index])
 
-  return sortedPopulation.slice(0, numberOfPopulation)
+  return removeEls(sortedPopulation, skillsKeys).slice(0, numberOfPopulation)
 }
 
 export default function (req, res, next) {
   const {vacancies, skillComplexities, student} = res
+
+  if (Object.prototype.toString.call(student) !== "[object Object]") {
+    return next(new HttpError(401))
+  }
 
   const defaultSkills = student.skills.map(x => x.name)
   const vacanciesSkills = vacancies.map(v => v.skills.map(x => x.name))
@@ -183,7 +192,19 @@ export default function (req, res, next) {
     )
   }
 
-  const resultSkills = arrayToSkills(population[0], skillsKeys)
+  const bestPopulation = population
+    .slice(0, 5)
+    .map(x => arrayToSkills(x, skillsKeys).sort((a, b) => {
+      if (defaultSkills[a] && !defaultSkills[b]) {
+        return -1
+      }
+      if (!defaultSkills[a] && defaultSkills[b]) {
+        return 1
+      }
+      return skillsWeight[a] <= skillsWeight[b] ? 1 : -1
+    }))
+
+  const [resultSkills] = bestPopulation
   const resultValue = getComparisonResult(resultSkills, vacanciesSkills)
   const resultPercent = checkComparison(resultSkills, vacanciesSkills)
   const resultWeight = calcWeight(resultSkills, skillsWeight)
@@ -192,6 +213,7 @@ export default function (req, res, next) {
     resultSkills,
     resultValue,
     resultPercent,
-    resultWeight
+    resultWeight,
+    bestPopulation
   })
 }
