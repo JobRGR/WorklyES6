@@ -192,7 +192,7 @@ export default function (req, res, next) {
     )
   }
 
-  const bestPopulation = population
+  const roadMaps = population
     .slice(0, 5)
     .map(x => arrayToSkills(x, skillsKeys).sort((a, b) => {
       if (defaultSkills[a] && !defaultSkills[b]) {
@@ -203,17 +203,16 @@ export default function (req, res, next) {
       }
       return skillsWeight[a] <= skillsWeight[b] ? 1 : -1
     }))
+    .map(curSkills => {
+      const resultValue = getComparisonResult(curSkills, vacanciesSkills)
+      return {
+        skills: curSkills,
+        resultValue,
+        avarageComparison: resultValue / vacanciesSkills.length,
+        resultPercent: checkComparison(curSkills, vacanciesSkills),
+        resultWeight: calcWeight(curSkills, skillsWeight)
+      }
+    })
 
-  const [resultSkills] = bestPopulation
-  const resultValue = getComparisonResult(resultSkills, vacanciesSkills)
-  const resultPercent = checkComparison(resultSkills, vacanciesSkills)
-  const resultWeight = calcWeight(resultSkills, skillsWeight)
-
-  res.send({
-    resultSkills,
-    resultValue,
-    resultPercent,
-    resultWeight,
-    bestPopulation
-  })
+  res.send({roadMaps})
 }
