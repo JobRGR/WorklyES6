@@ -3,6 +3,7 @@ import HttpError from '../utils/error'
 const maxWeight = 40
 const times = 100
 const numberOfPopulation = 30
+const defaultSkillComplexity = 5
 
 function checkComparison(curSkills, vacanciesSkills) {
   return vacanciesSkills.map(vacancySkills => {
@@ -21,7 +22,7 @@ function getComparisonResult(curSkills, vacanciesSkills) {
 }
 
 function calcWeight(skills, skillsWeight) {
-  return skills.reduce((memo, curr) => memo + (skillsWeight[curr] || 5), 0)
+  return skills.reduce((memo, curr) => memo + (skillsWeight[curr] || defaultSkillComplexity), 0)
 }
 
 function createSkillArray(length) {
@@ -201,12 +202,15 @@ export default function (req, res, next) {
       if (!defaultSkills[a] && defaultSkills[b]) {
         return 1
       }
-      return skillsWeight[a] <= skillsWeight[b] ? 1 : -1
+      return skillsWeight[a] <= skillsWeight[b] ? -1 : 1
     }))
     .map(curSkills => {
       const resultValue = getComparisonResult(curSkills, vacanciesSkills)
       return {
-        skills: curSkills,
+        skills: curSkills.map(skill => ({
+          name: skill,
+          complexity: skillsWeight[skill] || defaultSkillComplexity
+        })),
         resultValue,
         avarageComparison: resultValue / vacanciesSkills.length,
         resultPercent: checkComparison(curSkills, vacanciesSkills),
