@@ -51,7 +51,7 @@ export default (cb) => async.waterfall([
   callback => Skill.getItem(null, (err, skills) => {
     skills = skills.slice(0, 40)
     for (let i = 0; i < data.length; ++i) {
-      let count = Math.floor(Math.random() * 4) + 2
+      let count = Math.floor(Math.random() * 4) + 3
       for (let j = 0; j < count; ++j)
         data[i].skills.push(mongoose.Types.ObjectId(random(skills)._id))
     }

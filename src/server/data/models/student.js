@@ -49,7 +49,7 @@ export default cb => async.waterfall([
     for (let i = 0; i < data.length; i++) {
       data[i].experiences.push(mongoose.Types.ObjectId(experience[j]._id))
       j++
-      let count = Math.floor(Math.random() * 3)
+      let count = Math.floor(Math.random() * 3) || 1
       if (count > 1) {
         data[i].experiences.push(mongoose.Types.ObjectId(experience[j]._id))
         j++

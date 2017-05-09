@@ -34,7 +34,6 @@ schema.statics.searchItems = function (search, callback, skip, limit) {
   return searchPopulate.apply(this, [search, callback, foreignKeys, skip, limit])
 }
 
-
 schema.statics.getAll = function (callback) {
   return getAllPopulate.apply(this, [callback, foreignKeys])
 }
