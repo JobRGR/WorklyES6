@@ -1,4 +1,5 @@
 import crypto from 'crypto'
+import async from 'async'
 import deepPopulate from '../../utils/deep_populate'
 import mongoose from '../index'
 import Company from '../company'
@@ -140,6 +141,28 @@ schema.statics.changeEmail = function (student, email, callback) {
   })
 }
 
+schema.statics.getAll = function (cb) {
+  const limit = 100
+  let data = []
+  this.count({}, (err, count) => {
+    let loop = []
+    let lastSkip = Math.ceil(count / limit)
+    for (let i = 0; i <= lastSkip; i++) {
+      loop.push(callback => {
+        this
+          .find({})
+          .skip(i * limit)
+          .limit(limit)
+          .deepPopulate(foreignKeys)
+          .exec((err, res) => {
+            !err && data.push(...res)
+            callback()
+          })
+      })
+    }
+    async.waterfall(loop, () => cb(data))
+  })
+}
 
 schema.methods.toJSON = toJson
 schema.statics.getCount = getCount

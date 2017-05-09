@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 import mongoose from '../index'
 import HttpError from '../../utils/error'
-import {toJson, removeItem, getItem} from '../../utils/model/helpers'
+import {toJson, removeItem, getItem, getAll} from '../../utils/model/helpers'
 
 let {Schema} = mongoose
 let schema = new Schema({
@@ -46,6 +46,7 @@ schema.statics.addItem = function ({name, password}, callback) {
 }
 
 schema.statics.getItem = getItem
+schema.statics.getAll = getAll
 schema.statics.removeItem = removeItem
 schema.methods.toJSON = toJson
 

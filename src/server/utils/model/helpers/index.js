@@ -11,6 +11,8 @@ import searchPopulate from './lib/search_populate'
 import addArray from './lib/add_array'
 import removeArray from './lib/remove_array'
 import toJson from './lib/to_json'
+import getAll from './lib/get_all'
+import getAllPopulate from './lib/get_all_populate'
 
 export default {
   removeItem,
@@ -25,5 +27,7 @@ export default {
   searchPopulate,
   addArray,
   removeArray,
-  toJson
+  toJson,
+  getAll,
+  getAllPopulate
 }
