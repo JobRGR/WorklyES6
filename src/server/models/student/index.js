@@ -2,7 +2,9 @@ import crypto from 'crypto'
 import deepPopulate from '../../utils/deep_populate'
 import mongoose from '../index'
 import Company from '../company'
+import Vacancy from '../vacancy'
 import HttpError from '../../utils/error'
+import async from 'async'
 import {removeItem, getCount, toJson} from '../../utils/model/helpers'
 
 let {Schema} = mongoose
@@ -22,11 +24,41 @@ let schema = new Schema({
   experiences: [{type: mongoose.Schema.Types.ObjectId, ref: 'Experience'}],
   skills: [{type: mongoose.Schema.Types.ObjectId, ref: 'Skill'}],
   city: {type: mongoose.Schema.Types.ObjectId, ref: 'City'},
+  recommendedVac: {type: mongoose.Schema.Types.ObjectId, ref: 'Company'},
   hashedPassword: {type: String, required: true},
   salt: {type: String, required: true}
 }, {timestamps: true})
 
 const foreignKeys = ['educations.speciality', 'experiences.companyName', 'educations.university', 'experiences.position', 'city', 'skills']
+
+let n;
+let k;
+let mt = [];
+let used = [];
+
+function try_kuhn(v) {
+  if (used[v]) return false;
+  used[v] = true;
+  for (let i=0; i<g[v].size(); i++) {
+    let to = g[v][i];
+    if (mt[to] == -1 || try_kuhn(mt[to])) {
+      mt[to] = v;
+      return true;
+    }
+  }
+  return false;
+}
+
+function matchSkills(a,b) {
+  for (let i = 0; i<b.length(); i++) {
+    let skillExist = false;
+    for (let j = 0; j<a.length(); j++)
+      if (b[i] == a[j])
+        skillExist = true;
+    if (!skillExist) return false;
+  }
+  return true;
+}
 
 schema.path('email').validate((value, callback) => {
   Company.find({email: value}, (err, company)=>{
@@ -68,7 +100,60 @@ schema.statics.authorize = function ({email, password}, callback) {
 schema.statics.addItem = function ({name, email, dob, telephone, about, educations, experiences, skills, city, password, avatar}, callback) {
   let Student = this
   let student = new Student({name, email, dob, telephone, about, educations, experiences, skills, city, password, avatar})
-  student.save(err => callback(err, student))
+  let studentsArray, vacanciesArray;
+  let graph = [];
+
+  async.series([
+    function(cb1) {
+      student.save(err => cb1(err))
+    },
+
+    function(cb1) {
+      async.parallel([
+        function(cb2) {
+          Vacancy.find({}, (err, vacancies)=>{
+            vacanciesArray = vacancies
+            cb2()
+          })
+        },
+        function(cb2) {
+          this.find({}, (err, students)=>{
+            studentsArray = students
+            cb2()
+          })
+        }
+      ], function (err) {
+      });
+      cb1();
+    },
+
+    function(cb1) {
+      graph.resize(studentsArray.length());
+
+      for (let i = 0; i < studentsArray.length(); i++)
+        for (let j = 0; j < vacanciesArray.length(); j++)
+          if (matchSkills(studentsArray[i].skills,vacanciesArray[j].skills))
+            graph[i].push(j);
+
+      n = studentsArray.length();
+      k = vacanciesArray.length();
+      mt.resize(k); for (let i = 0; i<k; i++) mt[i] = -1;
+      used.resize(n);
+
+      for (let v=0; v<n; v++) {
+        for (let i = 0; i<n; i++) used[i] = false;
+        try_kuhn (v);
+      }
+
+      for (let i=0; i<k; i++)
+        if (mt[i] != -1)
+          vacanciesArray[i].recommendedVacancy = studentsArray[mt[i]]
+
+      cb1()
+    }
+
+  ], function (err) {
+  });
 }
 
 schema.statics.getItem = function (id, callback, skip = 0, limit = 100) {
@@ -92,14 +177,71 @@ schema.statics.updateItem = function (id, update, callback) {
   })
 }
 
-schema.statics.updateOne = function (student, update, callback) {
+schema.statics.updateOne = function (std, update, callback) {
   for (let key in  update) {
     if (update[key]) {
-      if (key == 'city') student[key] = mongoose.Types.ObjectId(update[key])
-      else student[key] = update[key]
+      if (key == 'city') std[key] = mongoose.Types.ObjectId(update[key])
+      else std[key] = update[key]
     }
   }
-  student.save(err => callback(err, student))
+  //---------------------------------------
+  //---------------------------------------
+  let studentsArray, vacanciesArray;
+  let graph = [];
+
+  async.series([
+    function(cb1) {
+      std.save(err => cb1(err))
+    },
+
+    function(cb1) {
+      async.parallel([
+        function(cb2) {
+          Vacancy.find({}, (err, vacancies)=>{
+            vacanciesArray = vacancies
+            cb2()
+          })
+        },
+        function(cb2) {
+          this.find({}, (err, students)=>{
+            studentsArray = students
+            cb2()
+          })
+        }
+      ], function (err) {
+      });
+      cb1();
+    },
+
+    function(cb1) {
+      graph.resize(studentsArray.length());
+
+      for (let i = 0; i < studentsArray.length(); i++)
+        for (let j = 0; j < vacanciesArray.length(); j++)
+          if (matchSkills(studentsArray[i].skills,vacanciesArray[j].skills))
+            graph[i].push(j);
+
+      n = studentsArray.length();
+      k = vacanciesArray.length();
+      mt.resize(k); for (let i = 0; i<k; i++) mt[i] = -1;
+      used.resize(n);
+
+      for (let v=0; v<n; v++) {
+        for (let i = 0; i<n; i++) used[i] = false;
+        try_kuhn (v);
+      }
+
+      for (let i=0; i<k; i++)
+        if (mt[i] != -1)
+          vacanciesArray[i].recommendedVacancy = studentsArray[mt[i]]
+
+      cb1()
+    }
+
+  ], function (err) {
+  });
+  //---------------------------------------
+  //---------------------------------------
 }
 
 schema.statics.getRandom = function(callback) {

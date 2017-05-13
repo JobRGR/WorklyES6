@@ -9,6 +9,10 @@ class VacancyApi {
     return request({url: this.path})
   }
 
+  getUser() {
+    return request({url: '/api/status'})
+  }
+
   getItem(id) {
     return request({url: `${this.path}/${id}`})
   }
