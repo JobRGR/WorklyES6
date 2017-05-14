@@ -71,7 +71,7 @@ schema.statics.getItem = function (id, callback, skip = 0, limit = 100) {
     .skip(skip)
     .limit(limit)
     .deepPopulate(foreignKeys)
-    .sort({'updatedAt': -1})
+    .sort({'createdAt': -1})
     .exec(callback)
 }
 
@@ -95,7 +95,7 @@ schema.statics.getRandom = function(callback) {
       .findOne()
       .skip(skip)
       .deepPopulate(foreignKeys)
-      .sort({'updatedAt': -1})
+      .sort({'createdAt': -1})
       .exec(callback)
   })
 }
@@ -106,7 +106,7 @@ schema.statics.searchItem = function(search, callback, skip = 0, limit = 100) {
     .skip(skip)
     .limit(limit)
     .deepPopulate(foreignKeys)
-    .sort({'updatedAt': -1})
+    .sort({'createdAt': -1})
     .exec(callback)
 }
 
