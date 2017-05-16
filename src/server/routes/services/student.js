@@ -1,5 +1,6 @@
 import express from 'express'
 import Student from '../../handler/student'
+import Vacancy from '../../handler/vacancy'
 import Dictionaries from '../../handler/dictionary'
 import CompanyName from '../../handler/company_name'
 import Education from '../../handler/education'
@@ -12,6 +13,13 @@ export default express()
     .get('/student-count', Student.getCount)
     .get('/student-random', Student.getRandom, Student.sendItem)
     .get('/student-status', Student.getStudent, Student.sendItem)
+    .get('/student-recommended',
+        checkStudent,
+        Student.initUser,
+        Student.searchItems,
+        Vacancy.searchItems,
+        Student.sendRecommended
+    )
     .get('/student-auto-login/:id', checkAdmin, Student.autoLogin, Student.sendItem)
     .post('/student-login', Student.login, Student.sendItem)
     .post('/student-search',

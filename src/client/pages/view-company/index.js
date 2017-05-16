@@ -72,6 +72,28 @@ export default class extends Component {
             <div className='view-user_right-side'>
 
               <CardHeader title={'Вакансії компанії'}
+                           titleStyle={{fontFamily: 'sans-serif', fontWeight: 700, fontSize: 18}} />
+              <Divider/>
+              {
+                !this.state.loaded &&
+                <div style={{width: '100%', textAlign: 'center', margin: '10px 0'}}>
+                  <CircularProgress size={1.5}/>
+                </div>
+              }
+              {
+                this.state.loaded &&
+                this.state.items
+                    .map(item => (
+                        <div className='vacancy-item'
+                             onClick={() => this.navigate(`/feed/${item._id}`)}>
+                          {item.name} - {new Date(item.createdAt).toLocaleDateString()}
+                        </div>
+                    ))
+              }
+
+
+
+              <CardHeader title={'Рекомендована вакансія'}
                           titleStyle={{fontFamily: 'sans-serif', fontWeight: 700, fontSize: 18}} />
               <Divider/>
               {
@@ -83,50 +105,13 @@ export default class extends Component {
               {
                 this.state.loaded &&
                 this.state.items
-                  .map(item => (
-                    <div className='vacancy-item'
-                         onClick={() => this.navigate(`/feed/${item._id}`)}>
-                      {item.name} - {new Date(item.createdAt).toLocaleDateString()}
-                    </div>
-                  ))
+                    .map(item => (
+                        <div className='vacancy-item'
+                             onClick={() => this.navigate(`/feed/${item._id}`)}>
+                          {item.name} - {new Date(item.createdAt).toLocaleDateString()}
+                        </div>
+                    ))
               }
-
-              {
-                display &&
-                <CardHeader title={'Рекомендована вакансія'}
-                            titleStyle={{fontFamily: 'sans-serif', fontWeight: 700, fontSize: 18}} />
-              }
-              <Divider/>
-              {
-                display &&
-                !this.state.loaded &&
-                  <div style={{width: '100%', textAlign: 'center', margin: '10px 0'}}>
-                  <CircularProgress size={1.5}/>
-                  </div>
-              }
-
-              {/*{*/}
-                {/*this.state.loaded &&*/}
-                {/*this.state.vacancies.data*/}
-                    {/*.map(item => (*/}
-                      {/*<div className='vacancy-item'*/}
-                           {/*onClick={() => this.navigate(`/feed/${item._id}`)}>*/}
-                          {/*{item.name}*/}
-                      {/*</div>*/}
-                    {/*))*/}
-              {/*}*/}
-
-
-              {/*{*/}
-                {/*this.state.loaded &&*/}
-                {/*this.state.students.data*/}
-                    {/*.map(item => (*/}
-                        {/*<div className='vacancy-item'*/}
-                             {/*onClick={() => this.navigate(`/feed/${item._id}`)}>*/}
-                          {/*{item.name}*/}
-                        {/*</div>*/}
-                    {/*))*/}
-              {/*}*/}
 
           </div>
           </div>

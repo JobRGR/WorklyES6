@@ -98,4 +98,62 @@ handler.updateItem = (req, res, next) => {
 handler.changePassword = (req, res, next) => Student.changePassword(req.student, req.body.password, err => res.send({ok: err || true}))
 handler.changeEmail = (req, res, next) => Student.changeEmail(req.student, req.body.email, err => res.send({ok: err || true}))
 
+handler.sendRecommended = (req, res, next) => {
+  let currentId = req.student._id
+
+  let n;
+  let k;
+  let mt = [];
+  let used = [];
+
+  function try_kuhn(v) {
+    if (used[v]) return false;
+    used[v] = true;
+    for (let i=0; i<g[v].size(); i++) {
+      let to = g[v][i];
+      if (mt[to] == -1 || try_kuhn(mt[to])) {
+        mt[to] = v;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function matchSkills(a,b) {
+    for (let i = 0; i<b.length(); i++) {
+      let skillExist = false;
+      for (let j = 0; j<a.length(); j++)
+        if (b[i] == a[j])
+          skillExist = true;
+      if (!skillExist) return false;
+    }
+    return true;
+  }
+
+  const studentsArray = res.students, vacanciesArray = res.vacancies;
+  let graph = [];
+
+  graph.resize(studentsArray.length());
+
+  for (let i = 0; i < studentsArray.length(); i++)
+    for (let j = 0; j < vacanciesArray.length(); j++)
+      if (matchSkills(studentsArray[i].skills,vacanciesArray[j].skills))
+        graph[i].push(j);
+
+  n = studentsArray.length();
+  k = vacanciesArray.length();
+  mt.resize(k); for (let i = 0; i<k; i++) mt[i] = -1;
+  used.resize(n);
+
+  for (let v=0; v<n; v++) {
+    for (let i = 0; i<n; i++) used[i] = false;
+    try_kuhn(v);
+  }
+  for (let i=0; i<k; i++)
+    if (mt[i] != -1 && studentsArray[mt[i]]._id == currentId)
+      return vacanciesArray[i]
+
+  return {}
+}
+
 export default handler
