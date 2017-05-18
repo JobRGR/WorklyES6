@@ -106,11 +106,41 @@ handler.sendRecommended = (req, res, next) => {
   let mt = [];
   let used = [];
 
+  const studentsArray = res.students, vacanciesArray = res.vacancies;
+  let graph = new Array(studentsArray.length);
+  for (let i = 0; i<graph.length; i++) graph[i] = [];
+
+  for (let i = 0; i < studentsArray.length; i++)
+    for (let j = 0; j < vacanciesArray.length; j++)
+      if (matchSkills(studentsArray[i].skills,vacanciesArray[j].skills))
+        graph[i].push(j);
+
+  n = studentsArray.length;
+  k = vacanciesArray.length;
+
+  for (let i = 0; i<k; i++) mt.push(-1);
+  for (let i = 0; i<n; i++) used.push(false);
+
+  for (let v=0; v<n; v++) {
+    for (let i = 0; i<n; i++) used[i] = false;
+    try_kuhn(v);
+  }
+  for (let i=0; i<k; i++){
+    if (mt[i] != -1) console.log("not -1")
+    if (mt[i] != -1 && studentsArray[mt[i]]._id.toString() == currentId.toString()) {
+      console.log("not -1 + id")
+      res.send(vacanciesArray[i])
+      return
+    }
+  }
+
+  res.send({_id: null})
+
   function try_kuhn(v) {
-    if (used[v]) return false;
+    if (used[v] || !graph[v]) return false;
     used[v] = true;
-    for (let i=0; i<g[v].size(); i++) {
-      let to = g[v][i];
+    for (let i=0; i<graph[v].length; i++) {
+      let to = graph[v][i];
       if (mt[to] == -1 || try_kuhn(mt[to])) {
         mt[to] = v;
         return true;
@@ -120,40 +150,16 @@ handler.sendRecommended = (req, res, next) => {
   }
 
   function matchSkills(a,b) {
-    for (let i = 0; i<b.length(); i++) {
+    for (let i = 0; i<b.length; i++) {
       let skillExist = false;
-      for (let j = 0; j<a.length(); j++)
-        if (b[i] == a[j])
+      for (let j = 0; j<a.length; j++)
+        if (b[i].toString() == a[j].toString())
           skillExist = true;
       if (!skillExist) return false;
     }
     return true;
   }
 
-  const studentsArray = res.students, vacanciesArray = res.vacancies;
-  let graph = [];
-
-  graph.resize(studentsArray.length());
-
-  for (let i = 0; i < studentsArray.length(); i++)
-    for (let j = 0; j < vacanciesArray.length(); j++)
-      if (matchSkills(studentsArray[i].skills,vacanciesArray[j].skills))
-        graph[i].push(j);
-
-  n = studentsArray.length();
-  k = vacanciesArray.length();
-  mt.resize(k); for (let i = 0; i<k; i++) mt[i] = -1;
-  used.resize(n);
-
-  for (let v=0; v<n; v++) {
-    for (let i = 0; i<n; i++) used[i] = false;
-    try_kuhn(v);
-  }
-  for (let i=0; i<k; i++)
-    if (mt[i] != -1 && studentsArray[mt[i]]._id == currentId)
-      return vacanciesArray[i]
-
-  return {}
 }
 
 export default handler

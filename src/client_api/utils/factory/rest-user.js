@@ -116,6 +116,13 @@ class RestUser {
     })
   }
 
+  sendRecommended() {
+    return request({
+      url: '/api/student-recommended',
+      method: 'get'
+    })
+  }
+
   removeItem(id) {
     return request({
       url: `${this.path}/${id}`,
