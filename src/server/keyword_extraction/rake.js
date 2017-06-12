@@ -54,11 +54,6 @@ export class Rake {
     )
   }
 
-  sortPhrases(obj) {
-    var keys = []; for(var key in obj) keys.push(key);
-    return keys.sort(function(a,b){return obj[b]-obj[a]});
-  }
-
   extract() {
     const sentences = this.getSentences(this.text)
     const phrases = this.getPhrases(sentences)

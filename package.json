@@ -48,6 +48,7 @@
     "mongoose": "4.2.4",
     "mongoose-deep-populate": "^2.0.3",
     "morgan": "^1.6.1",
+    "natural": "0.5.1",
     "newrelic": "^1.24.0",
     "node-inspector": "^0.12.4",
     "node-wikipedia": "0.0.2",
