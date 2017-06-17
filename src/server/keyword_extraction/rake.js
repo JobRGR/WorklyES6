@@ -2,7 +2,7 @@ export class Rake {
   constructor(text, stopList){
     const stopStr = stopList.reduce((res, word) => res += `${word}|`, '')
     this.text = text;
-    this.stopRegex = `\\b(?:${stopStr.slice(0, -1)}\\b`
+    this.stopRegex = `\\b(?:${stopStr.slice(0, -1)})\\b`
   }
 
   removeStopWords(sentence) {
@@ -12,7 +12,7 @@ export class Rake {
 
   getSentences(text){
     return text
-      .match( /[^\.!\?\:\\]+/g )
+      .match( /[^\.!\?\:\\\n\r]+/g )
       .reduce((res, sentence) => sentence ? [...res, sentence] : res, [])
   }
 
@@ -21,7 +21,7 @@ export class Rake {
       return this.removeStopWords(sentence).reduce((list, phrase) => {
         const refinedPhrase = phrase.replace(/['!"“”’#$%&()\*+,\-\.\/:;<=>?@\[\\\]\^_`{|}~']/g, '')
         return refinedPhrase.search(/^\s*$/g) != -1 ? list : [...list, refinedPhrase.trim()]
-        }, [])
+      }, res)
     }, [])
   }
 

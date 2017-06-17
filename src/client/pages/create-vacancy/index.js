@@ -15,6 +15,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add'
 import ActionDelete from 'material-ui/svg-icons/action/delete'
 import {blue500} from 'material-ui/styles/colors'
 import {VacancyApi} from '../../../client_api'
+import request from '../../../client_api/utils/request'
 import marked from 'marked'
 
 
@@ -23,8 +24,8 @@ export default class extends Component {
     super(props)
     this.state = {
       item: {
-        name: null, 
-        city: null,
+        name: '',
+        city: '',
         skills: [],
         about: ''
       },
@@ -46,6 +47,14 @@ export default class extends Component {
     let item = this.state.item
     item[e.target.name] = e.target.value
     this.setState({item})
+  }
+
+  _handleTextAboutBlur = (e) => {
+    request({url: '/api/extract-keywords', method: 'POST', body: {text: this.state.item.about}})
+      .then(({data}) => {
+        this.setState(({item}) => ({item: Object.assign(item, {skills: data.list})}))
+      })
+      .catch(ignored => {})
   }
 
   _handleAddSkillChange = (e) => {
@@ -230,7 +239,9 @@ export default class extends Component {
                      name='about'
                      fullWidth={true}
                      multiLine={true}
-                     onChange={this._handleTextFieldChange} />
+                     onChange={this._handleTextFieldChange}
+                     onBlur={this._handleTextAboutBlur}
+          />
           <div className='add-skill'>
             <TextField hintText='Вміння'
                        value={this.state.addSkill}

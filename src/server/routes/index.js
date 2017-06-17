@@ -15,6 +15,7 @@ import {Experience, Education} from './services/education_experience'
 import OpenQuestion from './services/open_question'
 import TestQuestion from './services/test_question'
 import Statistic from './services/statistic'
+import ExtractKeywords from './services/extract_keywords'
 import AllQuestion from './services/all_question'
 import Vacancy from './services/vacancy'
 import Admin from './services/admin'
@@ -39,6 +40,7 @@ api
   .use(OpenQuestion)
   .use(TestQuestion)
   .use('/statistic', Statistic)
+  .use('/extract-keywords', ExtractKeywords)
   .use(AllQuestion)
   .use(Vacancy)
   .use(Admin)
