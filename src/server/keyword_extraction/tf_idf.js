@@ -7,7 +7,7 @@ export class TfIdf {
     const {F, L} = corpus.reduce(({F, L}, text) => {
       const terms = text.tokenizeAndStem()
       const freq = terms
-        .reduce((f, term) => Object.assign(f, {[term]: f[term] ? f[term] + 1 : 1}))
+        .reduce((f, term) => Object.assign(f, {[term]: f[term] ? f[term] + 1 : 1}), {})
       return {
         F: Object.keys(freq).reduce((res, term) => Object.assign(res, {[term]: res[term] ? res[term] + 1 : 1}), F),
         L: L + terms.length
@@ -52,7 +52,7 @@ export class TfIdf {
   extractTerms(text) {
     const terms = text.tokenizeAndStem()
     const termScores = terms.reduce((res, term) => Object.assign(res, {[term]: this.score(term, terms)}), {})
-    return terms
+    return Object.keys(termScores)
       .sort((t1, t2) => termScores[t2] - termScores[t1])
       .slice(0, Math.ceil(terms.length / 10))
   }

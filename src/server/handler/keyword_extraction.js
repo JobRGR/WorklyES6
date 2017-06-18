@@ -12,7 +12,12 @@ export default {
       const corpus = data.reduce((res, item) => {
         return [...res, item.about]
       }, [text])
-      res.send({list: [...rapidExtraction(text), ...collectionBaseExtraction(text, corpus)]})
+      try {
+        res.send({list: [...rapidExtraction(text), ...collectionBaseExtraction(text, corpus)]})
+      }
+      catch(error) {
+        res.send({list: []})
+      }
     })
   }
 }
